@@ -1,8 +1,8 @@
-algo_euristici_notes.aux
-algo_euristici_notes.fdb_latexmk
-algo_euristici_notes.fdb_latexmk
-algo_euristici_notes.fls
-algo_euristici_notes.log
-algo_euristici_notes.out
-algo_euristici_notes.toc
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.toc
+
 
