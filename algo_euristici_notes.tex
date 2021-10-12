@@ -809,34 +809,297 @@ da alcuna colonna ($\sum_{j\in x}a_{ij}=0$).
 
 \subsection{Interludio 4: ricerca di soluzioni fattibili}
 Gli algoritmi euristici spesso richiedono di risolvere un altro problema: \textit{trovare una soluzione
-    che fattibile $x\in X$}, questo è un \textbf{problema di ricerca}.
+    che fattibile $x\in X$}, questo è un \textbf{problema di ricerca}. Chiaramente dato che le soluzioni
+sono definite da una soluzione iniziale, le euristiche di scambio e ricombinazione hanno bisogno di
+partire da un sottoinsieme valido tale per cui esso stesso sia una soluzione fattibile.
 
 In base al problema la soluzione può essere banale:
 \begin{itemize}
     \item Alcuni insiemi sono sempre fattibili: $x=\emptyset$ (come nel KP, SPP) o $x=B$ (nel SCP).
-    \item
+    \item Alcune soluzioni casuali soddisfano un vincolo come $|x|=k$ (nel MDP).
+    \item Alcune soluzioni casuali soddisfano vincoli consistenti, come assegnare un task per ogni macchina
+          come nel PMSP, o un valore ad ogni variabile logica come nel Max-SAT.
+\end{itemize}
+Oppure può essere difficile:
+\begin{itemize}
+    \item Nel BPP il numero di container deve essere sufficientemente grande.
+    \item Nel SPP non è conosciuto alcun algoritmo polinomiale per risolvere il problema.
 \end{itemize}
 
+Alcuni algoritmi ingrandiscono al regione di fattibilità da $X$ a $X'$ (processo detto \textit{"rilassamento"}),
+la funzione oggettiva $f$ deve essere estesa anch'essa da $X$ a $X'$, ma spesso $X'\setminus X$ provvede delle
+soluzioni migliori.
 
+\subsection{Problemi sui grafi}
+\subsubsection{Vertex Cover Problem}
+Dato un grafo indiretto $G=(V,E)$, selezionare un sottoinsieme di vertici di cardinalità minima tale che ogni
+arco del grafo sia incidente a quest'ultimo.
 
+Il \textbf{ground set} è l'insieme dei vertici:
+$$B\equiv V$$
+La \textbf{regione di fattibilità} include tutti i sottoinsiemi dei vertici tali che gli archi del grafo siano
+incidenti ad essi:
+$$X=\left\{x\subseteq V:x\cap (i,j)\neq\emptyset \text{ }\forall (i,j)\in E\right\}$$
+L'obiettivo è minimizzare il numero di vertici selezionati:
+$$min\underset{x\in X}{f(x)}=|x|$$
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=5cm]{images/VCP_dataset.png}
+    \caption{Dataset del Vertex Covering Problem}
+    \label{fig:dataset_VCP}
+\end{figure}
 
+Prima soluzione proposta:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=5cm]{images/VCP_sol1.png}
+    \caption{Prima soluzione proposta per il VCP}
+    \label{fig:fst_sol_VCP}
+\end{figure}
 
+$$x'=\left\{ B,D,E,F,G \right\} \in X$$
+$$f(x')=5$$
+Notiamo che $x'$ è una \textbf{soluzione fattibile}, questo perché il sottoinsieme di vertici selezionato interseca
+ogni arco del grafo (appartiene alla regione di fattibilità).
 
+Guardiamo la seconda soluzione proposta:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=5cm]{images/VCP_sol2.png}
+    \caption{Seconda soluzione proposta per il VCP}
+    \label{fig:snd_sol_VCP}
+\end{figure}
 
+Invece, la seconda soluzione \textbf{non è una soluzione fattibile}, anche se la funzione oggettiva porta ad un
+risultato che è più convincente della soluzione precedente, questo sottoinsieme non appartiene alla regione di
+fattibilità (il sottoinsieme di vertici selezionato non è incidente a tutti gli archi del grafo, e.g.: $(d,e)$).
 
+\subsubsection{Maximum Clique Problem (MCP)}
+Dati:
+\begin{itemize}
+    \item Un \textbf{grafo indiretto} $G=(V,E)$.
+    \item Una funzione $w:V\rightarrow \mathbb{N}$ che provvede il peso di ogni vertice.
+\end{itemize}
+Selezionare il sottoinsieme di coppie di vertici adiacenti di peso massimo. Il \textbf{ground set} è l'insieme
+dei vertici.
+$$B\equiv V$$
 
+La \textbf{regione di fattibilità} include tutti i sottoinsiemi di coppie di vertici adiacenti.
+$$X=\left\{x\subseteq V:(i,v)\in E \text{ }\forall i \in x, \forall j \in x \setminus \{i\}\right\}$$
+L'obiettivo è quello di massimizzare il peso dei vertici selezionati:
+$$f(x)=\sum_{j\in x}w_j$$
 
+Consideriamo il seguente grafo indiretto costituito da \textbf{pesi uniform} $w_i=1 \forall i\in V$.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=5cm]{images/MCP_dataset.png}
+    \caption{Dataset per il Maximum Clique Problem}
+    \label{fig:MCP_dataset}
+\end{figure}
+Consideriamo la prima soluzione proposta:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=5cm]{images/MCP_sol1.png}
+    \caption{Prima soluzione proposta per il MCP}
+    \label{fig:MCP_sol1}
+\end{figure}
+$$x'=\left\{B,C,F,G\right\}\in X$$
+$$f(x')=4$$
+La prima soluzione proposta è una soluzione \textbf{fattibile}, visto che ogni coppia nel sottoinsieme di vertici
+presenta un arco tra di loro.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=5cm]{images/MCP_sol2.png}
+    \caption{Seconda soluzione proposta per il MCP}
+    \label{fig:MCP_sol2}
+\end{figure}
 
+$$x'=\left\{A,D,E\right\}\in X$$
+$$f(x')=3$$
+La seconda soluzione proposta è anch'essa una soluzione \textbf{fattibile}, per lo stesso motivo precedente.
 
+\subsubsection{Maximum Independent Set}
+Questo problema è opposto al MCP, vogliamo trvare un sottoinsieme di vertici di peso massimo che non è
+connesso da archi.
+Dati:
+\begin{itemize}
+    \item Un \textbf{grafo indiretto} $G=(V,E)$.
+    \item Una funzione $w:V\rightarrow \mathbb{N}$ che provvede un peso per ogni arco.
+\end{itemize}
+Il \textbf{ground set} è l'insieme dei vertici.
+$$B\equiv V$$
+La \textbf{regione di fattibilità} include tutti i sottoinsiemi di vertici i cui archi \textit{non sono adiacenti}.
+$$X=\left\{x\subseteq B : (i,j) \notin E \text{ }\forall i \in x, \forall j \in x\setminus \{i\}\right\}$$
+L'obiettivo è quello di massimizzare il peso dei vertici selezionati.
+$$max\underset{x\in X}{f(x)}=\sum_{j\in x}w_j$$
+Consideriamo il seguente grafo indiretto con \textit{pesi uniformi}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=5cm]{images/MIS_dataset.png}
+    \caption{Dataset per il Maximum Independent Set}
+    \label{fig:MIS_dataset}
+\end{figure}
+Adesso consideriamo la prima soluzione proposta:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=5cm]{images/MIS_sol1.png}
+    \caption{Prima soluzione per il MIS}
+    \label{fig:MIS_1}
+\end{figure}
 
+$$x'=\left\{B,C,F,G\right\}\in X$$
+$$f(x')=4$$
+La soluzione $x'$ è una soluzione \textbf{fattibile}, ogni vertice del sottoinsieme proposto \textit{non è connesso}
+con un altro vertice dello stesso sottoinsieme.
 
+Consideriamo adesso una seconda proposta:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=5cm]{images/MIS_sol2.png}
+    \caption{Seconda soluzione per il MIS}
+    \label{fig:MIS_2}
+\end{figure}
 
+$$x''=\left\{A,D,E\right\}\in X$$
+$$f(x'')=3$$
+Anche la seconda soluzione è una \textbf{soluzione fattibile}.
 
+\subsection{Interludio 5: le relazioni tra i problemi}
+Come al solito le domande che uno si dovrebbe porre per un qualsiasi problema sono le solite :
+\begin{itemize}
+    \item \textit{Come si calcola la funzione oggettiva?}
+    \item \textit{Cosa succede se togliamo un vertice?}
+    \item \textit{Come si verifica la fattibilità?}
+    \item \textit{Cosa succede se aggiungiamo o rimuoviamo un vertice ad una soluzione fattibile?}
+\end{itemize}
 
+Questi ultimi tre problemi sui grafi che abbiamo affrontato erano molto simili. Dovrebbe essere già noto
+dalla \textbf{teoria delle complessità computazionali} che alcuni problemi possono essere \textbf{ridotti} ad altri
+problemi, e che si possa \textit{utilizzare} un problema per risolverne un altro.
 
+Un chiaro esempio è il seguente:
+\begin{itemize}
+    \item Si parte dall'istanza iniziale del MCP, con un grafo $G=(V,E)$.
+    \item Si costruisce il \textbf{grafo complementare} $\overline{G}=(V,(V\times V)\setminus E)$ (un grafo tale
+          per cui i vertici adiacenti nel grafo originario ora non lo sono più e viceversa).
+    \item Si cerca una soluzione ottima per il MISP su $\overline{G}$.
+    \item I vertici corrispondenti danno una soluzione ottimale del MCP su $G$.
+\end{itemize}
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=10cm]{images/interlude5_complementary.png}
+    \caption{Una soluzione euristica MISP che da una soluzione euristica MCP}
+    \label{fig:interlude_5_graph}
+\end{figure}
 
+Questo processo può essere applicato anche nel verso opposto.
+
+Anche i problemi SCP (\textit{Set Covering Problem}) e VCP (\textit{Vertex Covering Problem}) P hanno una relazione tra di loro, ma in maniera differente; ogni istanza del
+VCP può essere trasformata in un istanza del SCP.
+\begin{itemize}
+    \item Ogni arco $i$ corrisponde ad una riga della matrice $A$.
+    \item Ogni vertice $j$ corrisponde ad una colonna $A$.
+    \item Se l'arco $i$ tocca il vertice $j$, l'insieme $a_{ij}=1$, altrimenti $a_{ij}=0$.
+    \item Una soluzione ottimale del SCP da una soluzione ottimale del VCP.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=10cm]{images/interlude5_vcp_scp.png}
+    \caption{Una soluzione euristica SCP che da una soluzione euristica VCP}
+    \label{fig:interlude5_vcp_scp}
+\end{figure}
+In questo caso non è semplice effettuare il procedimento inverso.
+
+I problemi BPP (\textit{Bin Packing Problem}) e PMSP (\textit{Parallel Machine Scheduling Problem})
+sono equivalenti, ma in una maniera più sofisticata:
+\begin{itemize}
+    \item I task corrispondono a gli oggetti.
+    \item Le macchine corrispondono ai container, ma ricordiamo che il BPP cerca di ottimizzare il numero di
+          container (data una capacità), mentre il PMSP dato un numero di macchine cerca di ottimizzare il \textit{tempo
+              di completamento}.
+\end{itemize}
+
+Partiamo da un istanza del BPP:
+\begin{itemize}
+    \item Facciamo un assunzione sul numero di container ottimali, per esempio $3$.
+    \item Costruiamo una corrispondente istanza nel PMSP.
+    \item Calcoliamo il tempo di completamento ottimale, per esempio $95$; se eccede la capacità,
+          incrementa l'assunzione fatta precedentemente (tipo $4$ o $5$). Nel caso contrario, decrementa
+          l'assunzione fatta ($2$ o $1$).
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=10cm]{images/interlude5_BPP_scp.png}
+    \caption{Una soluzione euristica PMSP che da una soluzione euristica BPP}
+    \label{fig:interlude5_PMSP_BPP}
+\end{figure}
+Il processo inverso è possibile. I due problemi sono equivalenti, ma ognuno dei due deve venire risolto molteplici
+volte.
+
+È importante sottolineare il fatto che in caso di \textbf{riducibilità}, una soluzione euristica all'interno di un
+istanza ridotta è una soluzione euristica per il problema originale; studiare le relazioni tra i problemi è importante
+anche senza pensare agli algoritmi.
+
+\subsection{Travelling Salesman Problem (TSP)}
+Dato:
+\begin{itemize}
+    \item Un grafo \textbf{diretto} $G=(N,A)$
+    \item Una funzione $c:A\rightarrow\mathbb{N}$ che provvede i costi per ogni arco.
+\end{itemize}
+Si vuole selezionare un ciclo di costo minimo che visiti tutti i nodi del grafo. Il \textbf{ground set} è l'insieme
+degli archi.
+$$B\equiv A$$
+La \textbf{regione di fattibilità} include i cicli che visitano tutti i nodi del grafo (\textbf{cicli Hamiltoniani}).
+
+L'obiettivo è minimizzare il costo totale degli archi selezionati.
+$$min\underset{x\in X}{f(x)}=\sum_{j\in x}c_j$$
+
+\textit{Come determinare quando un sottoinsieme è una soluzione fattibile?} Quel sottoinsieme deve identificare
+un ciclo sul grafo ed ogni nodo deve avere esattamente un arco entrante ed uno uscente (ma sempre facente parte
+del sottoinsieme). Inoltre, una visita del grafo utilizzando gli archi del sottoinsieme dovrebbe visitare tutti i
+nodi, in altre parole non sono previste sotto visite di $G$.
+
+\textit{Cosa accade se si effettua una modifica di una soluzione fattibile?} Questo dipende dal tipo della modifica
+effettuata sulla soluzione, potrebbe essere necessario ricalcolare la funzione oggettiva.
+
+\textit{Risulta difficile trovare una soluzione fattibile?} Trovare una soluzione che sia fattibile
+potrebbe essere altrettanto difficile; in generale un grafo Hamiltoniano (ovvero che presenta un
+ciclo Hamiltoniano) è un problema NP-completo, è di risoluzione banale solo nei grafi \textbf{completi}.
+
+Consideriamo il seguente grafo diretto e pesato:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=7cm]{images/TSP_dataset.png}
+    \caption{Dataset per il Travelling Salesman Problem}
+    \label{fig:tsp_dataset}
+\end{figure}
+
+Consideriamo la prima soluzione proposta:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=7cm]{images/TSP_sol1.png}
+    \caption{Prima soluzione del TSP}
+    \label{fig:tsp_1_sol}
+\end{figure}
+
+$$x'=\left\{(1,4),(4,5),(5,8),(8,7),(7,6),(6,2),(2,3),(3,1)\right\}\in X$$
+$$f(x')=102$$
+La soluzione $x'$ è una soluzione \textbf{fattibile}.
+
+Consideriamo la seconda soluzione proposta:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=7cm]{images/TSP_sol2.png}
+    \caption{Seconda soluzione del TSP}
+    \label{fig:tsp_2_sol}
+\end{figure}
+$$x''=\left\{(4,5),(5,8),(8,7),(7,4),(1,2),(2,3),(3,6),(6,1)\right\}\notin X$$
+$$f(x'')=106$$
+La soluzione $x''$ è una soluzione \textbf{fattibile}.
 
 
 
