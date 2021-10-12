@@ -98,7 +98,7 @@ $$x^*\in X^*=arg\textit{ } opt_{x\in X}f(x)={x^* \in X : f(x^*)=opt_{x\in X}f(x)
 Ovvero, vogliamo trovare una soluzione ottima nell'intero insieme di tutte le soluzioni ottime, anche se solitamente una è abbastanza, la notazione $arg$
 sta per l'intero insieme delle soluzioni (ne basta una).
 
-\subsection{Perchè siamo interessati nei problemi di ottimizzazione e ricerca ?}
+\subsection{perché siamo interessati nei problemi di ottimizzazione e ricerca ?}
 
 I problemi di ottimizzazione e ricerca sono di forte interesse poiché diversi campi applicativi richiedono oggetti o strutture caratterizzati da valori molto alti o molto bassi rispetto ad una propria funzione di valutazione.
 \begin{itemize}
@@ -119,12 +119,11 @@ Diversi problemi possono spesso essere ridotti in problemi di ottimizzazione e r
           da $X$ a $X'\supset X$ ed ottenere un problema di ricerca semplice. Si introduce una funzione $d(x)$ per quantificare la distanza di ogni soluzione $x\in X'$ da $X$. Infine, minimizzando $d(x)$ per trovare $x^*$ tale che $d(x^*)=0 \Leftrightarrow x^* \in X$.
     \item Alcuni \textit{problemi di decisione} riguardano l'esistenza di sottosistemi fattibili, e sono identici ai problemi di
           ricerca (trovare il sottosistema dimostra la sua esistenza).
-    \item Alcuni \textit{problemi di numerazione} riguardano la richeca di sottosistemi con \textit{"buoni"} valori di funzioni oggettive in conflitto e permettono
+    \item Alcuni \textit{problemi di numerazione} riguardano la ricerca di sottosistemi con \textit{"buoni"} valori di funzioni oggettive in conflitto e permettono
           \textit{adattamenti diretti} ad algoritmi di ottimizzazione e ricerca.
 \end{itemize}
 Tali riduzioni sono spesso possibili ed utili, ma non sempre.
-
-\subsection{Problema di ottimizzazione combinatoria (prima definizione)}
+\subsection{Problema di ottimizzazione combinatoria}
 Un problema è un problema CO (\textit{Combinatorial Optimization}) quando la regione di fattibilità \textit{X} è un insieme finito, e quindi, che abbia un numero
 finito di \textit{soluzioni fattibili}. Questa sembra un'assunzione molto restrittiva, ma sono presenti molti
 problemi che hanno un numero infinito di soluzioni che possono essere ridotti a problemi che hanno un numero finito di soluzioni.
@@ -146,8 +145,8 @@ Dove $\xi \in \mathbb{R}^n$, il quale è il vettore delle soluzioni di $n$ numer
 regione di fattibilità è l'insieme dei vettori che soddisfanno tutte le disuguaglianze.
 L'euristiche basate su modelli estrapolano l'informazione derivata dal modello, che sono le proprietà analitiche della funzione $\phi$ e $g_i \text{ per } i=1,...m$.
 
-\subsection{Definizione alternativa di problema di ottimizzazione combinatoria}
-Una problema è un problema CO quando:
+\subsection{Definizione alternativa di CO}
+Una problema è un problema CO() quando:
 \begin{enumerate}
     \item Il numero di soluzioni fattibili è finito (prima definizione).
     \item La regione di fattibilità è $X\subseteq 2^B$ per un dato \textbf{ground set} $B$, ovvero, le \textit{soluzioni fattibili} sono tutte sottoinsiemi del ground set che
@@ -184,7 +183,7 @@ Sono presenti due cose importanti che intervengono nella progettazione di un alg
 \end{itemize}
 
 Puoi avere algoritmi che usano o non usano la randomizzazione o la memoria.
-Questi due elementi sono ortogonali (indipendenti) rispetto alla classificazione delle eurisitche basate sulle soluzioni, per ognuna di esse possiamo dire che abbiamo quattro sottoclassi.
+Questi due elementi sono ortogonali (indipendenti) rispetto alla classificazione delle euristiche basate sulle soluzioni, per ognuna di esse possiamo dire che abbiamo quattro sottoclassi.
 
 \begin{enumerate}
     \item Utilizzo della randomizzazione:
@@ -207,7 +206,7 @@ che vanno utilizzano la randomizzazione e/o la memoria.
     \item \textbf{Attitudine reverenziale o alla tendenza}, ovvero, nello scegliere un algoritmo basato sul contesto sociale, anziché sul problema.
     \item \textbf{Attitudine magica}, ovvero, \textit{credere} in un metodo sulla base di un analogia con un fenomeno fisico e naturale.
     \item \textbf{Integralismo euristico}, ovvero, utilizzare un euristica per un problema che ammette l'utilizzo di un algoritmo esatto.
-    \item \textbf{Sgranocchiare numeri}, ovvero, performare sofisticati e complessi calcoli con numeri inaffidabili.
+    \item \textbf{Sgranocchiare numeri}, ovvero, eseguire sofisticati e complessi calcoli con numeri inaffidabili.
     \item \textbf{Attitudine SUV}, ovvero, affidarsi alla potenza dell'hardware.
     \item \textbf{Complicare ulteriormente}, ovvero, introdurre componenti e parametri \textit{ridondanti}, per cercare (fallendo) di migliorare il risultato.
     \item \textbf{Overfitting}, ovvero, adattare i componenti ed i parametri dell'algoritmo ad un dataset specifico utilizzato nella valutazione sperimentale.
@@ -217,7 +216,7 @@ Inoltre è fondamentale:
 \begin{itemize}
     \item Liberarsi dai pregiudizi.
     \item Valutare le prestazioni dell'algoritmo in una maniera scientifica.
-    \item Distinguire il contributo di ogni componente dell'algoritmo.
+    \item Distinguere il contributo di ogni componente dell'algoritmo.
     \item Implementare efficientemente ogni componente dell'algoritmo.
 \end{itemize}
 
@@ -300,7 +299,7 @@ Dati:
 \end{itemize}
 
 Il problema chiede di selezionare da un insieme di punti $P$ un sottoinsieme di $k$ punti la cui sommatoria delle distanze tra le coppie dei punti sia massima.
-Questo è un problema CO, perchè il numero di sottoinsiemi possibili è finito, ed in particolare è un problema CO perché le soluzioni sono sottoinsiemi del ground set.
+Questo è un problema CO, perché il numero di sottoinsiemi possibili è finito, ed in particolare è un problema CO perché le soluzioni sono sottoinsiemi del ground set.
 Il ground set, banalmente, è l'insieme dei punti $B\equiv P$, mentre la regione di fattibilità include tutti i sottoinsiemi composti da $k$ punti.
 $$X=\left\{x\subseteq B : |x| = k \right\}$$
 La funzione oggettiva è la sommatoria di tutte le distanze tra le coppie di punti in $x$:
@@ -351,8 +350,9 @@ In particolare il problema KP una funzione oggettiva \textbf{additiva}, nel calc
 con il valore della funzione ausiliaria $\phi$ definita sul ground set, ricordando che nel problema KP, $B \equiv E$.
 $$\phi : B\rightarrow \mathbb{N} \text{ induce } f(x)=\sum_{j\in x}\phi_j : X \rightarrow \mathbb{N}$$
 
-Questo è interessante perchè significa che si deve memorizzare solamente il valore della funzione ausiliaria $\phi$, i quali sono $|B|$ valori, e non $2^B$, come
-sarebbe per i valori della funzione oggettiva che è definita su $X$.
+Questo è interessante perché significa che si deve memorizzare solamente il valore della funzione
+ausiliaria $\phi$, i quali sono $|B|$ valori, e non $2^B$, come sarebbe per i valori della funzione
+oggettiva che è definita su $X$.
 \newline
 \newline
 Lo stesso accade per il problema MDP e la sua funzione ausiliaria $d$, anche se quest'ultima ha una funzione oggettiva quadratica,
@@ -376,7 +376,7 @@ Per riassumere, quando guardiamo un problema cerchiamo di capire come la funzion
     \item Su cosa è definita la funzione oggettiva?
 \end{itemize}
 
-\subsection{Insieme dei problemi di partizionamento (BDP)}
+\subsection{Insieme dei problemi di partizionamento}
 In questi problemi un insieme di oggetti viene fornito, l'obiettivo consiste nel dividerlo in sottoinsiemi ottenendo una partizione con alcune peculiarità.
 \subsubsection{Bin Packing Problem (BPP)}
 Il Bin Packing Problem (BPP), si ha un insieme di oggetti con un \textit{volume}, e si vuole mettere questi oggetti all'interno di
@@ -393,7 +393,7 @@ Dati:
 La prima domanda che ci si vuole porre è: \textit{è un problema di ottimizzazione combinatoria?}
 
 Il ground set è definito come $B=E\times C$, dove ogni elemento di $B$ è definito da una coppia $\langle oggetto, container\rangle$. Una soluzione
-per questo problema è un sottoinsieme formato da oggetti di questo tipo, il prodotto cartesiano è necessario poichè si deve selezionare un oggetto ed inserirlo in un determinato container.
+per questo problema è un sottoinsieme formato da oggetti di questo tipo, il prodotto cartesiano è necessario poiché si deve selezionare un oggetto ed inserirlo in un determinato container.
 
 Una volta che la lista di coppie contenenti gli elementi di $E$
 è costruita, una soluzione candidata sarà ottenuta (un sottoinsieme del ground set,
@@ -436,7 +436,7 @@ Per esempio, consideriamo degli oggetti con diversi volumi e sia data una capaci
 Consideriamo la prima soluzione proposta, visto che la lista dei prodotti cartesiano
 rispetta i due vincoli nella definizione della regione
 di fattibilità la soluzione $x'$ è una \textbf{soluzione fattibile}.
-$$x'=\{(a,1),(b,1),(c,2),(d,2),(e,2),(f,3),(g,4),(h,5),(i,5)\}\in X$$
+$$x'=\left\{(a,1),(b,1),(c,2),(d,2),(e,2),(f,3),(g,4),(h,5),(i,5)\right\}\in X$$
 $$f(x')=5$$
 
 \begin{figure}[H]
@@ -449,7 +449,7 @@ $$f(x')=5$$
 Invece, la seconda soluzione proposta è una \textbf{soluzione infattibile}, questo perché gli elementi non stanno
 rispettando il secondo vincolo sul volume, e quindi
 questo sottoinsieme non è compreso all'interno della regione di fattibilità.
-$$x''={(a,1),(b,1),(c,2),(d,2),(e,2),(f,3),(g,4),(h,1),(i,4)}\notin X$$
+$$x''=\left\{(a,1),(b,1),(c,2),(d,2),(e,2),(f,3),(g,4),(h,1),(i,4)\right\}\notin X$$
 $$f(x'')=4$$
 Considerando il caso in cui $x''$ fosse una soluzione fattibile avremmo scelto quella tra le soluzioni
 proposte, poiché la funzione oggettiva effettua l'ottimizzazione sul minimo.
@@ -497,7 +497,7 @@ Per esempio, consideriamo il seguente insieme di dati per tre macchine, $|M|=3$,
 \end{figure}
 
 Consideriamo la prima soluzione proposta:
-$$x'={(T1,M1),(T2,M2),(T3,M2),(T4,M2),(T5,M1),(T6,M3)}\in X$$
+$$x'=\left\{(T1,M1),(T2,M2),(T3,M2),(T4,M2),(T5,M1),(T6,M3)\right\}\in X$$
 $$f(x')=95$$
 Possiamo notare che questa è una \textbf{soluzione fattibile},
 visto che ogni task accade al meno ed al massimo una volta.
@@ -512,7 +512,7 @@ perché l'ultimo task ha un tempo di completamento pari a $95$.
 \end{figure}
 
 Consideriamo la seconda soluzione proposta:
-$$x''={(T1,M1),(T2,M1),(T3,M2),(T4,M2),(T5,M2),(T6,M3)}\in X$$
+$$x''=\left\{(T1,M1),(T2,M1),(T3,M2),(T4,M2),(T5,M2),(T6,M3)\right\}\in X$$
 $$f(x'')=120$$
 Notiamo che anche questa è una \textbf{soluzione fattibile} visto che ogni task accade al
 minimo ed al massimo una volta, in questo casa la funzione oggettiva assume come valore $120$.
@@ -523,7 +523,7 @@ Questo significa che fra le due soluzioni proposte la prima è quella \textbf{ot
 forniti nel problema, ma può essere formato dalla combinazione (come il prodotto cartesiano)
 di diversi insiemi forniti. Ora affrontiamo la domande proposte nell'ultimo interludio.
 
-\textit{Le funzioni oggettivi di che tipo sono? (addittive, quadratiche,...)}
+\textit{Le funzioni oggettivi di che tipo sono? (additive, quadratiche,...)}
 Questa volta le funzioni oggettive per il BPP e PMSP \textbf{non} sono additive, e non sono neanche banali.
 È presente un algoritmo polinomiale per calcolare la funzione oggettiva, seppur non complesso,
 non è semplice come per i problemi precedenti.
@@ -563,7 +563,7 @@ Dati:
     \item Un \textbf{letterale} $l_j(x)\in {x_j,\overline{x}_j}$ che è una funzione che consiste in una variabile logica
           \textit{affermata} o \textit{negata}.
     \item Una \textbf{formula logica} $C_i(x)=l_{i,1} \lor ... \lor l_{i,n_i}$, la quale è
-          una disgiunzione o \textit{somma logica} (OR) di lettarali. Soddisfare una formula
+          una disgiunzione o \textit{somma logica} (OR) di letterali. Soddisfare una formula
           logica significa fargli assumere valore 1.
     \item Una formula in \textbf{forma normale congiuntiva} $CNF(x)=C_1\land ... \land C_n$ è una congiunzione di \textit{prodotti logici} di formule logiche.
     \item Una funzione $w$ che provvede dei \textit{pesi} per la formula CNF. La funzione associa ogni formula logica
@@ -609,4 +609,238 @@ della funzione oggettive è polinomiale
 
 In caso di pesi uniformi sono presenti un campo ristretto di valori, che vanno da $0$ a $n$,
 il numero di formule logiche, anche se sono presenti $2^|V|$ combinazioni che possono essere considerate.
+
+\subsection{Problemi con matrici numeriche}
+\subsubsection{Set covering problem (SCP)}
+Data una \textbf{matrice binaria} ed una \textbf{funzione costo} definita per ogni
+colonna della matrice (come vettore), si vuole selezionare il sottoinsieme di
+colonne che coprono tutte le righe di costo minimo.
+
+Dati:
+\begin{itemize}
+    \item Matrice binaria $A\in\mathbb{B}^{m,n}$ con insieme delle righe $R$ e insieme delle colonne $C$.
+    \item La colonna $j\in C$ copre la riga $i\in R$ quando $a_{ij}=1$.
+    \item Una funzione $c:C\rightarrow\mathbb{N}$ provvede il costo di ogni colonna.
+\end{itemize}
+
+Il \textbf{ground set} è l'insieme delle colonne.
+$$B\equiv C$$
+La \textbf{regione di fattibilità} include tutti i sottoinsiemi delle colonne che coprono
+tutte le righe.
+$$X=\left\{x\subseteq B : \sum_{j\in x}a_{ij}\geq 1 \text{ }\forall i \in R\right\}$$
+
+L'obiettivo è \textit{minimizzare} il costo totale delle colonne selezionate, la \textbf{funzione oggettiva}
+è additiva, molto veloce da calcolare ed aggiornare, però la \textit{fattibilità} non è
+semplice da ottenere.
+$$min\underset{x\in X}{f(x)}=\sum_{j\in x}c_j$$
+
+Consideriamo il seguente esempio di una matrice con il relativo vettore dei costi:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=5cm]{images/SCP_datasets.png}
+    \caption{Dataset del Set Covering Problem (SCP)}
+    \label{fig:dataset_SCP}
+\end{figure}
+Notiamo che la terza e la quinta riga (iniziando dall'alto) sono coperte dalla prima
+colonna. Infatti, \textit{"set covering"}, si coprono i \textit{set} (righe) con
+\textit{subset} (colonne).
+
+Consideriamo adesso una prima soluzione proposta:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=5cm]{images/SCP_first_sol.png}
+    \caption{Prima soluzione proposta del SCP}
+    \label{fig:sol1_SCP}
+\end{figure}
+
+$$x'={c_1,c_2,c_5 }\in X$$
+$$f(x')=19$$
+La prima soluzione $x'$ è una \textbf{soluzione fattibile}, perché ogni riga ha almeno un elemento
+$a_{ij}\geq 1$.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=5cm]{images/SCP_snd_sol.png}
+    \caption{Seconda soluzione proposta del SCP}
+    \label{fig:sol2_SCP}
+\end{figure}
+
+$$x''={c_1,c_5,c_6 }\notin X$$
+$$f(x'')=15$$
+
+La seconda soluzione $x''$ \textbf{non è una soluzione fattibile}, dato che la Seconda
+riga non è coperta da almeno un elemento delle colonne. Comunque, nel caso in cui
+la seconda soluzione sia una soluzione fattibile, allora quest'ultima sarebbe una
+soluzione migliore della prima.
+
+\subsubsection{Interludio 3: il test di fattibilità}
+Solitamente, gli algoritmi euristici \textbf{richiedono} di risolvere il seguente
+problema: \textit{Dato un sottoinsieme $x$, è fattibile o infattibile?}, in breve
+$x\in X \text{?}$. Come risolvere questo problema? Innanzitutto, è un \textbf{problema di decisione}.
+
+Consideriamo SCP, la fattibilità può essere decisa passando per ogni riga e sommando gli $1$ che appaiono
+nella colonna selezionata: se una qualsiasi riga ha una somma complessiva pari a $0$ la soluzione sarà
+\textbf{infattibile}.
+
+Nel caso del KP, il test di fattibilità richiede di calcolare dalla soluzione e testare un singolo numero
+(il peso totale rispetto alla capacità dello zaino) proprio come nel MDP, dove la cardinalità della soluzione
+si trovava sotto una restrizione $k$.
+
+Altri problemi come il Max-SAT ed il PMSP richiedono di testare la fattibilità su un singolo insieme di
+numeri (numero di variabili logiche non si ripeta nella soluzione $x\cap B_v$), mentre problemi come il BPP richiedono di testare su diversi insiemi di numeri (i volumi degli oggetti rispetto
+alla capacità dei container).
+
+Alcune modifiche alle soluzioni vengono vietate \textit{a priori} per evitare l'inammissibilità delle soluzioni.
+Supponiamo di avere una soluzione fattibile per il MDP, una qualsiasi modifica in cui il numero di punti non è uguale
+al numero di punti aggiunti rende la soluzione \textbf{infattibile}.
+
+Alcune modifiche non garantiscono \textbf{inammissibilità} (unfeasible) della soluzione, le quali richiedono un test
+\textit{a posteriori} come nel PMSP.
+
+\subsection{Set Packing Problem}
+Il Set Packing Problem è un problema molto simile al precedente SCP, questo perché appartiene alla stessa
+classe di problemi e provvede un valore per ogni colonna.
+
+
+Dati:
+\begin{itemize}
+    \item Una \textbf{matrice binaria} $A\in \mathbb{B}^{m,n}$ con insieme delle righe $R$ e insieme delle colonne $C$.
+    \item Sia definito un conflitto tra due colonne $j',j'' \in C$ quando $a_{ij'}=a_{ij''}=1$.
+    \item Una funzione $\phi:C\rightarrow \mathbb{N}$ che provvede il valore di ogni colonna.
+\end{itemize}
+Il \textbf{ground set} è ancora l'insieme delle colonne:
+$$B\equiv C$$
+La \textbf{regione di fattibilità} include tutti i sottoinsieme di colonne che non sono in conflitto:
+$$X=\left\{x\subseteq B:\sum_{j\in x}a_{ij}\leq 1 \text{ } \forall i \in R\right\}$$
+
+L'obiettivo consiste nello scegliere le colonne di valore massimo senza che siano presenti \textit{conflitti}.
+$$max\underset{x\in X}{f(x)}=\sum_{j \in x}\phi_j$$
+
+Prendiamo in considerazione la seguente matrice:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=5cm]{images/SPP_dataset.png}
+    \caption{Dataset Set Packing Problem}
+    \label{fig:datasets_SPP}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=5cm]{images/SPP_first_sol.png}
+    \caption{Prima soluzione proposta del SPP (\textit{Set Packing Problem})}
+    \label{fig:fst_sol_SPP}
+\end{figure}
+
+
+La prima soluzione proposta è $x'=\left\{c_2,c_4\right\}\in X$, con valutazione della funzione oggettiva
+$f(x')=20$. Questa è una soluzione \textbf{fattibile}, visto che non presenti conflitti sulle righe delle colonne
+selezionate.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=5cm]{images/SPP_snd_sol.png}
+    \caption{Seconda soluzione proposta del SPP (\textit{Set Packing Problem})}
+    \label{fig:snd_sol_SPP}
+\end{figure}
+In questo caso \textbf{non è una soluzione fattibile}, visto che avviene il conflitto sulla terza riga, anche quando
+la valutazione della funzione oggettiva era meglio della prima soluzione, le somme valutate non sono ottenute dalla
+regione di fattibilità $X$.
+
+\subsection{Set Partitioning Problem}
+Il problema di Set Partitioning (non lo chiameremo con l'acronimo inglese), è una fusione dei due precedenti problemi
+SCP e SPP.
+
+Dati:
+\begin{itemize}
+    \item Una \textbf{matrice binaria} $A\in \mathbb{B}^{m,n}$ con insieme delle righe $R$ e insieme delle colonne
+          $C$.
+    \item Una funzione $c:C\rightarrow\mathbb{N}$ che fornisce il costo di ogni colonna.
+\end{itemize}
+La risoluzione del problema prevede di selezionare il sottoinsieme di \textit{costo minimo} delle colonne
+che non sono in conflitto.
+Il \textbf{ground set}, anche questa volta, è l'insieme delle colonne:
+$$B\equiv C$$
+La \textbf{regione di fattibilità} include tutti i sottoinsiemi di colonne che coprono tutte le righe che non
+sono in conflitto:
+$$X=\left\{x\subseteq C:\sum_{j\in x}a_{ij}=1 \text{ }\forall i \in R\right\}$$
+$$min\underset{x\in X}{f(x)}=\sum_{j\in x}c_j$$
+
+Consideriamo la seguente matrice binaria:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=5cm]{images/SPP2_dataset.png}
+    \caption{Dataset del Set Partitioning Problem}
+    \label{fig:dataset_SPP2}
+\end{figure}
+
+Ora prendiamo in considerazione la prima soluzione proposta:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=5cm]{images/SPP2_fst_sol.png}
+    \caption{Prima soluzione del SPP (\textit{Set Partitioning Problem})}
+    \label{fig:fst_sol_SPP2}
+\end{figure}
+
+$$x'=\left\{c_2,c_3,c_6\right\}\in X$$
+$$f(x')=26$$
+Notiamo che la soluzione $x'$ è un \textbf{soluzione fattibile}, visto che gli elementi appartenenti alle
+selezionati si trovano colonne si trovano in una maniera da non generare conflitti lungo le righe (la sommatoria
+degli elementi lungo le righe non porta ad un risultato diverso da $1$).
+
+Ora consideriamo la seconda soluzione candidata:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=5cm]{images/SPP2_snd_sol.png}
+    \caption{Seconda soluzione del SPP (\textit{Set Partitioning Problem})}
+    \label{fig:snd_sol_SPP2}
+\end{figure}
+
+$$x''=\left\{c_1,c_5,c_6\right\}\notin X$$
+$$f(x'')=15$$
+
+Anche se il risultato della funzione oggettiva ha un valore migliore (più piccolo) rispetto a quello della
+prima soluzione, la soluzione $x''$ \textbf{non è una soluzione fattibile}. Questo perché, gli elementi sulla terza
+riga si trovano in conflitto ($\sum_{j\in x}a_{ij}\geq 1$), ed anche perché la seconda riga non viene \textit{coperta}
+da alcuna colonna ($\sum_{j\in x}a_{ij}=0$).
+
+\subsection{Interludio 4: ricerca di soluzioni fattibili}
+Gli algoritmi euristici spesso richiedono di risolvere un altro problema: \textit{trovare una soluzione
+    che fattibile $x\in X$}, questo è un \textbf{problema di ricerca}.
+
+In base al problema la soluzione può essere banale:
+\begin{itemize}
+    \item Alcuni insiemi sono sempre fattibili: $x=\emptyset$ (come nel KP, SPP) o $x=B$ (nel SCP).
+    \item
+\end{itemize}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \end{document}
