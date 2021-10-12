@@ -965,7 +965,7 @@ $$x''=\left\{A,D,E\right\}\in X$$
 $$f(x'')=3$$
 Anche la seconda soluzione è una \textbf{soluzione fattibile}.
 
-\subsection{Interludio 5: le relazioni tra i problemi}
+\subsubsection{Interludio 5: le relazioni tra i problemi}
 Come al solito le domande che uno si dovrebbe porre per un qualsiasi problema sono le solite :
 \begin{itemize}
     \item \textit{Come si calcola la funzione oggettiva?}
@@ -1044,7 +1044,7 @@ volte.
 istanza ridotta è una soluzione euristica per il problema originale; studiare le relazioni tra i problemi è importante
 anche senza pensare agli algoritmi.
 
-\subsection{Travelling Salesman Problem (TSP)}
+\subsubsection{Travelling Salesman Problem (TSP)}
 Dato:
 \begin{itemize}
     \item Un grafo \textbf{diretto} $G=(N,A)$
@@ -1101,9 +1101,92 @@ $$x''=\left\{(4,5),(5,8),(8,7),(7,4),(1,2),(2,3),(3,6),(6,1)\right\}\notin X$$
 $$f(x'')=106$$
 La soluzione $x''$ è una soluzione \textbf{fattibile}.
 
+\subsubsection{Minimum Capacitated Spanning Tree Problem (MCSTP)}
+Dati:
+\begin{itemize}
+    \item Un grafo indiretto $G=(V,E)$ con un vertice radice $r\in V$
+    \item Una funzione $c:E\rightarrow \mathbb{N}$ che provvede il \textit{costo} di ogni arco.
+    \item Una funzione $w:V\rightarrow \mathbb{N}$ che provvede il peso di ogni vertice.
+    \item Un numero $W\in \mathbb{N}$ che è la capacità di ogni sotto albero.
+\end{itemize}
+
+Si vuole selezionare un \textbf{minimo albero ricoprente} tale che ogni ramo (sotto albero rispetto alla radice)
+rispetti la capacità massima $W$. Il \textbf{ground set} è l'insieme degli archi.
+
+$$B\equiv E$$
+
+La \textbf{regione di fattibilità} include tutti gli alberi ricoprenti tali che il peso costituito dai vertici
+rispetti la capacità $W$.
+L'obiettivo è quello di minimizzare il costo totale degli archi selezionati.
+
+$$min\underset{x\in X}{f(x)}=\sum_{j\in x}c_j$$
+
+Consideriamo il seguente grafo indiretto di pesi uniformi $w_i=1 \forall i\in V$, e con una capacità massima
+dei sotto alberi $W=3$.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=5cm]{images/MCSTP_dataset.png}
+    \caption{Dataset del Minimum Capacitated Spanning Tree Problem}
+    \label{fig:dataset_MCSTP}
+\end{figure}
+
+La prima soluzione candidata:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=5cm]{images/MCSTP_fst_sol.png}
+    \caption{Prima soluzione del MCSTP}
+    \label{fig:fst_sol_MCSTP}
+\end{figure}
+
+$$x'=\left\{(r,3),(3,2),(3,6),(r,4),(r,5),(5,7),(5,8)\right\}\in X$$
+$$f(x')=95$$
+Questa è una soluzione \textbf{fattibile}, visto che ogni sotto albero non eccede la
+capacità $W$ e i sottoinsiemi sono un minimo albero ricoprente del grafo.
+
+La seconda soluzione candidata:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=5cm]{images/MCSTP_snd_sol.png}
+    \caption{Seconda soluzione del MCSTP}
+    \label{fig:snd_sol_MCSTP}
+\end{figure}
+
+$$x''=\left\{(r,3),(3,2),(3,6),(r,4),(r,5),(5,7),(5,8)\right\}\notin X$$
+$$f(x'')=87$$
+Questa \textbf{non è} una soluzione fattibile, visto che il sotto albero destro non rispetta
+la capacità massima (nonostante il sottoinsieme sia un albero ricoprente).
+
+Il costo delle operazioni principali cambia, il testi di fattibilità richeide solamente la somma
+dei pesi, calcolare la funzione oggettiva richiede risolvere un problema
+MST (\textit{Minimum Spanning Tree}).
+
+La funzione oggettiva risulta:
+\begin{itemize}
+    \item \textbf{Lenta da valutare}, calcolare un MST per ogni sottoinsieme.
+    \item \textbf{Lenta da aggiornare}, ricalcolare un MST per ogni sottoinsieme modificato.
+\end{itemize}
+Se il grafo è \textbf{completo}, i test di ammissibilità sono:
+\begin{itemize}
+    \item \textbf{Veloci da eseguire}, sommare i pesi dei vertici per ogni sotto albero.
+    \item \textbf{Veloci da aggiornare}, sommare i pesi aggiunti e sottrarre quelli rimossi.
+\end{itemize}
+Visto che la funzione oggettiva è \textbf{additiva}, è abbastanza semplice da valutare, ma mentre
+è semplice da ricalcolare, è più difficile verificarne la fattibilità, eccetto per situazioni banali.
+
+Trovare uno \textbf{albero ricoprente capacitato} è un problema fortemente NP-completo, quindi spesso
+è difficile trovare una soluzione fattibile a meno che il grafo sia completo. Dato un insieme di vertici,
+in ordine si controlla se la soluzione è una soluzione fattibile o meno, è necessario costruire
+la corretta rappresentazione dell'albero e poi visitare il sotto albero, sommare i pesi dei vertici, in
+una maniera simile ad una visita DFS.
+\newline
+\newline
+\textbf{Descrizione alternativa}
+\newline
 
 
-
-
+\subsubsection{Vehicle Routing Problem (VRP)}
+\subsubsection{Interludio 6: combinare rappresentazioni alternative}
 
 \end{document}
