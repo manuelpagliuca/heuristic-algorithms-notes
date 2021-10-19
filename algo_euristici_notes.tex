@@ -3,6 +3,9 @@
 \usepackage[OT1]{fontenc}
 \usepackage{mathpazo}
 \usepackage[italian]{babel}
+\usepackage{caption}
+%Prefisso della caption delle figure
+\captionsetup[figure]{labelformat=empty}% redefines the caption setup of the figures environment in the beamer class.
 
 \usepackage{amsmath}
 \usepackage{amsfonts}
@@ -1188,5 +1191,206 @@ una maniera simile ad una visita DFS.
 
 \subsubsection{Vehicle Routing Problem (VRP)}
 \subsubsection{Interludio 6: combinare rappresentazioni alternative}
+Il CMSTP ed il VRP condividono una complicazione interessante: differenti definizioni del
+ground set $B$ sono possibili e naturali.
+\begin{itemize}
+    \item La descrizione come insieme di archi sembra preferibile per gestire la funzione oggettiva.
+    \item La descrizione che utilizza un insieme di coppie $(vertice, albero)/(nodo/ciclo)$ sembra
+          migliore per generare soluzioni ottime ed ha a che fare con la fattibilità.
+\end{itemize}
+
+\noindent\textit{Quale descrizione dovrebbe essere adottata?}
+\newline\noindent Quella che rende più semplice le operazioni più frequenti, oppure una possibilità risulta
+quella di utilizzare entrambe le rappresentazioni se le operazioni sono usate molto più frequentemente
+che quanto sono aggiornate, in maniera che il fardello di mantenerle aggiornate e consistenti sia accettabile.
+
+Per riassumere, le domande che ci si deve chiedere a riguardo di un problema sono:
+
+\begin{itemize}
+    \item Come si calcola la funzione oggettiva?
+    \item Come provo che un sottoinsieme sia fattibile?
+    \item Come trovo una soluzione fattibile?
+    \item Come valutare il test di fattibilità?
+    \item Cosa succede quando un cambiamento alla soluzione fattibile viene effettuato: è ancora fattibile?
+          Sicuramente non lo è più? È necessario rivalutare da capo la funzione oggettiva o c'è una soluzione migliore?
+    \item Quale è la definizione corretta di ground set? Sono qui presenti più definizioni possibili?
+    \item Sono presenti relazioni tra questo ed un altro problema?
+\end{itemize}
+
+\section{Efficienza teorica}
+La seconda parte di questo corso è dedicata alle caratteristiche degli algoritmi euristici: abbiamo precedentemente
+descritto gli algoritmi euristici come algoritmi che non provvedono sempre soluzioni corrette, ma che sono
+caratterizzati da due aspetti:
+\begin{itemize}
+    \item Costa molto meno degli algoritmi corretti.
+    \item \textit{Spesso} restituisce qualcosa che è \textit{vicino} alla soluzione corretta.
+\end{itemize}
+
+Considereremo questi due aspetti, \textbf{costi} e \textbf{qualità}, significa la distanza e la probabilità
+di ottenere una certa qualità e considereremo essi da due punti di vista:
+\begin{itemize}
+    \item \textit{Analisi a priori}, basata sulla teoria.
+    \item \textit{Analisi a posteriori}, basata sull'evidenza e sui dati empirici ottenuti dall'esecuzione dell'algoritmo
+          su dataset appositi per test.
+\end{itemize}
+
+\subsection{Problemi}
+Informalmente, un problema è una domanda su un sistema costituito da oggetti matematici. La stessa domanda può
+essere spesso posta su diversi sistemi simili.
+\begin{itemize}
+    \item Un istanza $I\in\mathcal{I}$ consiste in ogni specifico sistema riguardante la domanda.
+    \item Una soluzione $S\in\mathcal{S}$ è una risposta corrispondente ad una delle istanze.
+\end{itemize}
+
+Per esempio: \textit{$n$ è un numero primo?}, questo è un problema con infinite istanze e due soluzioni.
+$$\mathcal{I}=\mathbb{N}^+\setminus{\{1\}}\text{ and }\mathbb{S}=\text{\{yes,no\}}$$
+
+Formalmente, un problema è una funzione che relaziona le istanze e le soluzioni:
+$$P:\mathcal{I}\rightarrow\mathcal{S}$$
+Definire una funzione non significa sapere come calcolarla.
+
+\subsection{Algoritmi}
+Un algoritmo è una \textbf{procedura formale}, composta da passi elementari posti in una sequenza finita, ogni
+uno è determinato da un input e dai risultati dei passi precedenti.
+
+Un algoritmo per un problema $P$ è un algoritmo tale per cui un input $I\in\mathcal{I}$ restituisce una soluzione
+$S_I\in\mathcal{S}$.
+$$A:\mathcal{I}\rightarrow\mathcal{S}$$
+Un algoritmo definisce una funzione ed il modo per calcolarla, questo può essere:
+\begin{itemize}
+    \item \textbf{Esatto}, se la funzione associata coincide con il problema.
+    \item Altrimenti \textbf{euristico}.
+\end{itemize}
+Un algoritmo euristico è utile se risulta:
+\begin{itemize}
+    \item \textbf{Efficiente}, significa che costa molto meno dell'algoritmo esatto.
+    \item \textbf{Efficace}, significa che restituisce frequentemente la soluzione \textit{"vicina"} a quella corretta.
+\end{itemize}
+
+\subsection{Costi di un algoritmo euristico}
+Il costo di un algoritmo (entrambi i tipi) denotano il costo di computazione durante esecuzione:
+
+\begin{itemize}
+    \item \textbf{Tempo}, richiesto per terminare la sequenza finita di passi elementari.
+    \item \textbf{Spazio}, quello occupato in memoria dai risultati dei passi precedenti.
+\end{itemize}
+
+Il costo in tempo viene molto più discusso perché lo spazio è una risorsa rinnovabile, mentre il tempo non lo è.
+Utilizzare lo spazio richiede di utilizzare meno tempo possibile, in oltre è tecnicamente più semplice distribuire
+l'utilizzo di spazio che quello del tempo. Lo spazio ed il tempo sono parzialmente intercambiabili,
+è possibile ridurre il costo di uno incrementando l'utilizzo dell'altro.
+
+\subsubsection{Il tempo}
+Il tempo richiesto per risolvere un problema dipende da diversi aspetti:
+\begin{itemize}
+    \item L'\textbf{istanza} specifica da risolvere.
+    \item L'\textbf{algoritmo} utilizzato.
+    \item La \textbf{macchina} che sta eseguendo l'algoritmo.
+\end{itemize}
+La nostra misura di tempo computazionale dovrebbe essere:
+\begin{itemize}
+    \item \textbf{Sconnessa} dalla tecnologia, che sia la stessa su macchine differenti.
+    \item \textbf{Coincisa}, che viene riassunta in una semplice espressione simbolica.
+    \item \textbf{Ordinale}, che sia sufficiente per essere comparata con diversi algoritmi.
+\end{itemize}
+Il tempo computazionale in secondo per ogni istanza viola tutti i requisiti.
+
+\subsubsection{Complessità asintotica nel caso peggiore}
+La complessità asintotica di un algoritmo nel \textbf{caso peggiore} provvede una tale misura
+attraverso i seguenti passaggi:
+\begin{enumerate}
+    \item Definire il tempo come un numero $T$ di operazioni elementari eseguite.
+    \item Definire la dimensione di un istanza come opportuno valore di $n$.
+    \item Trovare il caso peggiore, ovvero il massimo valore di $T$ su tutte le istanze
+          di dimensione $n$. $$T(n)=max\underset{I\in\mathcal{I}_n}{T(I)}\text{  ,  }n\in\mathbb{N}$$
+          Ora la complessità in tempo è una funzione $T:\mathbb{N}\rightarrow\mathbb{N}$.
+    \item Approssimare $T(n)$ da sotto e/o da sopra con una funzione più semplice $f(n)$, questo
+          considerando solamente il loro comportamento asintotico (per $n\rightarrow\infty$).
+    \item Collezionare le funzioni in \textbf{classi} con la stessa \textit{funzione di approssimazione}.
+\end{enumerate}
+
+\subsubsection{Gli spazi funzionali $\Theta$}
+$$T(n) \in \Theta (f (n))$$
+Formalmente significa:
+$$\exists c_1, c_2 \in \mathbb{R}^+, n_0 \in \mathbb{N} : c_1 f(n) \leq T(n) \leq c_2 f(n)
+    \text{  }\forall n\geq n_0$$
+
+Dove $c_1,c_2$ e $n_0$ sono indipendenti da $n$. $T(n)$ è \textit{"racchiusa"} tra
+$c_1 f(n)$ e $c_2 f(n)$, per:
+
+\begin{itemize}
+    \item Alcuni \textit{"piccoli"} valori di $c_1$.
+    \item Alcuni \textit{"grandi"} valori di $c_2$.
+    \item Alcuni \textit{"grandi"} valori di $n_0$.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.8]{images/theta.png}
+    \caption{$f(n)=\Theta(T(n))$}
+\end{figure}
+Asintoticamente, la funzione $f(n)$ stima la funzione $T(n)$ per un fattore moltiplicativo:
+per grandi istanze, il tempo computazionale è al meno ed al più il valore della funzione $f(n)$.
+
+\subsubsection{Gli spazi funzionali $O$}
+$$T (n) \in O (f (n))$$
+Formalmente significa:
+$$\exists c \in \mathbb{R}^+, n_0 \in \mathbb{N} : T(n) \leq c f(n) \text{  }\forall n \geq n_0$$
+
+Dove $c$ e $n_0$ sono indipendenti da $n$. $T(n)$ è \textit{"dominata"} da $c f(n)$, per:
+\begin{itemize}
+    \item Alcuni \textit{"grandi"} valori di $c$.
+    \item Alcuni \textit{"grandi"} valori di $n_0$.
+\end{itemize}
+Asintoticamente, la funzione $f(n)$ sovrastima la funzione $T(n)$ per un fattore moltiplicativo: per
+grandi istanze, il tempo computazionale è al più proporzionale al valore della funzione $f(n)$
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.8]{images/ogrande.png}
+    \caption{$f(n)=O(T(n))$}
+\end{figure}
+
+\subsubsection{Gli spazi funzionali $\Omega$}
+$$T (n) \in \Omega (f (n))$$
+Formalmente significa:
+$$\exists c>0, n_0\in\mathbb{N}:T(n)\geq c f(n) \text{  }\forall n\geq n_0$$
+Dove $c$ e $n_0$ sono indipendenti da $n$. $T(n)$ \textit{"domina"} $c f(n)$, per:
+\begin{itemize}
+    \item Alcuni \textit{"grandi"} valori di $c$.
+    \item Alcuni \textit{"grandi"} valori di $n_0$.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1]{images/omega.png}
+    \caption{$f(n)=\Omega(T(n))$}
+\end{figure}
+
+Asintoticamente, $f(n)$ sovrastima $T(n)$ per un fattore moltiplicativo: per alcune grandi istanze,
+il tempo computazionale è almeno proporzionale al valore della funzione $f(n)$.
+
+\subsubsection{L'algoritmo esaustivo}
+Per i problemi di ottimizzazione combinatoria la dimensione di un istanza può essere misurata
+dalla cardinalità del ground set.
+$$n=|B|$$
+
+L'\textbf{algoritmo esaustivo}:
+\begin{itemize}
+    \item Considera ogni sottoinsieme $x\subseteq B$ tale che $x\in 2^{|B|}$.
+    \item Testi la fattibilità (se $x\in X$) in un tempo $\alpha(n)$.
+    \item In caso positivo, risolve la funzione oggettiva $f(x)$ in tempo $\beta(n)$.
+    \item Se necessario, aggiorna il miglior valore trovato finora.
+\end{itemize}
+
+La complessità in tempo degli algoritmi esaustivi è :
+$$T(n)\in\Theta\left( 2^n\left(\alpha(n)+\beta(n)\right) \right)$$
+Questa risulta lo stesso esponenziale, anche se $\alpha(n)$ e $\beta(n)$ sono dei
+polinomi (caso più frequente). La maggior parte delle volte l'algoritmo esaustivo
+è \textbf{impraticabile}.
+
+\subsubsection{Complessità polinomiale ed esponenziale}
+
+
+
 
 \end{document}
