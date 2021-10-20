@@ -1389,7 +1389,209 @@ polinomi (caso più frequente). La maggior parte delle volte l'algoritmo esausti
 è \textbf{impraticabile}.
 
 \subsubsection{Complessità polinomiale ed esponenziale}
+Nei problemi di ottimizzazione combinatoria, la principale distinzione si trova tra:
+\begin{itemize}
+    \item \textbf{Complessità polinomiale}, $T(n)\in O(n^d)$, dove $d>0$ è costante.
+    \item \textbf{Complessità esponenziale}, $T(n)\in\Omega(d^n)$, dove $d>1$ è costante.
+\end{itemize}
+Nella prima famiglia fanno parte gli \textbf{algoritmi efficienti}, invece nella seconda
+quelli \textbf{inefficienti}. In generale, gli algoritmi euristici sono algoritmi polinomiali
+per problemi dove l'algoritmo esatto risulta esponenziale.
+\subsubsection{Problemi di trasformazione e riduzione}
+Una relazione tra problemi permette la progettazione di algoritmi (\textit{interludio 5}).
 
+Progettare un algoritmo per \textbf{trasformazione}:
+\begin{enumerate}
+    \item Data un istanza di un problema $P$, detta $I_P$, trasformarla in
+          una istanza di un altro problema $Q$, $I_Q$.
+    \item Data $I_Q$, applicare l'algoritmo $A_Q$ per ottenere la soluzione $S_Q$.
+    \item Data $S_Q$, trasformiamola nella soluzione del problema $P$, $S_P$.
+\end{enumerate}
+
+Progettare un algoritmo per \textbf{riduzione}:
+\begin{enumerate}
+    \item Ripetere le trasformazioni $1,2,3$ diverse volte correggendo $I_Q$ basato sulle soluzioni
+          $\{S_Q\}$ già ottenute.
+\end{enumerate}
+
+I due algoritmi spesso hanno complessità simili: se $A_Q$ è polinomiale (o esponenziale) e:
+\begin{itemize}
+    \item Costruire $I_Q$ impiegherà tempo polinomiale/esponenziale.
+    \item Il numero di iterazioni sarà polinomiale/esponenziale.
+    \item Costruire $S_P$ impiegherà tempo polinomiale/esponenziale.
+\end{itemize}
+
+Quindi $A_P$ è un algoritmo \textit{polinomiale/esponenziale}.
+
+Il punto è che se si ha una trasformazione nella quale la modifica dell'istanza è
+polinomiale, ed il tempo in cui la trasformazione è applicata è polinomiale, allora la
+complessità di tutto l'algoritmo dipenderà dalla complessità di $A_Q$.
+
+\subsubitem{Oltre alla complessità del caso peggiore}
+La complessità nel caso peggiore ha diversi svantaggi:
+\begin{itemize}
+    \item Cancella tutte le informazioni delle istanze più semplici, poiché considera
+          solamente le istanza con grandi dimensioni.
+
+    \item Fornisce una approssimativa sovrastima del tempo computazionale, che
+          in alcuni rari casi è inutile. Per esempio, i problemi di \textit{programmazione
+              lineare}, nei quali i problemi hanno infinite soluzioni ma \textit{finite} soluzioni
+          base, ed ammettono un algoritmo che ha complessità esponenziale.
+
+          Tuttavia nella maggioranza dei casi gli algoritmi sono polinomi di bassa complessità.
+\end{itemize}
+\noindent\textit{Cosa se le istanze difficili sono rare nelle applicazioni pratiche?}
+Per compensare, uno può investigare:
+\begin{itemize}
+    \item La \textbf{complessità parametrizzata}, la quale introduce un nuovo rilevante
+          parametro $k$ (che è basato sulla dimensione di $n$), ed esprime il tempo come $T(n,k)$.
+    \item La \textbf{complessità nel caso medio}, la quale si assume una probabilità di
+          distribuzione su $\mathcal{I}$ ed esprime il tempo come il valore atteso.
+          $$T(n)=E[T(I)|I\in \mathcal{I}_n]$$
+
+\end{itemize}
+
+\subsubsection{Complessità parametrizzata}
+L'idea è che alcuni algoritmi non sono esponenziali in $n$ ma sono esponenziali in un
+altro parametro $k$ che è più piccolo di $n$.
+
+Se entrambi $k$ e $n$ sono grandi, allora ovviamente l'algoritmo è inefficiente, ma se $k$
+è piccolo, allora l'algoritmo sarà efficiente e possibilmente anche polinomiale.
+
+Perciò:
+\begin{itemize}
+    \item Efficiente su istanze con $k$ piccolo.
+    \item Inefficiente su istanze con $k$ grande.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{images/param_coplx.png}
+    \caption{Insieme delle istanza infinitamente diviso dai parametri $k$ ed $n$}
+\end{figure}
+
+Abbiamo tutti gli insiemi delle istanze del nostro problema, possiamo partizionare queste
+istanze con un numero infinito di fette per $n$ e per l'altro parametro $k$. Possiamo
+considerare il nostro algoritmo.
+
+Il parametro $k$ può fare parte dell'input come la capacità, il massimo numero di
+letterali per formula (SAT), il numero di elementi non-zero (problema matrici numeriche),
+il massimo grado o il diametro (problemi con i grafi).
+
+Stranamente il parametro aggiuntivo $k$ può essere parte della soluzione (come la \textit{
+    cardinalità} nel VCP): in tale caso non puoi conoscere \textit{a priori} se l'algoritmo
+è efficiente o meno, ma solo un approssimazione può essere disponibile. Quindi
+se $k$ è facente parte della soluzione, solo \textit{a posteriori} sarà possibile
+sapere se si tratta di un algoritmo efficiente.\newline
+
+\subsubsection{Bounded tree search (algoritmo con parametro)}
+\noindent\textbf{Per esempio: il VCP}
+\newline
+L'algoritmo esaustivo: per ogni uno dei $2^n$ sottoinsiemi di vertici, testare se
+coprono tutti gli archi, calcolare la cardinalità e mantenere il valore più piccolo.
+$$T(n,m)\in\Theta(2^n(m+n)),\text{ dove }n=|V|\text{ e }m=|E|$$
+
+Ma se noi già sappiamo una soluzione con $f(x)=|x|=k+1$, possiamo cercare per una soluzione
+di $k$ vertici, e progressivamente decrementare $k$ (o ancora meglio utilizzare
+la \textbf{ricerca binaria} su $k$).
+
+L'algoritmo naive: per ogni sotto insieme di $k$ vertici, testare se copre tutti gli archi.
+$$T(n,m,k)\in\Theta(n^k m)$$
+Per una dato $k$ fissato, l'algoritmo risulta di complessità polinomiale. Detto questo
+è possibile fare di meglio.\newline\newline
+
+\noindent\textbf{Bounded tree search per il VCP}
+\newline
+Un algoritmo migliore può essere basato sulla seguente proprietà:
+$$x\cap(u,v)\neq\emptyset\text{ }\forall x\in X,(u,v)\in E$$
+Ovvero, una qualsiasi soluzione fattibile include almeno un estremo (vertice)
+di ogni arco.
+
+Allora l'algoritmo \textbf{Bounded tree search} (\textit{ricerca delimitata da gli alberi}),
+vuole trovare $x$ tale che $x\leq k$:
+\begin{enumerate}
+    \item Scegliere un qualsiasi arco $(u,v)$, sia che $u\in x$ che $u\notin x$ e
+          che $v\in x$ (ovvero che uno degli estremi non faccia per forza parte dalla soluzione).
+    \item Per ogni caso \textit{"aperto"}, rimuovere i vertici di $x$ e gli archi che
+          essi coprono. $$V:=V\setminus x, E:=E\setminus\{e\in E:e\cap x\neq\emptyset\}$$
+    \item Se $|x|\leq k$ e $E=\emptyset$, $x$ è la soluzione richiesta.
+    \item Se $|x|=k$ e $E\neq\emptyset$, non è presente alcuna soluzione.
+    \item Altrimenti ritorna al passo $1$.
+\end{enumerate}
+La complessità è $T(n,m,k)\in\Theta(2^km)$, polinomiale in $n$ ($m<n^2$). Per $n>>2$,
+questo algoritmo è molto più efficiente di quello \textit{naive}.\newline
+\noindent\textbf{Esempio del Bounded tree search}
+\newline
+Nel seguente grafo con $n=10,m=16$, \textit{è presente una soluzione con $|x|\leq 3$?} (quindi
+$k=3$).
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1]{images/bounded_tree_search_1.png}
+    \caption{Stato iniziale del grafo (\textit{Bounded Tree Search})}
+\end{figure}
+\noindent Algoritmo esaustivo: $\Theta(2^n(m+n))$, con $2^n(m+n)=1024\cdot(16+10)$\newline
+Algoritmo naive: $\Theta(n^k m)$, con $n^k m=1000\cdot 16$\newline
+Bounded tree search algorithm: $\Theta(2^km)$ con $2^km=8\cdot 16$
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1]{images/bounded_tree_search_2.png}
+    \caption{Soluzione del Bounded Tree Search, considerando un ordinamento lessicografico}
+\end{figure}
+
+\subsubsection{Kernelization - "Problem reduction" (algoritmo con parametro)}
+La \textit{kernelizzazione} trasforma tutte le istanze di $P$ in istanze più
+semplici di $P$, anziché istanze di un altro problema $Q$. Questa pratica è anche
+conosciuta con il nome di \textbf{problem reduction} (\textit{riduzione del problema}).
+
+Abbastanza spesso, in fatti, sono presenti delle proprietà molto utili che lo dimostrano:
+\begin{itemize}
+    \item Esiste una soluzione ottimale che non include certi elementi di $B$ (tali
+          elementi possono essere rimossi).
+    \item Esiste una soluzione ottimale che include certi elementi di $B$ (tali
+          elementi possono essere messi da parte ed aggiunti dopo).
+\end{itemize}
+In breve rimuove elementi di $B$ senza modificare la soluzione. Possibili risultati
+utili sono:
+\begin{itemize}
+    \item Un algoritmo esatto e polinomiale in $n$ (complessità parametrizzata).
+    \item Algoritmi esatti più veloci ed algoritmi euristici.
+    \item Migliori soluzioni euristiche.
+    \item \textbf{Heuristic kernelization}, applica condizione rilassata sacrificando
+          l'ottimalità.
+\end{itemize}
+
+\noindent Tornando al problema del VCP, vediamo la \textbf{Kernelization del VCP}:
+\newline
+Se $\delta_v\geq k+1$, il vertice $v$ appartiene ad una qualsiasi soluzione possibile di
+valore $\leq k$. Considerare che $v$ ha $k+1$ archi incidenti e che dovrebbe essere
+coperto da altrettanti vertici.
+\newline
+Algoritmo di kernelizzazione per mantenere solo i vertici della soluzione $x$ con $|x|\leq k$:
+\begin{itemize}
+    \item Iniziare allo step $t=0$ con $k_0=k$ ed un sottoinsieme di vertici vuoto $x_t:=\emptyset$
+    \item Impostare $t=t+1$ ed aggiungere alla soluzione i vertici di grado $\geq k_t+1$.
+          $$\delta_v\geq k_t+1\implies x_t := x_{t-1}\cup\{v\}$$
+    \item Aggiornare $k_t\text{: } k_t:=k_0-|x_t|$
+    \item Rimuovere i vertici con grado zero, quelli di $x$ e degli archi coperti.
+          $$V:=\{v\in V : \delta_v > 0\}\setminus x_t$$
+          $$E:=\{e\in E : e\cap x_t = \emptyset\}$$
+    \item Se $|E|>k_t^2$, non è presente alcuna soluzione fattibile ($k_t$ vertici non sono abbastanza).
+    \item Se $|E|\leq k_t^2\implies |V|\leq 2k_t^2$, si applica l'algoritmo esaustivo.
+\end{itemize}
+La complessità è $T(n,k)\in\Theta(n+m+2^{2k^2}k^2)$.
+
+Per esempio, consideriamo il seguente grafo con $n=10,m=16$, \textit{è presente una
+    soluzione con $|x|\leq k_0=5$?}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1]{images/kerneliz_0.png}
+    \caption{Grafo d'esempio per la Kernelization del VCP}
+\end{figure}
+
+Algoritmo esaustivo:$\Theta(2^n(m+n))\implies T\approx 2^{10}(10+16)=26624$
+\newline
+\noindent Algoritmo naive: $\Theta(n^km)\implies T\approx 10^5\cdot 16=16000000$
 
 
 
