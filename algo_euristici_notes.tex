@@ -352,12 +352,9 @@ Questo ovviamente, non è il caso dei precedenti problemi in quanto semplici da 
 In particolare il problema KP una funzione oggettiva \textbf{additiva}, nel calcolare la $f$ dobbiamo effettuare delle somme
 con il valore della funzione ausiliaria $\phi$ definita sul ground set, ricordando che nel problema KP, $B \equiv E$.
 $$\phi : B\rightarrow \mathbb{N} \text{ induce } f(x)=\sum_{j\in x}\phi_j : X \rightarrow \mathbb{N}$$
+Questo è interessante perché significa che si deve memorizzare solamente il valore della funzione ausiliaria $\phi$,
+i quali sono $|B|$ valori, e non $2^B$, come sarebbe per i valori della funzione oggettiva che è definita su $X$.
 
-Questo è interessante perché significa che si deve memorizzare solamente il valore della funzione
-ausiliaria $\phi$, i quali sono $|B|$ valori, e non $2^B$, come sarebbe per i valori della funzione
-oggettiva che è definita su $X$.
-\newline
-\newline
 Lo stesso accade per il problema MDP e la sua funzione ausiliaria $d$, anche se quest'ultima ha una funzione oggettiva quadratica,
 poi fornito un $n=|B|$ di punti nel caso peggiore si dovranno sommare $\frac{n(n-1)}{2}$ (numero di archi in un grafo completo) distanze, tuttavia però il
 calcolo rimane \textit{"solamente"} una somma, quindi avente una \textbf{complessità polinomiale}.
@@ -398,11 +395,9 @@ La prima domanda che ci si vuole porre è: \textit{è un problema di ottimizzazi
 Il ground set è definito come $B=E\times C$, dove ogni elemento di $B$ è definito da una coppia $\langle oggetto, container\rangle$. Una soluzione
 per questo problema è un sottoinsieme formato da oggetti di questo tipo, il prodotto cartesiano è necessario poiché si deve selezionare un oggetto ed inserirlo in un determinato container.
 
-Una volta che la lista di coppie contenenti gli elementi di $E$
-è costruita, una soluzione candidata sarà ottenuta (un sottoinsieme del ground set,
-ma a noi questo non basta, voglia che sia un sottoinsieme della regione di fattibilità).
-\newline
-\newline
+Una volta che la lista di coppie contenenti gli elementi di $E$ è costruita, una soluzione candidata sarà ottenuta
+(un sottoinsieme del ground set, ma a noi questo non basta, voglia che sia un sottoinsieme della regione di fattibilità).
+
 Consideriamo $B_e$ come il sottoinsieme del ground set dove gli oggetti delle coppie provengono da $E$ (i container sono tutti i possibili), e $B_c$ come il sottoinsieme del ground set dove i container nelle coppie degli elementi provengono da $C$ (gli elementi sono tutti i possibili).
 $$B_e=\{(i,j) \in B : i=e\}$$
 $$B_c=\{(i,j) \in B : i=c\}$$
@@ -481,7 +476,6 @@ $$min\underset{x\in X}{f(x)}=max\underset{m\in M}{}\sum_{t:(t,m)\in x} d_t$$
 
 In parole povere, vogliamo trovare il sottoinsieme $x$ che minimizza il tempo di completamento di ciascuna
 macchina, dove il tempo di completamento per un singolo task è $\sum_{t:(t,m)\in x} d_t$.
-\newline
 \newline
 Per esempio, consideriamo il seguente insieme di dati per tre macchine, $|M|=3$, e sette task differenti $|T|=7$.
 
@@ -923,7 +917,7 @@ $$f(x')=3$$
 La seconda soluzione proposta è anch'essa una soluzione \textbf{fattibile}, per lo stesso motivo precedente.
 
 \subsubsection{Maximum Independent Set}
-Questo problema è opposto al MCP, vogliamo trvare un sottoinsieme di vertici di peso massimo che non è
+Questo problema è opposto al MCP, vogliamo trovare un sottoinsieme di vertici di peso massimo che non è
 connesso da archi.
 Dati:
 \begin{itemize}
@@ -1161,7 +1155,7 @@ $$f(x'')=87$$
 Questa \textbf{non è} una soluzione fattibile, visto che il sotto albero destro non rispetta
 la capacità massima (nonostante il sottoinsieme sia un albero ricoprente).
 
-Il costo delle operazioni principali cambia, il testi di fattibilità richeide solamente la somma
+Il costo delle operazioni principali cambia, il testi di fattibilità richiede solamente la somma
 dei pesi, calcolare la funzione oggettiva richiede risolvere un problema
 MST (\textit{Minimum Spanning Tree}).
 
@@ -1182,12 +1176,8 @@ Trovare uno \textbf{albero ricoprente capacitato} è un problema fortemente NP-c
 è difficile trovare una soluzione fattibile a meno che il grafo sia completo. Dato un insieme di vertici,
 in ordine si controlla se la soluzione è una soluzione fattibile o meno, è necessario costruire
 la corretta rappresentazione dell'albero e poi visitare il sotto albero, sommare i pesi dei vertici, in
-una maniera simile ad una visita DFS.
-\newline
-\newline
-\textbf{Descrizione alternativa}
-\newline
-
+una maniera simile ad una visita DFS. \paragraph{Descrizione alternativa}
+%Va scritta la descrizione alternativa (secondo o terzo pacco di slide)
 
 \subsubsection{Vehicle Routing Problem (VRP)}
 \subsubsection{Interludio 6: combinare rappresentazioni alternative}
@@ -1195,12 +1185,12 @@ Il CMSTP ed il VRP condividono una complicazione interessante: differenti defini
 ground set $B$ sono possibili e naturali.
 \begin{itemize}
     \item La descrizione come insieme di archi sembra preferibile per gestire la funzione oggettiva.
-    \item La descrizione che utilizza un insieme di coppie $(vertice, albero)/(nodo/ciclo)$ sembra
-          migliore per generare soluzioni ottime ed ha a che fare con la fattibilità.
+    \item La descrizione che utilizza un insieme di coppie del tipo
+          \newline$(vertice, albero)/(nodo/ciclo)$ sembra migliore per generare
+          soluzioni ottime ed ha a che fare con la fattibilità.
 \end{itemize}
 
-\noindent\textit{Quale descrizione dovrebbe essere adottata?}
-\newline\noindent Quella che rende più semplice le operazioni più frequenti, oppure una possibilità risulta
+\noindent\textit{Quale descrizione dovrebbe essere adottata?} Quella che rende più semplice le operazioni più frequenti, oppure una possibilità risulta
 quella di utilizzare entrambe le rappresentazioni se le operazioni sono usate molto più frequentemente
 che quanto sono aggiornate, in maniera che il fardello di mantenerle aggiornate e consistenti sia accettabile.
 
@@ -1309,7 +1299,7 @@ attraverso i seguenti passaggi:
     \item Collezionare le funzioni in \textbf{classi} con la stessa \textit{funzione di approssimazione}.
 \end{enumerate}
 
-\subsubsection{Gli spazi funzionali $\Theta$}
+\subsubsection{\texorpdfstring{Gli spazi funzionali $\Theta$}{Gli spazi funzionali}}
 $$T(n) \in \Theta (f (n))$$
 Formalmente significa:
 $$\exists c_1, c_2 \in \mathbb{R}^+, n_0 \in \mathbb{N} : c_1 f(n) \leq T(n) \leq c_2 f(n)
@@ -1332,7 +1322,7 @@ $c_1 f(n)$ e $c_2 f(n)$, per:
 Asintoticamente, la funzione $f(n)$ stima la funzione $T(n)$ per un fattore moltiplicativo:
 per grandi istanze, il tempo computazionale è al meno ed al più il valore della funzione $f(n)$.
 
-\subsubsection{Gli spazi funzionali $O$}
+\subsubsection{\texorpdfstring{Gli spazi funzionali $O$}{}}
 $$T (n) \in O (f (n))$$
 Formalmente significa:
 $$\exists c \in \mathbb{R}^+, n_0 \in \mathbb{N} : T(n) \leq c f(n) \text{  }\forall n \geq n_0$$
@@ -1350,7 +1340,7 @@ grandi istanze, il tempo computazionale è al più proporzionale al valore della
     \caption{$f(n)=O(T(n))$}
 \end{figure}
 
-\subsubsection{Gli spazi funzionali $\Omega$}
+\subsubsection{\texorpdfstring{Gli spazi funzionali $\Omega$}{}}
 $$T (n) \in \Omega (f (n))$$
 Formalmente significa:
 $$\exists c>0, n_0\in\mathbb{N}:T(n)\geq c f(n) \text{  }\forall n\geq n_0$$
@@ -1482,10 +1472,10 @@ Stranamente il parametro aggiuntivo $k$ può essere parte della soluzione (come 
     cardinalità} nel VCP): in tale caso non puoi conoscere \textit{a priori} se l'algoritmo
 è efficiente o meno, ma solo un approssimazione può essere disponibile. Quindi
 se $k$ è facente parte della soluzione, solo \textit{a posteriori} sarà possibile
-sapere se si tratta di un algoritmo efficiente.\newline
+sapere se si tratta di un algoritmo efficiente.
 
 \subsubsection{Bounded tree search (algoritmo con parametro)}
-\noindent\textbf{Per esempio: il VCP}
+\noindent\textbf{Per esempio, il VCP}
 \newline
 L'algoritmo esaustivo: per ogni uno dei $2^n$ sottoinsiemi di vertici, testare se
 coprono tutti gli archi, calcolare la cardinalità e mantenere il valore più piccolo.
@@ -1498,11 +1488,8 @@ la \textbf{ricerca binaria} su $k$).
 L'algoritmo naive: per ogni sotto insieme di $k$ vertici, testare se copre tutti gli archi.
 $$T(n,m,k)\in\Theta(n^k m)$$
 Per una dato $k$ fissato, l'algoritmo risulta di complessità polinomiale. Detto questo
-è possibile fare di meglio.\newline\newline
-
-\noindent\textbf{Bounded tree search per il VCP}
-\newline
-Un algoritmo migliore può essere basato sulla seguente proprietà:
+è possibile fare di meglio.\paragraph{Bounded Tree Search per il VCP}, un algoritmo migliore può
+essere basato sulla seguente proprietà:
 $$x\cap(u,v)\neq\emptyset\text{ }\forall x\in X,(u,v)\in E$$
 Ovvero, una qualsiasi soluzione fattibile include almeno un estremo (vertice)
 di ogni arco.
@@ -1535,8 +1522,8 @@ Bounded tree search algorithm: $\Theta(2^km)$ con $2^km=8\cdot 16$
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=1]{images/bounded_tree_search_2.png}
-    \caption{Soluzione del Bounded Tree Search, considerando un ordinamento lessicografico}
+    \includegraphics[scale=0.8]{images/bounded_tree_search_2.png}
+    \caption{Soluzione del Bounded Tree Search (\textit{ordinamento lessicografico})}
 \end{figure}
 
 \subsubsection{Kernelization - "Problem reduction" (algoritmo con parametro)}
@@ -1613,8 +1600,8 @@ $\delta_10\geq k_2+1\implies x_3 := \{5,10\}$ rimozione degli archi incidenti ed
     \caption{Rimozione degli archi incidenti con $k_3=2$}
 \end{figure}
 
-\subsection{Complessità nel caso medio (avarage-case complexity)}
-Alcuni algoritmi sono inefficenti solo in un insieme di istanze ridotte, per esempio
+\subsection{Complessità nel caso medio (average-case complexity)}
+Alcuni algoritmi sono inefficienti solo in un insieme di istanze ridotte, per esempio
 il \textit{simplex algorithm} nel caso della programmazione lineare.
 
 Gli studi teorici:
@@ -1674,8 +1661,8 @@ Considerando una CNF casuale con un dato numero di variabili $n$:
 \begin{itemize}
     \item \textbf{Insieme con probabilità fissa}: elenca tutte le
           $\binom{n}{k}2^k$ formule con $k$ letterali distinti e consistenti, ed
-          aggiungo oguno alla CNF con probabilità $p$.
-    \item \textbf{Insieme con dimensione fissa}: costuisco $m$ formule,
+          aggiungo ognuno alla CNF con probabilità $p$.
+    \item \textbf{Insieme con dimensione fissa}: costruisco $m$ formule,
           aggiungo ad ognuna $k$ letterali distinti e consistenti, estratti con
           probabilità uniforme. Se $p=\frac{m}{\binom{n}{k}2^k}$, esso assomiglierà
           al modello con probabilità fissa, ma alcune istanze non potranno essere generate.
@@ -1704,7 +1691,7 @@ Spesso, la \textit{variazione} di performance avviene all'improvviso in piccole
 regioni dello spazio dei parametri, come la \textit{transizione di fase} all'interno
 di un sistema fisico.
 
-Questo è utile per predirre il comportamento di un algoritmo data un istanza.
+Questo è utile per predire il comportamento di un algoritmo data un istanza.
 \subsection{Transizione di fare per 3-SAT e Max-3-SAT}
 Data una CNF di $n$ variabili e con formule logiche contenenti $3$ letterali.
 
@@ -1735,7 +1722,7 @@ incrementa.
 immagine
 
 Quando $\frac{|x|}{|V|}$ è piccolo, alcuni vertici sono chiaramente necessari, problema risolto.
-Quando $\frac{|x|}{|V|} è grande, molti vertici sono chiaramente necessari: problema risolto.$
+Quando $\frac{|x|}{|V|}$ è grande, molti vertici sono chiaramente necessari, problema risolto.
 
 \subsection{Costo computazionale degli algoritmi euristici}
 La complessità in tempo di un algoritmo euristico è solitamente:
@@ -1755,7 +1742,7 @@ Le \textbf{metaeuristiche} utilizzano passi casuali o memoria:
 \noindent\textit{Perché discutere ciò in un corso di algoritmi euristici ?}
 \begin{itemize}
     \item Per guidare la ricerca dell'algoritmo corretto, un algoritmo corretto
-          può essere efficiente in un caso specifico, ed inefficente in un caso peggiore.
+          può essere efficiente in un caso specifico, ed inefficiente in un caso peggiore.
     \item Per mostrare che gli algoritmi euristici possono interagire proficuamente:
           poiché gli algoritmi euristici provvedono informazioni per migliorare gli algoritmi
           esatti (rendendoli più efficienti).
