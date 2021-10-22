@@ -2007,7 +2007,45 @@ dominato da questo limite superiore, il che significa che l'algoritmo euristico
 è quasi sicuramente un fattore moltiplicato per la soluzione ottima. Andiamo a dimostrare
 che l'algoritmo double-tree è 2-approssimato.
 \paragraph{Dimostrazione algoritmo Double-tree 2-approssimato},
+Rimuovendo un arco da un ciclo Hamiltoniano restituisce un percorso Hamiltoniano,
+il quale è necessariamente più economico. Visto che un cammino Hamiltoniano ricopre tutti
+i nodi, è effettivamente un albero ricoprente, e solitamente non di costo minimo. Quindi,
+un attuale minimo albero ricoprente è sicuramente un limite inferiore sul costo di un
+ciclo Hamiltoniano. La serie di nodi della visita DFS del MST (\textit{Minimum Spanning Tree})
+assieme con i suoi archi di back tracking genera un ciclo Hamiltoniano nel grafo originale,
+poiché è presente una coppia di archi diretti per ogni nodo (quindi ogni arco visitato nella
+DFS esiste nel grafo originale).
 
+Il costo di questo ciclo Hamiltoniano è necessariamente una sovrastima, visto che il
+costo di tutti percorsi nel grafo rispetta l'uguaglianza traingolare; mentre la visita
+restituisce, per esempio il percorso $A\rightarrow B\rightarrow C$, il grafo rispetta l'
+uguaglianza triangolare scegliendo l'arco $A\rightarrow C$ la soluzione sarà di costo minimo.
+Quindi, visto che $LB(I)$ è uguale al costo del MST ed il ciclo ha esattamente il doppio
+degli archi del MST, abbiamo $UB(I)=2\cdot LB(I)$.
 
+L'euristica è dominata da un limite superiore ed un qualsiasi circuito $x$ ha:
+$$f_A(I)\leq UB(I)\leq 2\cdot LB(I)\leq 2\cdot f^*(I) \text{   }\forall I\in \mathcal{I}$$
+
+\subsection{Inapprossimabilità}
+Per un problema \textbf{inaprossimabile}, tutti gli algoritmi approssimati sono esatti, quindi
+alcuni problemi non possono essere approssimati a meno che alcune proprietà della
+complessità computazionale vengano verifica, cosa che è molto difficile che accada.
+
+Per esempio, consideriamo la seguente famiglia di istanze del TSP che violano la
+disuguaglianza triangolare nella seguente maniera:
+
+\[c_{ij}=\begin{cases}
+        0 & \forall (i,j)\in A_0\subset A   \\
+        1 & \forall (i,j)\in A\setminus A_0
+    \end{cases}
+\]
+
+%ed il grafo è completo. Se una qualsiasi funzione di costo nullo ($f^*(I)=0$) viene trovata, significa che la
+%soluzione contiene solo archi in $A_0$ che compongono il ciclo Hamiltoniano. Quindi, in un senso, è presente
+%un grafo non-completo $G(N,A_0)$ che ha un ciclo Hailtoniano come soluzione fattibile, tale che è lo stesso
+%per quello del grafo originale (questo significa che il grafo originale è il \textit{completamento} del nuovo
+%grafo).
+%Questo è bello finchè una soluzione per il grafo completo viene trovata con costo nullo, allora potrai
+%veramente risolvere il problema del TSP nella forma decisionale anche su
 
 \end{document}
