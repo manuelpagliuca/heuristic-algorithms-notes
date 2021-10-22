@@ -4,6 +4,7 @@
 \usepackage{mathpazo}
 \usepackage[italian]{babel}
 \usepackage{caption}
+\usepackage[dvipsnames]{xcolor}
 %Prefisso della caption delle figure
 \captionsetup[figure]{labelformat=empty}% redefines the caption setup of the figures environment in the beamer class.
 
@@ -28,7 +29,7 @@
 
 \maketitle
 \tableofcontents
-
+\pagebreak
 \section{Introduzione}
 L'obiettivo di questo corso è quello di mostrare che gli \textbf{algoritmi euristici} non sono ricette per problemi specifici:
 le euristiche e i problemi possono essere combinati liberamente.
@@ -1708,7 +1709,11 @@ Con l'aumentare del rateo formule-variabili $\alpha=\frac{m}{n}$:
           decresce, invece nel Max-SAT incrementa ulteriormente dopo la transizione.
 \end{itemize}
 
-inserire immagine
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.52]{images/max_sat_SAT.png}
+    \caption{Plot delle fasi}
+\end{figure}
 
 Per $n\rightarrow\infty$ la transizione si concentra attorno $\alpha_c\approx 4.26$
 \subsection{La transizione di fase per il VCP}
@@ -1719,7 +1724,11 @@ incrementa.
     \item Per $n\rightarrow\infty$ la transizione si concentra attorno al valore critico.
 \end{itemize}
 
-immagine
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{images/phase_VCP.png}
+    \caption{Fase del VCP}
+\end{figure}
 
 Quando $\frac{|x|}{|V|}$ è piccolo, alcuni vertici sono chiaramente necessari, problema risolto.
 Quando $\frac{|x|}{|V|}$ è grande, molti vertici sono chiaramente necessari, problema risolto.
@@ -1751,5 +1760,254 @@ Le \textbf{metaeuristiche} utilizzano passi casuali o memoria:
     \item Per identificare \textit{a priori} le istanze più ardue, certamente non tutti
           gli algoritmi hanno le stesse istanze \textit{"complesse"}.
 \end{itemize}
+
+\section{Efficacia teorica}
+\subsection{Efficacia di un algoritmo euristico}
+Un algoritmo euristico è utile se è:
+\begin{itemize}
+    \item \textbf{Efficiente}, ovvero \textit{"costa"} molto meno di un algoritmo esatto.
+    \item \textbf{Efficace}, ovvero restituisce \textit{"frequentemente"} una soluzione
+          che è vicina a quella esatta.
+\end{itemize}
+
+Adesso vogliamo discute dell'efficacia degli algoritmi euristici, possiamo formalmente discutere
+questo concetto introducendo il concetto di distanza di una soluzione rispetto ad una ottimale e la
+frequenza (probabilistica) di ottenere una soluzione ottimale o quasi (rispetto ad una data distanza)
+rispetto ad una soluzione ottima.
+Queste caratteristiche possono essere combinate in una distribuzione a frequenza di soluzioni
+più o meno vicine alla soluzione ottimale (andrà introdotto un concetto di distanza).
+
+L'efficacia di un algoritmo euristico può essere investigata in due modi:
+\begin{itemize}
+    \item \textbf{Analisi teorica} (\textit{a priori}), provando che un algoritmo trova
+          sempre o con una data frequenza soluzioni con una certa garanzia di qualità.
+    \item \textbf{Analisi sperimentale} (\textit{a posteriori}), misurando le prestazioni dell'algoritmo
+          su istanze di benchmark campionate per dimostrarne la presenza.
+\end{itemize}
+
+\subsection{Distanza tra le soluzioni}
+Come detto precedentemente, dobbiamo dare un significato al concetto di distanza, e possiamo fornire
+molteplici interpretazioni differenti.\\L'efficacia di un algoritmo di ottimizzazione euristico $A$
+è misurata dalla \textbf{differenza} tra il valore $f_A(I)$ (la funzione oggettiva sull'istanza
+$I$ calcolata da $A$) e il valore ottimale $f*(I)$ (la soluzione migliore per l'istanza $I$).
+
+\subsubsection{Differenza assoluta}
+Una possibile definizione iniziale tra due valori:
+$$\widetilde{\delta}_A(I)=|f_A(I)-f^{*}(I)|$$
+Seppure questa definizione è molto naturale ed ovvia, è raramente utilizzata in pratica poiché dipende
+dall'unità di misura della funzione oggettiva: basa pensare di provare a minimizzare il tempo complessivo
+nel caso del TSP e che lo si misuri in giorni. Si potrebbe provare ad utilizzare ore, minuti o secondi
+anziché ed il valore di $\widetilde{\delta}_A(I)$ dipenderà fortemente da questa scelta. Questo sarà
+valido quando la funzione oggettiva è un numero puro.
+
+\subsubsection{Differenza relativa}
+La seconda definizione è basata sull'idea che calcolare la differenza relativa rispetto alla soluzione
+ottimale.
+$$\delta_A(I)=\frac{|f_A(I)-f^*(I)|}{f^*(I)}$$
+Questo è un approccio molto frequente nell'analisi sperimentale ed il suo vantaggio è che nel caso in
+cui la funzione oggettiva abbia un unità di misura, allora il rapporto (\textit{rateo}) ottenuto sarà
+un numero \textit{puro}.
+
+\subsubsection{Rapporto di approssimazione}
+Un terzo approccio, ampiamente utilizzato, è il rapporto di approssimazione:
+$$\rho_A(I)=max\left[\frac{f_A(I)}{f^*(I)},\frac{f^*(I)}{f_A(I)}\right]\geq 1$$
+Il quale include sia il problema di minimizzazione che di massimizzazione: nel caso in cui sia un
+problema di minimizzazione, probabilmente $f*(I)<f_A(I)$ e viceversa per i problemi di massimizzazione.
+Chiaramente è collegato alla differenza relazionale, in fatti nel caso dei problemi di minimizzazione:
+$$\delta_A(I)=\rho_A(I)-1$$
+La relazione esiste anche per i problemi di massimizzazione.
+
+\subsection{Analisi teorica: garanzia di approssimazione}
+Per garantire \textit{a priori} le prestazioni dell'algoritmo, l'idea è ancora una volta quella
+di considerare il caso peggiore, proprio come per l'efficienza. In generale quando si applica
+un algoritmo euristico il risultato $f_A(I)$ potrebbe essere un pessimo (distante) risultato
+rispetto alla soluzione ottimale $f*(I)$, ma se l'algoritmo è buono la differenza non sarà
+molto grande;
+
+La differenza tra $f_A(I)$ e $f^*(I)$ è generalmente illimitata, ma per alcuni algoritmi è limitata:
+\begin{itemize}
+    \item \textbf{Approssimazione assoluta}: $$\exists\widetilde{\alpha}_A\in\mathbb{N}:\widetilde{\delta}_A(I)\leq\widetilde{\alpha}\text{ }\forall I\in\mathcal{I}$$
+          Significa che la la distanza assoluta rispetto alla soluzione ottimale è limitata da
+          un intero costante; un esempio è l'algoritmo di Vizing per la colorazione del grafo ($\widetilde{\alpha}=1$).
+
+    \item \textbf{Approssimazione relativa}: $$\exists\alpha_A\in\mathbb{R}^+:\rho_A(I)\leq\alpha_A\text{ }\forall I\in\mathcal{I}$$
+          Significa che il rapporto di approssimazione $\rho_A(I)$ ha un limite superiore delimitato da una costante reale $\alpha_A$.
+          La cosa interessante è che la definizione può essere estesa a casi in cui una garanzia di approssimazione
+          costante non può essere trovata considerando l'approssimazione come un valore ma come un'apposita funzione
+          parametrizzata rispetto alla dimensione dell'istanza:
+          $$\rho_A(I)\leq\alpha_A(n)\text{ }\forall I\in\mathcal{I}_n,n\in\mathbb{N}$$
+\end{itemize}
+In conclusione, è importante sottolineare che mentre l'efficienza e è necessariamente
+dipendente dalla dimensione dell'istanza, l'efficacia \textit{potrebbe} non esserlo.
+
+\subsubsection{Come ottenere una garanzia di approssimazione?}
+Fornite le basi teoriche, ora possiamo descrivere in maniera generale un metodo per introdurre e
+dimostrare un algoritmo con garanzia di approssimazione.\\ Per i problemi di minimizzazione,
+si vuole dimostrare:
+$$\exists\alpha_A\in\mathbb{R}:f_A(I)\leq\alpha_A f^*(I)\text{ }\forall I\in\mathcal{I}$$
+
+Uno schema generalmente astratto è:
+\begin{itemize}
+    \item Trovare un modo per costruire una sottostima $LB(I)$ $$LB(I)\leq f^*(I)\text{,   }I\in\mathcal{I}$$
+    \item Trovare un modo per costruire una sovrastima $UB(I)$ che sia in relazione con il coefficiente $\alpha_A$
+          $$UB(I)=\alpha_A LB(I)\text{,   }I\in\mathcal{I}$$
+    \item Trovare un algoritmo $A$ la cui soluzione non sia peggiore di $UB(I)$ $$f_A(I)\leq UB(I)\text{   }I\in\mathcal{I}$$
+\end{itemize}
+
+Se i tre passi sono stati completati e vengono trovati valori ed algoritmi adatti
+$$f_A(I)\leq UB(I)=\alpha LB(I)\leq\alpha f^*(I)\text{   }\forall I\in\mathcal{I}\implies f_A(I)\leq\alpha_A f^*(I)\text{   }\forall I\in\mathcal{I}$$
+
+La parte più complicata potrebbe essere il secondo passo, quindi affrontiamo mostrando un esempio.
+\paragraph{Garanzia di approssimazione per il VCP: algoritmo 2-approssimato}: dato un grafo indiretto
+$G=(V,E)$ trovare un sottoinsieme di vertici di cardinalità minima tale per cui ogni arco dell'arco
+del grafo sia incidente.\\Definiamo:
+\begin{itemize}
+    \item Un insieme \textbf{"matching"}, tale per cui sia l'insieme degli archi non adiacenti.
+    \item Un insieme \textbf{"maximal matching"}, è un insieme di tipo \textit{matching} tale che
+          ogni altro arco del grafo è adiacente ad uno dei suoi archi.
+\end{itemize}
+Algoritmo di Matching:
+\begin{enumerate}
+    \item Costruire un \textit{maximal matching} $M\subseteq E$ scorrendo gli archi di $E$ e includendo in
+          $M$ quelli che non sono adiacenti ad $M$ (ora ogni arco di $E\setminus M$ è adiacente ad un arco di $M$).
+    \item L'insieme di vertici \textit{estremi} degli archi in \textit{matching} è la soluzione del VCP
+          $$x_A := \bigcup_{(u,v)\in M}\{u,v\}$$ Può essere migliorata rimuovendo i vertici ridondanti.
+\end{enumerate}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/matching_0.png}
+    \caption{Algoritmo di Matching - Passo 0 (stato iniziale del grafo)}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/matching_1.png}
+    \caption{Algoritmo di Matching - Passo 1}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/matching_2.png}
+    \caption{Algoritmo di Matching - Passo 2}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/matching_3.png}
+    \caption{Algoritmo di Matching - Passo 3}
+\end{figure}
+
+Torniamo adesso alla garanzia di approssimazione. Un possibile limite inferiore è quello di includere nella soluzione
+solamente uno dei vertici dell'arco nel \textit{maximal matching}: considero solo gli archi nel \textit{maximal
+    matching} $M$.
+
+È chiaro che il grafo consiste nei soli archi $e\in M$ ($G'=(V,M)$) solo \textit{metà} dei vertici inclusi nella
+soluzione $x_A$ copre gli archi in $M$. In altre parole, la copertura ottimale dei vertici degli archi in $M$
+è certamente più piccola della copertura ottimale di tutti gli archi in $E$.
+
+Per fornire un esempio numerico, supponiamo che un certo grafo per il VCP abbia la soluzione ottimale $f^*=5$
+(quindi $5$ vertici possono coprire tutti gli archi) e che l'algoritmo di matching trovi il matching massimale
+con $3$ archi, quindi la soluzione dell'algoritmo sarà $f_A=2\cdot|M|=6$. Però coprire tutti gli archi in $M$
+(considerare questo insieme come un grafo), basteranno $\frac{|M|}{2}=3$ vertici!
+
+Il valore $\frac{|M|}{2}$ è un possibile limite inferiore (o \textit{lower bound}) per il nostro problema VCP:
+$$LB(I)=\frac{|M|}{2}\leq f^*(I)$$
+Ma c'è dell'altro: sappiamo che $x_A$ viene calcolato prima che sia una soluzione attualmente fattibile ed
+è collegata a $LB(I)$:
+$$f_A=2\cdot |M|=2\cdot LB(I)=UB(I)$$
+Quindi abbiamo trovato sia il limite inferiore che quello superiore. Adesso forniamo una dimostrazione
+formale che l'algoritmo di matching è \textbf{2-approssimato}:
+\paragraph{Dimostrazione algoritmo di Matching 2-approssimato}, per prima cosa dimostriamo che la cardinalità
+dell'insieme "matching" sia una sottostima $LB(I)$: la cardinalità di una copertura ottimale per un qualsiasi
+sottoinsieme di archi $E'\subseteq E$ non supera quella di una copertura ottimale per $E$
+$$|x^*_{E'}|\leq|x^*_E|$$
+e la copertura ottimale di un qualsiasi insieme di matching $M$ ha cardinalità $\frac{|M|}{2}$, quindi
+$$|M|\leq|E|\implies |x^*_M|\leq |x^*_E|\implies\frac{|M|}{2}\leq |x^*_E|\text{   }\forall M$$
+$$LB(I)=\frac{|M|}{2}\leq |x^*_e|\text{ è un limite inferiore valido}$$
+In parole, visto che l'insieme $M$ ha una cardinalità minore o uguale a quella di $E$, la soluzione ottimale
+(la quale ha cardinalità esatta di $\frac{|M|}{2}$) ha una cardinalità minore o uguale a quella della
+soluzione ottimale per l'insieme $E$, rendendola un valido limite inferiore.
+
+Il fatto che $|M|$ stesso consiste in una sovrastima è provato dal fatto che la definizione dei vertici degli
+archi in $M$ copre tutti gli archi in $E$, significa che l'insieme dei vertici $M$ consiste in una soluzione
+fattibile (il che significa che è un limite superiore ed è un valore ottimale) e copre sia il "matching" che
+gli archi adiacenti. Perciò $|M|=UB(I)=2\cdot LB(I)$ è una sovrastima.
+
+La prova si conclude con il fatto che l'algoritmo restituisce soluzioni di valore $f_A(I)\leq UB(I)$, visto che
+in $M$ potrebbero essere presenti dei vertici \textit{ridondanti} che possono essere rimossi. Questo
+implica che $f_A(I)\leq 2\cdot f^*(I)\text{   }\forall I\in\mathcal{I}$, che è $\alpha_A=2$
+\paragraph{Lo stretto legame tra stime inferiori e superiori}, \textit{sono presenti delle istanze $\overline{I}$ per
+    il VCP tali che $f_A(\overline{I})=2\cdot f^{*}(\overline{I})$ utilizzando l'algoritmo di Matching?} Più
+in generale, sono presenti delle istanze $\overline{I}$ tali che:
+$$f_A(\overline{I})=\alpha_A f^*(\overline{I})$$
+e se così, \textit{come sono le istanze $\overline{I}$?} In altre parole, dopo aver dimostrato che $f_A(I)$ è
+in relazione con $f^*(I)$ attraverso $\alpha_A$, questo è \textbf{costante}, \textbf{preciso} e \textbf{importante}
+o e \textit{"solo"} un limite superiore? Lo studio delle istanze $\overline{I}$ è utile per valutare se sono
+rare o frequenti e per introdurre modifiche \textit{ad hoc} per migliorare l'algoritmo.
+\paragraph{Garanzia di approssimazione per il TSP (disuguaglianza triangolare)}, consideriamo il TSP
+con delle assunzione aggiuntive, ovvero che $G=(N,A)$ sia \textbf{completo} e che la funzione $c$ sia
+simmetrica e soddisfi la \textbf{disuguaglianza triangolare}:
+$$c_{ij}=c_{ij}\text{   }\forall i,j\in\mathbb{N}$$
+e che
+$$c_{ij}+c_{jk}\geq\text{   }\forall i,j,k\in\mathbb{N}$$
+Il problema in generale, è fortemente NP-completo. Ma è anche fortemente NP-completo capire se le istanze
+hanno una soluzione fattibile (non quale sia fattibile), ovvero se è presente un ciclo Hamiltoniano che visiti
+tutti i nodi.
+
+Sotto le precedenti assunzioni un algoritmo euristico può essere costruito con una garanzia di approssimazione
+associata ad esso.
+\paragraph{Algoritmo Double-tree}
+\begin{enumerate}
+    \item Considera il grafo completo e indiretto $G$
+    \item Costruisci un minimo albero ricoprente $T^*=(N,X^*)$
+    \item Fai una visita in pre-ordine di $T^*$ e costruisci due liste di archi:
+          \begin{enumerate}
+              \item $x$ sarà la lista degli archi utilizzata sia per la visita che per il backtracking:
+                    questo è un ciclo che visita ogni nodo, possibilmente molteplici volte.
+              \item $x'$ sarà la lista degli archi che connettono i nodi in pre-ordine con il primo nodo:
+                    questo è un ciclo che visita ogni nodo esattamente una volta.
+          \end{enumerate}
+\end{enumerate}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.6]{images/TSP_double_tree_0.png}
+    \caption{Double-tree per TSP - Passo 1 (grafo completo con archi omessi)}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.6]{images/TSP_double_tree_1.png}
+    \caption{Double-tree per TSP - Passo 2 (\textit{Minimo Albero Ricoprente} $T^*$)}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.6]{images/TSP_double_tree_2.png}
+    \caption{Double-tree per TSP - Passo 3.a (costruzione $x$)}
+\end{figure}
+$$x=\{
+    A,C,F,H,\textcolor{blue}{F},I,\textcolor{blue}{F},\textcolor{blue}{C},
+    D,G,L,\textcolor{blue}{G},E,\textcolor{blue}{G},
+    \textcolor{blue}{D},B,\textcolor{blue}{D},\textcolor{blue}{C},A
+    \}$$
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.6]{images/TSP_double_tree_3.png}
+    \caption{Double-tree per TSP - Passo 3.b (costruzione $x'$)}
+\end{figure}
+
+$$x'=\{A,C,F,H,U,D,G,L,E,B,A\}$$
+
+La struttura è la stessa del VCP: una sottostima è trovata assieme al fattore di moltiplicazione
+per costruire un limite superiore e quindi è provato che un algoritmo euristico può essere
+dominato da questo limite superiore, il che significa che l'algoritmo euristico
+è quasi sicuramente un fattore moltiplicato per la soluzione ottima. Andiamo a dimostrare
+che l'algoritmo double-tree è 2-approssimato.
+\paragraph{Dimostrazione algoritmo Double-tree 2-approssimato},
+
+
 
 \end{document}
