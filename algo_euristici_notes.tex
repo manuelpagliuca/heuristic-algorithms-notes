@@ -1594,11 +1594,25 @@ Per esempio, consideriamo il seguente grafo con $n=10,m=16$, \textit{è presente
 \noindent Algoritmo naive: $\Theta(n^km)\implies T\approx 10^5\cdot 16=16000000$
 
 $\delta_3\geq k_0+1\implies x_1 := \{3\}$ rimozione degli archi incidenti ed avremo $k_1=4$.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1]{images/kerneliz_1.png}
+    \caption{Rimozione degli archi incidenti con $k_1=4$}
+\end{figure}
 
-Inserire immagini.
 $\delta_10\geq k_2+1\implies x_3 := \{5,10\}$ rimozione degli archi incidenti ed avremo $k_3=2$.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1]{images/kerneliz_2.png}
+    \caption{Rimozione degli archi incidenti con $k_2=3$}
+\end{figure}
 
-inserire immagini
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1]{images/kerneliz_3.png}
+    \caption{Rimozione degli archi incidenti con $k_3=2$}
+\end{figure}
+
 \subsection{Complessità nel caso medio (avarage-case complexity)}
 Alcuni algoritmi sono inefficenti solo in un insieme di istanze ridotte, per esempio
 il \textit{simplex algorithm} nel caso della programmazione lineare.
@@ -1606,16 +1620,16 @@ il \textit{simplex algorithm} nel caso della programmazione lineare.
 Gli studi teorici:
 \begin{itemize}
     \item Definiscono un modello probabilistico del problema. Il quale è una
-    distribuzione probabilistica su $\mathcal{I}_n\text{ }\forall n\in\mathbb{N}$
+          distribuzione probabilistica su $\mathcal{I}_n\text{ }\forall n\in\mathbb{N}$
     \item Calcolano il valore stimato di $T(I)$
-    $$T(n)=E[T(I)|I\in\mathcal{I}_n]$$
+          $$T(n)=E[T(I)|I\in\mathcal{I}_n]$$
 \end{itemize}
 
 Gli studi empirici:
 \begin{itemize}
     \item Costruiscono un \textit{modello di simulazione} del problema,
-    il quale è una distribuzione probabilistica di $\mathcal{I}_n\text{ }\forall n\in\mathbb{N}$
-    teorico o empirico (costruito).
+          il quale è una distribuzione probabilistica di $\mathcal{I}_n\text{ }\forall n\in\mathbb{N}$
+          teorico o empirico (costruito).
     \item Costruire un benchmark di istanze casuali relativo alla distribuzione.
     \item Applicare l'algoritmo e misurare il tempo richiesto.
 \end{itemize}
@@ -1624,17 +1638,17 @@ Gli studi empirici:
 Data una matrice binaria ($m$ righe e $n$ colonne):
 \begin{itemize}
     \item \textbf{Equiprobabilità}, elencare tutte le $2^{mn}$ matrici binarie e
-    selezionare una delle matrici con probabilità uniforme.
+          selezionare una delle matrici con probabilità uniforme.
     \item \textbf{Probabilità uniforme}, impostare ogni cella ad $1$ con una data
-    probabilità $p$
+          probabilità $p$
 
-    $$Pr[a_{ij}=1]=p\text{   }(i=1,...,m;j=1,...,n)$$
-    Se $p=0.5$, esso coincide con il modello di equiprobabilità, per un qualsiasi
-    altro valore alcune istanze sono più simili di altre.
+          $$Pr[a_{ij}=1]=p\text{   }(i=1,...,m;j=1,...,n)$$
+          Se $p=0.5$, esso coincide con il modello di equiprobabilità, per un qualsiasi
+          altro valore alcune istanze sono più simili di altre.
     \item \textbf{Densità fissa}, estrae $\delta mn$ celle da $mn$ con una
-    probabilità uniforme e le imposta ad $1$.
-    Se $\delta=p$, esso assomiglierà al modello di probabilità uniforme, ma alcune
-    istanze non potranno essere generate.
+          probabilità uniforme e le imposta ad $1$.
+          Se $\delta=p$, esso assomiglierà al modello di probabilità uniforme, ma alcune
+          istanze non potranno essere generate.
 
 \end{itemize}
 
@@ -1642,29 +1656,29 @@ Data una matrice binaria ($m$ righe e $n$ colonne):
 Dato un grafo casuale con un numero $n$ di vertici:
 \begin{itemize}
     \item \textbf{Equiprobabilità}, elenca tutti i $2^{\frac{n(n-1)}{2}}$ grafi
-    e seleziona quello con la probabilità uniforme.
+          e seleziona quello con la probabilità uniforme.
     \item \textbf{Modello di Gilbert} o \textbf{probabilità uniforme} $G(n,p)$
-    $$Pr[(i,j)\in E]=p\text{   }(i\in V,j\in V\setminus\{i\})$$
-    Tutti i grafi con lo stesso numero di archi $m$ hanno la stessa probabilità
-    $p^m(1-p)^{\frac{n(n-1)}{2}-m}$ (diverso per ogni $m$). Se $p=0.5$, esso
-    coincide con il modello di equiprobabilità.
+          $$Pr[(i,j)\in E]=p\text{   }(i\in V,j\in V\setminus\{i\})$$
+          Tutti i grafi con lo stesso numero di archi $m$ hanno la stessa probabilità
+          $p^m(1-p)^{\frac{n(n-1)}{2}-m}$ (diverso per ogni $m$). Se $p=0.5$, esso
+          coincide con il modello di equiprobabilità.
 
-    \item \textbf{Modello di Erdos-Renyi} $G(n,m)$: estrae $m$ coppie di 
-    vertici non ordinate su $\frac{n(n-1)}{2}$ con probabilità uniforme e
-    crea un arco per ognuna. Se $p=\frac{2m}{n(n-1)=p}$, esso assomiglierà
-    al modello con probabilità uniforme, ma alcune istanze non verranno generate.
+    \item \textbf{Modello di Erdos-Renyi} $G(n,m)$: estrae $m$ coppie di
+          vertici non ordinate su $\frac{n(n-1)}{2}$ con probabilità uniforme e
+          crea un arco per ognuna. Se $p=\frac{2m}{n(n-1)=p}$, esso assomiglierà
+          al modello con probabilità uniforme, ma alcune istanze non verranno generate.
 \end{itemize}
 
 \subsection{Modelli probabilistici per funzioni logiche}
 Considerando una CNF casuale con un dato numero di variabili $n$:
 \begin{itemize}
-    \item \textbf{Insieme con probabilità fissa}: elenca tutte le 
-    $\binom{n}{k}2^k$ formule con $k$ letterali distinti e consistenti, ed
-    aggiungo oguno alla CNF con probabilità $p$.
+    \item \textbf{Insieme con probabilità fissa}: elenca tutte le
+          $\binom{n}{k}2^k$ formule con $k$ letterali distinti e consistenti, ed
+          aggiungo oguno alla CNF con probabilità $p$.
     \item \textbf{Insieme con dimensione fissa}: costuisco $m$ formule,
-    aggiungo ad ognuna $k$ letterali distinti e consistenti, estratti con
-    probabilità uniforme. Se $p=\frac{m}{\binom{n}{k}2^k}$, esso assomiglierà
-    al modello con probabilità fissa, ma alcune istanze non potranno essere generate.
+          aggiungo ad ognuna $k$ letterali distinti e consistenti, estratti con
+          probabilità uniforme. Se $p=\frac{m}{\binom{n}{k}2^k}$, esso assomiglierà
+          al modello con probabilità fissa, ma alcune istanze non potranno essere generate.
 \end{itemize}
 
 \subsection{Transizione di fase}
@@ -1676,7 +1690,7 @@ Per i grafi:
     \item $m=0$ e $p=0$ corrisponde al grafo vuoto.
     \item $m=\frac{n(n-1)}{2}$ e $p=1$ corrisponde al grafo completo.
     \item Valori intermedi corrispondono al grafo di densità intermedia (
-        deterministicamente per $m$, probabilisticamente per $p$).
+          deterministicamente per $m$, probabilisticamente per $p$).
 \end{itemize}
 
 Per molti problemi la \textbf{performance} dell'algoritmo è decisamente differente
@@ -1702,9 +1716,9 @@ Data una CNF di $n$ variabili e con formule logiche contenenti $3$ letterali.
 Con l'aumentare del rateo formule-variabili $\alpha=\frac{m}{n}$:
 \begin{itemize}
     \item Le istanze soddisfacibili decrementano da quasi tutte (tante variabili
-    per poche formule) a quasi nessuna (poche variabili per tante formule).
+          per poche formule) a quasi nessuna (poche variabili per tante formule).
     \item Il tempo di calcolo per il 3-SAT incrementa fortemente e poi subito
-    decresce, invece nel Max-SAT incrementa ulteriormente dopo la transizione.
+          decresce, invece nel Max-SAT incrementa ulteriormente dopo la transizione.
 \end{itemize}
 
 inserire immagine
@@ -1715,7 +1729,7 @@ Il VCP esibisce una transizione di fase simile alla precedente quando $\frac{|x|
 incrementa.
 \begin{itemize}
     \item Il tempo computazionale prima esplode, dopo cade.
-    \item Per $n\rightarrow\infty$ la transizione si concentra attorno al valore critico. 
+    \item Per $n\rightarrow\infty$ la transizione si concentra attorno al valore critico.
 \end{itemize}
 
 immagine
@@ -1734,21 +1748,21 @@ Le \textbf{metaeuristiche} utilizzano passi casuali o memoria:
 \begin{itemize}
     \item La complessità è ben definita per componenti singoli dell'algoritmo.
     \item La complessità globale non è chiaramente definita, in teoria potrebbe
-    essere estesa \textit{indefinitamente}, in pratica, è definita da una
-    condizione imposta dall'utente.
+          essere estesa \textit{indefinitamente}, in pratica, è definita da una
+          condizione imposta dall'utente.
 \end{itemize}
 
 \noindent\textit{Perché discutere ciò in un corso di algoritmi euristici ?}
 \begin{itemize}
     \item Per guidare la ricerca dell'algoritmo corretto, un algoritmo corretto
-    può essere efficiente in un caso specifico, ed inefficente in un caso peggiore.
+          può essere efficiente in un caso specifico, ed inefficente in un caso peggiore.
     \item Per mostrare che gli algoritmi euristici possono interagire proficuamente:
-    poiché gli algoritmi euristici provvedono informazioni per migliorare gli algoritmi
-    esatti (rendendoli più efficienti).
+          poiché gli algoritmi euristici provvedono informazioni per migliorare gli algoritmi
+          esatti (rendendoli più efficienti).
     \item Per mostrare che la kernelization migliora gli algoritmi euristici (diventano più efficienti
-    ed efficaci).
+          ed efficaci).
     \item Per identificare \textit{a priori} le istanze più ardue, certamente non tutti
-    gli algoritmi hanno le stesse istanze \textit{"complesse"}.
+          gli algoritmi hanno le stesse istanze \textit{"complesse"}.
 \end{itemize}
 
 \end{document}
