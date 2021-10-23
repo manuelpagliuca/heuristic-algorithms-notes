@@ -1,10 +1,17 @@
 \documentclass{article}
-
+\usepackage{newunicodechar}
 \usepackage[OT1]{fontenc}
 \usepackage{mathpazo}
 \usepackage[italian]{babel}
 \usepackage{caption}
 \usepackage[dvipsnames]{xcolor}
+\usepackage{fancyhdr}
+\fancyhead{}
+\renewcommand{\headrulewidth}{0pt} % Width of line at top of page
+\fancyhead[L]{\leftmark} % Mark right [R] of page with Chapter name [\leftmark]
+
+\pagestyle{fancy} % Set default style for all content pages (not TOC, etc)
+
 %Prefisso della caption delle figure
 \captionsetup[figure]{labelformat=empty}% redefines the caption setup of the figures environment in the beamer class.
 
@@ -21,6 +28,8 @@
     linkcolor=black,
     urlcolor=black
 }
+
+
 
 \title{\textbf{Algoritmi Euristici}}
 \author{Manuel Pagliuca}
@@ -2017,7 +2026,7 @@ poiché è presente una coppia di archi diretti per ogni nodo (quindi ogni arco 
 DFS esiste nel grafo originale).
 
 Il costo di questo ciclo Hamiltoniano è necessariamente una sovrastima, visto che il
-costo di tutti percorsi nel grafo rispetta l'uguaglianza traingolare; mentre la visita
+costo di tutti percorsi nel grafo rispetta la disuguaglianza triangolare; mentre la visita
 restituisce, per esempio il percorso $A\rightarrow B\rightarrow C$, il grafo rispetta l'
 uguaglianza triangolare scegliendo l'arco $A\rightarrow C$ la soluzione sarà di costo minimo.
 Quindi, visto che $LB(I)$ è uguale al costo del MST ed il ciclo ha esattamente il doppio
@@ -2040,12 +2049,231 @@ disuguaglianza triangolare nella seguente maniera:
     \end{cases}
 \]
 
-%ed il grafo è completo. Se una qualsiasi funzione di costo nullo ($f^*(I)=0$) viene trovata, significa che la
-%soluzione contiene solo archi in $A_0$ che compongono il ciclo Hamiltoniano. Quindi, in un senso, è presente
-%un grafo non-completo $G(N,A_0)$ che ha un ciclo Hailtoniano come soluzione fattibile, tale che è lo stesso
-%per quello del grafo originale (questo significa che il grafo originale è il \textit{completamento} del nuovo
-%grafo).
-%Questo è bello finchè una soluzione per il grafo completo viene trovata con costo nullo, allora potrai
-%veramente risolvere il problema del TSP nella forma decisionale anche su
+ed il grafo è completo. Se una qualsiasi funzione di costo nullo ($f^*(I)=0$) viene trovata, significa che la
+soluzione contiene solo archi in $A_0$ che compongono il ciclo Hamiltoniano. Quindi, in un senso, è presente
+un grafo non-completo $G(N,A_0)$ che ha un ciclo Hamiltoniano come soluzione fattibile, tale che è lo stesso
+per quello del grafo originale (questo significa che il grafo originale è il \textit{completamento} del nuovo
+grafo).
+Questo è bello finché una soluzione per il grafo completo viene trovata con costo nullo, allora potrai
+veramente risolvere il problema del TSP nella forma decisionale anche sul grafo non completo, il quale
+è un problema fortemente NP-completo. Quest non può essere fatto esattamente, a meno che $P=NP$, il
+che è difficile. La funzione oggettiva di una qualsiasi istanza $\overline{I}$ è:
+\[\begin{cases}
+        f^*(\overline{I})=0     & \text{Se }A_0\text{ contiene un ciclo Hamiltoniano} \\
+        f^*(\overline{I})\geq 1 & \text{Altrimenti}
+    \end{cases}
+\]
+
+Non possiamo trovare una garanzia di approssimazione sul valore $\alpha$ per un algoritmo
+polinomiale tale che:
+$$f_A(I)\leq\alpha f^*(I)\text{  }\forall I\in\mathcal{I}$$
+Poiché assumendo che sia possibile quello che accade è che se il grafo avesse un ciclo Hamiltoniano
+di costo zero, allora necessariamente l'algoritmo di approssimazione restituirà un costo:
+$$f^*(\overline{I})=0\Leftrightarrow f_A(\overline{I})=0$$
+in parole povere, l'algoritmo di approssimazione risolve la versione decisionale del TSP nel
+caso di un istanza con il grafo non-completo, questo è possibile risolvendo un problema
+fortemente NP-completo in tempo polinomiale e dimostrando che $P=NP$. Visto che questo è molto
+difficile che sia così, il problema il TSP è considerato un problema inaprossimabile.
+
+\subsection{Schemi di approssimazione}
+A volte è possibile trovare qualcosa meglio di una semplice approssimazione: per un qualsiasi
+problema difficile è presente un algoritmo esaustivo che fornisce la migliore approssimazione
+possibile garantendo $\alpha_A=1$ (in quanto esatto), ciò richiede tempo esponenziale $T_A$.
+
+Gli algoritmi approssimati solitamente una garanzia di approssimazione peggiore ($\alpha_A >1$)
+ma essi potrebbero richiedere tempo polinomiale $T_A$.
+
+Ora nel mezzo di questi due casi si possono trovare molte cose, significa che al posto di un singolo algoritmo
+polinomiale con tempo $T_A$ e garanzia $\alpha_A$ potrebbe essere presente una completa
+famiglia di \textit{"differenti compromessi"} tra efficienza ed efficacia, che incrementano la
+complessità computazionale e migliorano la garanzia di approssimazione.
+
+\begin{itemize}
+    \item Migliori e migliori garanzie di approssimazione: $\alpha_{A_1} > ... > \alpha_{A_r}$
+    \item Peggiori e peggiori complessità computazionali: $T_{A_1}<...<T_{A_r}$
+\end{itemize}
+
+Tali famiglie di algoritmi sono chiamate \textbf{schemi di approssimazione}, i quali sono algoritmi
+parametrici $A_\alpha$, che permettono di scegliere $\alpha$. Un esempio di questo è il problema KP.
+
+\subsection{Oltre al caso peggiore}
+Proprio come per l'efficienza, l'efficacia ha dei metodi di misurazione che sono approcci
+differenti dal \textit{caso peggiore}. Potresti avere un brutto caso peggiore senza approssimazione
+o un approssimazione $\alpha=1000000$ che restituisce una soluzione ottimale. Sono presenti differenti approcci.
+
+\subsubsection{Parametrizzazione}
+Anziché dividere le istanze per la dimensione, altri parametri $k_i$ possono essere identificati in maniera che
+essi possano provvedere una garanzia di approssimazione che dipenda da $k_i$ e non sia costante.
+
+\subsubsection{Caso medio}
+Assume una probabilità di distribuzione sulle istanze e ne calcola il fattore di approssimazione desiderato (
+l'algoritmo potrebbe avere delle brutte prestazioni solo su rare istanze).
+
+\subsubsection{Randomizzazione}
+Le operazioni dell'algoritmo dipendono non solo dall'istanza, ma anche dai numeri pseudocasuali, in maniera
+che la soluzione diventa una variabile casuale la quale possa essere investigata (la complessità in tempo
+potrebbe anch'essa essere casuale, ma solitamente non lo è).
+
+Per un algoritmo casuale $A$, vengono considerate come variabili casuali $f_A(I)$ e $\rho_A(I)$. Un
+\textbf{algoritmo di approssimazione casuale} ha un rapporto di approssimazione il cui valore desiderato
+è limitato da una costante:
+$$E[\rho_A(I)]\leq\alpha_A\text{  }\forall I\in\mathcal{I}$$
+
+Considerando il problema Max-SAT: data una CNF, si vuole trovare l'assegnamento di verità per le variabili logiche
+tale che soddisfi un sottoinsieme di peso massimo di formule.
+
+Allora una algoritmo puramente casuale assegna ad ogni variabile $x_j(j=1,...,n)$:
+\begin{itemize}
+    \item Un valore $False$ con probabilità 0.5
+    \item Un valore $True$ con probabilità 0.5
+\end{itemize}
+
+\paragraph{Approssimazione casuale per il Max-SAT} Sia $C_X\subseteq\{1,...,m\}$ il sottoinsieme
+di formule soddisfatte dalla soluzione $x$. Il valore oggettivo $f(x)=f_A(I)$ è il peso totale
+delle formule in $C_x$ ed il valore desiderato è:
+$$E[f_A(I)]=E\left[\sum_{i\in \mathcal{C}_x}w_i\right] = \sum_{i\in \mathcal{C}}(w_i\cdot Pr[i\in \mathcal{C}_x])$$
+Sia $k_i$ il numero di letterali della formula $i\in \mathcal{C}$ e $k_min = min\underset{i\in \mathcal{C}}{k_i}$
+
+$$Pr[i\in \mathcal{C}_x]=1-\left(\frac{1}{2}\right)^{k_i}\geq 1-\left(\frac{1}{2}\right)^{k_{min}}\text{  }\forall i\in \mathcal{C}$$
+$$\implies E[f_A(I)]\geq\sum_{i\in \mathcal{C}}w_i\cdot\left[1-\left(\frac{1}{2}\right)^{k_min}\right]=\left[1-\left(\frac{1}{2}\right)^{k_{min}}\right]\sum_{i\in \mathcal{C}}w_i$$
+e visto che $E[\rho_A(I)]=f^*(I)/E[f_A(I)]$ e $f^*(I)\leq\sum_{i\in \mathcal{C}w_i}\text{  }\forall I\in\mathcal{I}$
+uno ottiene:
+$$E[\rho_A(I)]\leq 1/\left[1-\left(\frac{1}{2}\right)^{k_{min}}\right]\leq 2$$
+
+\section{Valutazione empirica delle prestazioni}
+Dopo la considerazione di un analisi algoritmica svolta \textit{a priori}, la quale consiste
+nel dimostrare la presenza di alcune garanzie su alcuni aspetti dell'algoritmo che
+sono stati studiati come il costo computazione della qualità delle soluzioni, ora
+è possibile considerare l'analisi algoritmica \textit{a posteriori}.
+
+Questo perché l'analisi a priori è complicata su diversi aspetti: nell'analisi dell'efficienza
+il concetto è semplice mentre nell'analisi della qualità è molto più complicata,
+poiché i "passi elementari" degli algoritmi non hanno una relazione diretta
+con la qualità della soluzione. Inoltre, nel caso medio e della randomizzazione si richiede
+un trattamento statistico.
+
+L'analisi teorica può esser una pratica \textbf{insoddisfacente} quando le conclusioni sono basate
+su \textbf{assunzioni non rappresentative}, come: un caso peggiore non frequente (molto difficile e
+su istanze molto rare), oppure una distribuzione probabilistica delle istanze irrealistica.
+
+\subsection{Analisi sperimentale}
+Il metodo sperimentale è l'apporccio tipico che viene utilizzato nella scienza con l'eccezione
+della matematica, la quale è basata più su approcci formali, ma gli algoritmi sono l'eccezione
+all'eccezione, visto che solo alcune proprietà legate alle prestazioni degli algoritmi possono
+essere dimostrate e informazioni interessanti possono essere estrapolate dalle prestazioni pratiche.
+
+Quindi abbiamo trovato un \textit{isola empirica} in un mare di formalismo.
+
+L'approccio empirico consiste nell'osservare la realtà ed effettuare alcune assunzioni su come
+la realtà "funzioni", questo formulando un \textbf{modello}. Dopo, una sequenza di passi
+viene ripetuta fino ad ottenere un \textbf{modello soddisfacente}:
+
+\begin{enumerate}
+    \item Progettare esperimenti computazionali per validare il modello.
+    \item Eseguire gli esperimenti e collezionare i risultati.
+    \item Analizzare i risultati con metodi quantitativi.
+    \item Revisionare il modello in base ai risultati ottenuti.
+\end{enumerate}
+
+\subsection{Modello}
+\textit{Che cosa è un modello nel contesto dell'algoritmica?} In fisica un modello è una
+legge che regola il comportamento di un fenomeno e, come analogia, nell'algoritmica
+un modello è una legge che ipoteticamente regola il comportamento dell'algoritmo stesso.
+
+Le leggi possono essere del tipo: assumere che la complessità computazionale
+dell'algoritmo sia lineare, questo dipenderà da altri parametri come il massimo
+grado divertici del grafo, ecc...
+
+Questo è qualcosa che viene assunto basato sulla conoscenza dell'algoritmo ma anche su
+un \textit{trend} esposto dall'approccio empirico.
+
+L'analisi sperimentale degli algoritmi mira:
+\begin{enumerate}
+    \item Ottenere indici di efficienza ed efficacia compatti di un algoritmo.
+    \item Paragonare gli indici di algoritmi differenti per ordinarli.
+    \item Descrivere la relazione tra gli indici ed i valori parametrici delle istanze.
+    \item Suggerire miglioramenti negli algoritmi.
+\end{enumerate}
+
+\subsection{Benchmark}
+Visto che non tutte le istanze possono essere testate, viene definito un campione di
+riferimento (\textbf{benchmark sample}): un campione significativo deve rappresentare differenti
+\begin{itemize}
+    \item Dimensioni, in particolare per l'analisi dei costi computazionali.
+    \item Caratteristiche strutturale (\textit{densità, grado, diametro, ...}).
+    \item Tipi
+          \begin{itemize}
+              \item di applicazione: logistici, telecomunicazioni, produzione, ...
+              \item di generazione: realistici, artificiali, trasformazioni di altri problemi, ...
+              \item di distribuzione probabilistica: uniforme, normale, esponenziale, ...
+          \end{itemize}
+\end{itemize}
+Cercare un benchmark sample che sia "equiprobabile" non è significativo perché:
+\begin{itemize}
+    \item Le istanze di un insieme sono infinite.
+    \item Gli insiemi infiniti non ammettono l'equiprobabilità (grande domanda della statistica).
+\end{itemize}
+
+Al contrario, noi possiamo:
+\begin{itemize}
+    \item Definire classi finite di istanze che sono:
+          \begin{itemize}
+              \item Sufficientemente difficile per essere istruttive.
+              \item Sufficientemente frequenti in applicazione di interesse.
+              \item Veloci abbastanza nella risoluzione, in modo da fornire dati sufficienti per le conclusioni.
+          \end{itemize}
+    \item Estrarre benchmark samples da queste classi.
+\end{itemize}
+
+\subsection{Riproducibilità}
+Il metodo scientifico richiede risultati riproducibili e controllabili. Quindi,
+se vengono fatte delle indagini, è necessario assicurarsi che altre persone siano
+in grado di replicare l'esperimento. Quindi, è necessario utilizzare \textbf{istanze
+    pubblicamente disponibili} (o renderle pubblicamente disponibili), specificare i
+dettagli di implementazione, il linguaggio di programmazione e il compilatore
+dell'algoritmo implementato e i valori ambientali come la macchina utilizzata,
+il sistema operativo e la memoria disponibile.
+
+\subsection{Confronto di algoritmi euristici}
+Un algoritmo euristico è migliore di un altro altro quando simultaneamente
+\begin{itemize}
+    \item Ottiene risultati migliori.
+    \item Richiede meno tempo.
+\end{itemize}
+Algoritmi lenti con buoni risultati ed algoritmi veloci con brutti risultati
+non possono essere paragonati in una maniera significativa. In alcune situazioni
+specifiche il tempo computazionale può essere trascurato, precisamente quando
+non si vuole fare alcun confronto ma si cerca di fare solo una stima e anche
+quando si sa che i l tempo di calcolo è più o meno lo stesso (per conosciuti
+motivi strutturali, ad es. due algoritmi uguali ma con qualche differenza nei
+parametri).
+
+\subsubsection{Descrivere le prestazioni di un algoritmo}
+Per descrivere le prestazioni di un algoritmo un \textbf{metodo statistico} può essere
+fornito. In particolare, l'idea è quella di modellare un algoritmo come se fosse un
+esperimento casuale in cui i risultati dipendono dalla scelta di un oggetto
+all'interno dello \textit{spazio di campionamento} (sample space), definito come
+il campionamento delle istanze
+$$\overline{\mathcal{I}}\subset \mathcal{I}$$
+Il tempo computazionale $T_A(I)$ assieme alla differenza relativa $\delta_A(I)$
+sono entrambe \textit{variabili casuali}.
+
+Le proprietà statistiche delle variabili casuali $T_A(I)$ e $\delta_A(I)$ descrivono
+le prestazioni dell'algoritmo $A$.
+
+Quello che viene effettuato: anzichè considerare tutti i possibili valori del tempo
+computazionale e tutti i possibili valori della differenza relativa, si descrivono
+le variabili casuali con le loro proprietà statistiche, cosa che darà una descrizione
+statistica delle prestazioni dell'algoritmo.
+
+\subsection{Analisi del tempo computazionale (diagramma RTD)}
+Il diagramma \textit{"Run Time Distribution"} (RTD) è il grafico della funzione di
+distribuzione $T_A(I)$ su $\overline{\mathcal{I}}$.
+$$F_{T_A}(t)=Pr[T_A(I)\leq t]\text{  }\forall t\in\mathbb{R}$$
+Visto che $T_A(I)$ dipende fortemente dalla dimensione di $n(I)$, significa che
+diagrammi RTD significativi solitamente si riferiscono a benchmarks
+$\overline{\mathcal{I}}_n$ con un $n$ fissato (e possibilmente fissati anche
+altri parametri suggeriti dall'analisi del caso peggiore).
+
 
 \end{document}
