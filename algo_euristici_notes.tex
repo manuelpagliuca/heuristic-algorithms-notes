@@ -29,6 +29,7 @@
     urlcolor=black
 }
 
+\newcommand{\ovcal}[1]{\overline{\mathcal{#1}}}
 
 
 \title{\textbf{Algoritmi Euristici}}
@@ -2266,7 +2267,7 @@ computazionale e tutti i possibili valori della differenza relativa, si descrivo
 le variabili casuali con le loro proprietà statistiche, cosa che darà una descrizione
 statistica delle prestazioni dell'algoritmo.
 
-\subsection{Analisi del tempo computazionale (diagramma RTD)}
+\subsection{Analisi del tempo computazionale (\textit{RTD diagram})}
 Il diagramma \textit{"Run Time Distribution"} (RTD) è il grafico della funzione di
 distribuzione $T_A(I)$ su $\overline{\mathcal{I}}$.
 $$F_{T_A}(t)=Pr[T_A(I)\leq t]\text{  }\forall t\in\mathbb{R}$$
@@ -2274,6 +2275,139 @@ Visto che $T_A(I)$ dipende fortemente dalla dimensione di $n(I)$, significa che
 diagrammi RTD significativi solitamente si riferiscono a benchmarks
 $\overline{\mathcal{I}}_n$ con un $n$ fissato (e possibilmente fissati anche
 altri parametri suggeriti dall'analisi del caso peggiore).
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.35]{images/RTD_0.png}
+    \caption{Diagramma \textit{Run Time Distribution}}
+\end{figure}
 
+Se tutti i parametri influenti vengono identificati e fissati, il diagramma RTD degenera
+in una funzione a scala (ovvero, tutte le istanze richiedono lo stesso tempo).
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.4]{images/RTD_stairs.png}
+    \caption{RTD degenerato ina una \textit{step function}}
+\end{figure}
+Il diagramma RTD è:
+\begin{itemize}
+    \item \textbf{monotona non decrescente}, più istanze vengono risolte in più tempo.
+    \item \textbf{graduale e continua verso destra}, il grafico aumento ad ogni $T(I)$.
+    \item \textbf{uguale a $0$ per $t<0$}, nessuna istanza è risolta in tempo negativo.
+    \item \textbf{uguale ad $1$ per $t\geq\underset{I\in\overline{\mathcal{I}}}{T(I)}$}, tutti vengono risolti con il tempo più grande.
+\end{itemize}
+Per benchmark sample, il disegno sembra continuo, ma non lo è.
+
+Costruzione del RTD:
+\begin{itemize}
+    \item Eseguire l'algoritmo su ogni istanza $I\in\overline{\mathcal{I}}$
+    \item Costruire l'insieme $T_A(\overline{\mathcal{I}})=\{T_A(I):I\in\overline{\mathcal{I}}\}$
+    \item Ordinare $T_A(\overline{\mathcal{I}})$ non decrementando i valori $t_1 \leq ...\leq t_{|\overline{\mathcal{I}}|}$
+    \item Disegnare i punti $\left(t_j,\frac{j}{|\overline{\mathcal{I}}|}\right)$ per $j=1,...,|\overline{\mathcal{I}}|$ ed
+          i segmenti orizzontali (chiusi a sinistra, aperti a destra).
+\end{itemize}
+
+\subsection{Analisi del tempo computazionale (\textit{scaling diagram})}
+Lo \textbf{scaling diagram} descrive la dipendenza di $T(I)$ sulla dimensione di $n(I)$
+\begin{itemize}
+    \item Genera una sequenza di valori di $n$ ed un campion $\overline{\mathcal{I}}_n$
+          per ogni valore.
+    \item Applica l'algoritmo ad ogni $I\in\overline{\mathcal{I}}_n\text{  }\forall n$
+    \item Disegna tutti i punti $(n(I),T(I))$ o i punti medi $\left(n,\frac{\sum_{I\in\overline{\mathcal{I}}_n}T(I)}{|\overline{\mathcal{I}}_n|}\right)$
+    \item Assumere una \textbf{funzione interpolante}.
+    \item Stimare i parametri numerici della funzione interpolante.
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.4]{images/interp_funct.png}
+    \caption{Stima dei parametri rispetto alla funzione interpolante}
+\end{figure}
+L'analisi fornisce empiricamente un caso medio di complessità, con fattori di molteplicità
+ben determinati (anziché $c_1$ e $c_2$), e non più grande del caso peggiore.
+
+\subsubsection{Interpolazione dello \textit{scaling diagram}}
+La famiglia corretta di funzioni interpolanti può essere suggerita, da:
+\begin{itemize}
+    \item Analisi teorica
+    \item Manipolazione dei grafici
+\end{itemize}
+Solitamente l'\textbf{interpolazione lineare} è lo strumento corretto.
+Il dragamma di scaling si trasofrma in una linea dritta quando
+\begin{itemize}
+    \item Un algoritmo esponenziale è rappresentato da una \textbf{scala semi logaritmica} (il logaritmo
+          viene applicato solo sull'asse del tempo).
+          $$\log_2 T(n)=\alpha n + \beta \Leftrightarrow T(n)=2^\beta(2^\alpha)^n$$
+
+    \item Un algoritmo polinomiale è rappresentato da una scala logaritmica (il logaritmo viene
+          applicato su entrambi gli assi).
+          $$\log_2 T(n) = \alpha log_2 n + \beta \Leftrightarrow T(n) = 2^\beta n^\alpha$$
+\end{itemize}
+
+\subsection{Analisi della qualità della soluzione (\textit{SQD diagram})}
+Il diagramma \textbf{Solution Quality Distribution} (SQD) è il grafico della funzione di distribuzione $\delta_A(I)$ su
+$\overline{\mathcal{I}}$
+$$F_{\delta_A}(\alpha) = Pr[\delta_A (I)\leq\alpha]\text{   }\forall\alpha\in\mathbb{R}$$
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.4]{images/SQD_0.png}
+    \caption{Diagramma \textit{Solution Quality Distribution}}
+\end{figure}
+Per un qualsiasi algoritmo, la funzione di distribuzione di $\delta_A(I)$
+\begin{itemize}
+    \item \textbf{Monotona non decrescente}: più casi vengono risolti con lacune peggiori.
+    \item \textbf{graduale e continua a destra}: il grafo effettua un passo ad ogni $\delta(I)$
+    \item \textbf{Uguale a $0$ per $\alpha <0$}: nessuna istanza viene risolta con lacune peggiori.
+    \item \textbf{Uguale ad $1$ per} $\alpha\geq\underset{I\in\overline{\mathcal{I}}}{max}\delta_I$: tutte le istanze sono risolte all'interno della lacuna peggiore.
+\end{itemize}
+
+Se $A$ è un:
+\begin{itemize}
+    \item Algoritmo esatto, è una funzione a scala, uguale ad $1\text{   }\forall\alpha\geq0$
+    \item Algoritmo $\overline{\alpha}$-approssimato, è una funzione uguale ad $1\text{   }\forall\alpha\geq\overline{\alpha}$
+\end{itemize}
+\paragraph{Costruzione del diagramma}
+\begin{itemize}
+    \item Eseguire l'algoritmo $\forall I\in\overline{\mathcal{I}}$
+    \item Costruire l'insieme $\delta_A(\ovcal{I})=\{\delta_A(I):I\in\ovcal{I}\}$
+    \item Ordinare $\delta_A(\ovcal{I})$ per valori non decrescenti : $\delta_1,...,\delta_{\ovcal{I}}$
+    \item Disegnare i punti $\left(\delta_j,\frac{j}{|\ovcal{I}|}\right)$ per $j=1,...,|\ovcal{I}|$ ed
+          i segmenti orizzontali (chiusi a sinistra, aperti a destra).
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.45]{images/SQD_1.png}
+\end{figure}
+
+\subsubsection{Diagrammi SQD parametrici}
+Dati i problemi teorici e pratici per costruire un campione significativo, il diagramma è parametrizzato
+rispetto a:
+\begin{itemize}
+    \item Un parametro descrittivo delle istanze (dimensione, densità, ...)
+    \item Un parametro di distribuzione probabilistica assunto per le istanze (varianza dei costi, ...)
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.45]{images/SQD_2.png}
+\end{figure}
+
+Le conclusioni sono più limitate, ma il campione è più significativo, i \textbf{trend generali} possono
+essere evidenziati.
+
+\subsubsection{Confronto tra algoritmi utilizzando SQDs}
+\textit{Come determinare quando un algoritmo è migliore di un altro?}
+\begin{itemize}
+    \item \textbf{Dominanza stretta}, ottiene migliori risultati su tutte le istanze.
+          $$\delta_{A_2}(I)\leq\delta_{A_1}(I)\text{   }\forall I\in\mathcal{I}$$
+    \item \textbf{Dominanza probabilistica}, la funzione di distribuzione ha valori più alti per
+          tutti i valori di $\alpha$.
+          $$F_{\delta_{A_2}}(\alpha)\geq F_{\delta_{A_1}}(\alpha)\text{   }\forall\alpha\in\mathbb{R}$$
+\end{itemize}
+Il seguente grafico non mostra alcuna dominanza, ma $A_1$ è meno \textit{"robusto"} di $A_2$, i
+risultati di $A_1$ sono più spari di $A_2$.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.4]{images/SQD_3.png}
+\end{figure}
 
 \end{document}
