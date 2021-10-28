@@ -19,7 +19,11 @@
         "MISP",
         "Overfitting",
         "PMSP",
+        "QRTD",
         "Renyi",
-        "Vizing"
+        "SQST",
+        "Vizing",
+        "Wilcoxon",
+        "Wilcoxon's"
     ]
 }

@@ -2763,11 +2763,16 @@ Il test di Wilcoxon può suggerire:
     \item che uno dei due algoritmi è significativamente migliroe dell'altro.
     \item che i due algoritmi sono statisticamente equivalenti.
 \end{itemize}
-Se il campione include istanze di tipi differenti, due algoritmi potrebbero essere
-complessivamente equivalenti, ma non equivalenti sulle singole istanze delle classi.
-
 In entrambi i casi è importante "tenere un occhio" su $p$, poiché è una risposta
 stocastica.
+
+Se il campione include istanze di tipi differenti, due algoritmi potrebbero essere
+complessivamente equivalenti, ma non equivalenti sulle singole istanze delle classi.
+Quindi se effettuo un test su $\delta_A(I)$ anziché $f_A(I)$? È una domanda aperta.
+I risultati possono essere differenti utilizzando $\delta_A(I)$ significa che dando
+un peso minore alle istanze che hanno una soluzione ottimale maggiore. Probabilmente,
+se il risultato del test è differente nei due casi, il testo è probabilmente non
+affidabile.
 
 
 \end{document}
