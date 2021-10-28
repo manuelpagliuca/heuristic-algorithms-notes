@@ -2158,7 +2158,7 @@ su \textbf{assunzioni non rappresentative}, come: un caso peggiore non frequente
 su istanze molto rare), oppure una distribuzione probabilistica delle istanze irrealistica.
 
 \subsection{Analisi sperimentale}
-Il metodo sperimentale è l'apporccio tipico che viene utilizzato nella scienza con l'eccezione
+Il metodo sperimentale è l'approccio tipico che viene utilizzato nella scienza con l'eccezione
 della matematica, la quale è basata più su approcci formali, ma gli algoritmi sono l'eccezione
 all'eccezione, visto che solo alcune proprietà legate alle prestazioni degli algoritmi possono
 essere dimostrate e informazioni interessanti possono essere estrapolate dalle prestazioni pratiche.
@@ -2176,7 +2176,7 @@ viene ripetuta fino ad ottenere un \textbf{modello soddisfacente}:
     \item Revisionare il modello in base ai risultati ottenuti.
 \end{enumerate}
 
-\subsection{Modello}
+\subsubsection{Modello}
 \textit{Che cosa è un modello nel contesto dell'algoritmica?} In fisica un modello è una
 legge che regola il comportamento di un fenomeno e, come analogia, nell'algoritmica
 un modello è una legge che ipoteticamente regola il comportamento dell'algoritmo stesso.
@@ -2196,7 +2196,7 @@ L'analisi sperimentale degli algoritmi mira:
     \item Suggerire miglioramenti negli algoritmi.
 \end{enumerate}
 
-\subsection{Benchmark}
+\subsubsection{Benchmark}
 Visto che non tutte le istanze possono essere testate, viene definito un campione di
 riferimento (\textbf{benchmark sample}): un campione significativo deve rappresentare differenti
 \begin{itemize}
@@ -2226,7 +2226,7 @@ Al contrario, noi possiamo:
     \item Estrarre benchmark samples da queste classi.
 \end{itemize}
 
-\subsection{Riproducibilità}
+\paragraph{Riproducibilità}\mbox{}\\
 Il metodo scientifico richiede risultati riproducibili e controllabili. Quindi,
 se vengono fatte delle indagini, è necessario assicurarsi che altre persone siano
 in grado di replicare l'esperimento. Quindi, è necessario utilizzare \textbf{istanze
@@ -2267,7 +2267,8 @@ computazionale e tutti i possibili valori della differenza relativa, si descrivo
 le variabili casuali con le loro proprietà statistiche, cosa che darà una descrizione
 statistica delle prestazioni dell'algoritmo.
 
-\subsection{Analisi del tempo computazionale (\textit{RTD diagram})}
+\subsection{Valutazione a posteriori dell'efficienza}
+\subsubsection{Analisi del tempo computazionale (\textit{RTD diagram})}
 Il diagramma \textit{"Run Time Distribution"} (RTD) è il grafico della funzione di
 distribuzione $T_A(I)$ su $\overline{\mathcal{I}}$.
 $$F_{T_A}(t)=Pr[T_A(I)\leq t]\text{  }\forall t\in\mathbb{R}$$
@@ -2306,7 +2307,7 @@ Costruzione del RTD:
           i segmenti orizzontali (chiusi a sinistra, aperti a destra).
 \end{itemize}
 
-\subsection{Analisi del tempo computazionale (\textit{scaling diagram})}
+\subsubsection{Analisi del tempo computazionale (\textit{scaling diagram})}
 Lo \textbf{scaling diagram} descrive la dipendenza di $T(I)$ sulla dimensione di $n(I)$
 \begin{itemize}
     \item Genera una sequenza di valori di $n$ ed un campion $\overline{\mathcal{I}}_n$
@@ -2342,7 +2343,8 @@ Il dragamma di scaling si trasofrma in una linea dritta quando
           $$\log_2 T(n) = \alpha log_2 n + \beta \Leftrightarrow T(n) = 2^\beta n^\alpha$$
 \end{itemize}
 
-\subsection{Analisi della qualità della soluzione (\textit{SQD diagram})}
+\subsection{Valutazione a posteriori dell'efficacia}
+\subsubsection{Analisi della qualità della soluzione (\textit{SQD diagram})}
 Il diagramma \textbf{Solution Quality Distribution} (SQD) è il grafico della funzione di distribuzione $\delta_A(I)$ su
 $\overline{\mathcal{I}}$
 $$F_{\delta_A}(\alpha) = Pr[\delta_A (I)\leq\alpha]\text{   }\forall\alpha\in\mathbb{R}$$
@@ -2410,4 +2412,162 @@ risultati di $A_1$ sono più spari di $A_2$.
     \includegraphics[scale=0.4]{images/SQD_3.png}
 \end{figure}
 
+\subsection{Descrizione statistica compatta}
+Tutte le precedenti descrizioni prendono molto e sarebbe meglio avere dei numeri o una descrizione
+compatta delle prestazioni di un algoritmo: come un indice statistico riguardante la differenza
+relativa rispetto alla soluzione ottima. Questo coinvolge indici statistici classici di:
+\begin{itemize}
+    \item posizione, come il \textbf{sample mean} (\textit{mean} si riferisce alla media aritmetica di tutti
+          i valori).
+          $$\overline{\delta}_A = \frac{\sum_{I\in\ovcal{I}}\delta_A (I)}{|\ovcal{I}|}$$
+    \item dispersione, come il \textbf{sample variance}.
+          $$\overline{\sigma}^2_A = \frac{\sum_{I\in\ovcal{I}}(\delta_A(I)-\overline{\delta}_A)^2}{|\ovcal{I}|}$$
+
+\end{itemize}
+Questi indici tendono ad essere molto influenzati dai \textbf{valori anormali} (\textit{outliers}). Per
+esempio, un algoritmo che $9/10$ fornisce la soluzione ottima ed $1/10$ fornisce dieci volte la
+soluzione ottima, presenta chiaramente un valore anormale (questo non va bene). Utilizzando l'indice
+"sample mean" avverrà la somma delle differenze $\frac{0+0+...+9}{10}=0.9$ restituendo un divario
+medio del $90\%$, il quale non è una buona rappresentazione.
+
+Altri indici statistici sono più \textit{"stabili"} e dettagliati:
+\begin{itemize}
+    \item \textbf{sample median}
+    \item \textbf{sample quantiles}
+\end{itemize}
+
+\subsubsection{Boxplots}
+Sia il sample median che il quantiles possono essere rappresentati utilizzando una rappresentazione
+grafica chiamata \textbf{boxplot} (o diagramma a \textit{"scatola e baffi"} o \textit{"box and whiskers plot}).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/boxplot.png}
+    \caption{Esempio di boxplot}
+\end{figure}
+Supponiamo di avere 20 istanze nelle quali la relativa differenza spazia da $\approx4\%$ a $\approx11.5\%$,
+rispettivamente nel caso migliore e nel caso peggiore.
+All'interno del diagramma sono presenti cinque valori:
+\begin{itemize}
+    \item \textbf{sample median} (\textit{mediana}).
+    \item \textbf{lower and upper sample quartiles} (\textit{quartile minore e superiore}, rispetto alla mediana).
+    \item \textbf{extreme sample values}, (\textit{valori estremi}, escludendo gli \textit{outliers}).
+\end{itemize}
+
+La \textbf{mediana} è il valore che si trova oltre
+metà delle istanze e sotto metà delle istanze: se il campione è costituito da un numero dispari di casi
+la mediana è il valore dell'elemento nel "mezzo", nel nostro caso la mediana è qualcosa tra la decima
+e l'undicesima istanza (un'altra opzione è quella di utilizzare proprio la decima istanza).
+
+I quantili (considerando i \textit{quartili}) tipici utilizzati in un boxplot sono il
+\textbf{primo ed il terzo}, cioè i valori che separano un quarto dell'osservazione dall'altra
+di tre quarti; Per esempio su $20$ elementi il primo quartile corrisponde al quinto elemento
+mentre il terzo al quindicesimo.
+
+Una volta trovati i primi tre valori sono necessari altri due valori che sono i campioni estremi,
+essi corrispondono al \textit{minimo ed al massimo}.
+
+Questo è un diagramma interessante che fornisce sia la posizione che la dispersione del benchmark,
+detto questo esattamente metà delle istanze cadrà nella "scatola" e le rimanenti tra la fine
+della scatola ed i baffi. Questo diagramma è una descrizione semplificata del SQD e, visto che due
+algoritmi possono essere paragonati utilizzando l'SQD, essi possono essere paragonati altrettanto
+utilizzando i relativi boxplot.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/boxplot_comparison.png}
+    \caption{Confronto tra algoritmi attraverso i boxplot}
+\end{figure}
+Chiaramente, come mostrato in figure, il confronto è meno preciso di un diagramma SQD e meno
+informazioni possono essere estratte, tuttavia delle interessanti conclusioni possono essere fatte.
+In primis, prendendo sempre come esempio la figura sovrastante, gli $8$ boxplot rappresentano la
+\textit{differenza relativa} su un campione fisso di un benchmark, dove i cerchi sono gli outliers.
+
+Se paragoniamo $A_7$ e $A_8$, i due boxplot sono completamente separati, questo significa che tutte
+le istanze dell'algoritmo $A_7$ hanno valori migliori, questa è la definizione di \textbf{dominanza stretta}.
+
+Invece, si parla di \textbf{dominanza probabilistica} quando ognuno dei $4$ quartili di un boxplot
+si trova sotto l'altro boxplot con cui ci si sta confrontando, come per esempio tra $A_2$ e $A_3$,
+ma questa \textbf{non è una condizione sufficiente} (solo necessaria). Sempre considerando lo
+stesso esempio potrebbe essere che un istanza parti dal baffo inferiore di $A_2$ e tutte le altre
+si trovino esattamente nel primo quartile mentre accade l'opposto per $A_3$: in questo caso sicuramente
+non può essere considerata la dominanza probabilistica.
+
+\subsubsection{Relazione tra qualità e tempo computazioanle}
+Un algoritmo euristico è migliore di un altro non quando restituisce risultati migliori ma quando
+viene eseguito in un tempo minore. Se questo non accade, non si può dire che uno domini l'altro.
+
+Tuttavia, sono presenti molto algoritmi che non trovano una singola soluzione come gli algoritmi
+classici, ma quello che attuano è migliorare le soluzioni precedentemente trovate. Questo ne
+consegue in terminazioni premature.
+
+In particolare gli algoritmi con \textit{metaeuristiche} (passi casuali o meccanismi mnemonici)
+hanno un tempo computazione $t$ fissato dall'utente e potenzialmente illimitato.
+Sia $\delta_A(t,I)$:
+\begin{itemize}
+    \item La differenza relativa ottenuta da $A$ al tempo $t$ sull'istanza $I$.
+    \item $+\infty$ se $A$ non ha ancora trovato una soluzione fattibile nel tempo $t$.
+\end{itemize}
+Come funzione del tempo di calcolo $t$, $\delta_A(t,I)$ è:
+\begin{itemize}
+    \item \textbf{monotona a scala non-crescente}.
+    \item \textbf{costante dopo la terminazione regolare} $t\geq T(I)$ (se esiste).
+\end{itemize}
+\paragraph{Algoritmi randomizzati}\mbox{}\\
+Se gli algoritmi metaeuristici hanno passi casuali, allora la differenza relativa è funzione del
+seme casuale (\textit{random seed}) $\omega\in\Omega$ rendendo $\delta_A(t,I,\omega)$. Quando si effettua
+il testing di un tale algoritmo, dovrebbe essere preso in considerazione che sono presenti due
+elementi casuali: l'istanza $I$ estratta da $\ovcal{I}$ ed il random seed.
+
+Durante il test questi parametri possono essere combinati o distinti, significa che in un esperimento
+$I$ può essere fissato and un gruppo di semi $\overline{\Omega}$ viene testato, o al contrario, $\omega$
+è fisso ed un campione di istanze $\ovcal{I}$ viene testato. I risultati su $\omega$ sono solitamente
+riassunti fornendo entrambe la differenza minima $\delta_A^*(t,I)$ ed il tempo totale $|\overline{\Omega}|t$,
+oppure la differenza media relativa $\overline{\delta}_A(t,I)$ ed il singolo tempo d'esecuzione $t$.
+
+\subsubsection{Classificazione}
+Ora abbiamo tutti gli elementi per fornire una \textbf{classificazione} abbastanza complicata per
+algoritmi euristici, esatti ed approssimati. Questa vuole essere una classificazione di tutti
+i tipi di algoritmi per problemi di ottimizzazione combinatoria
+
+La relazione tra la qualità della soluzione e tempo computazionale permette di classificare gli
+algoritmi in:
+\begin{itemize}
+    \item \textbf{completi}: per ogni istanza $I\in\mathcal{I}$, si trova l'ottimo in un tempo finito (un
+          nome diverso per gli \textit{algoritmi esatti}).
+          $$\exists\overline{t}_I\in\mathbb{R}^+ :\delta_A(I,t)=0 \text{  }\forall t\geq\overline{t}_I,I\in\mathcal{I}$$
+
+    \item \textbf{probabilisticamente ed approssimativamente completi} (\textit{probabilistically approximately}):
+          per ogni istanza $I\in\mathcal{I}$, si trova l'ottimo con una probabilità convergente ad $1$, rispetto
+          ad una differenza relativa uguale a $0$, per $t\rightarrow\infty$
+          (molti algoritmi metaeuristici randomizzati). Questi algoritmi non forniscono una soluzione ottima in un
+          tempo finito, ma lo faranno se verrà fornito \textit{abbastanza tempo}.
+          $$\lim_{t\rightarrow +\infty}Pr[\delta_A(I,t)=0]=1\text{  }\forall I\in\mathcal{I}$$
+
+    \item \textbf{essenzialmente incompleti}: per alcune istanze di $I\in\mathcal{I}$, si trova
+          la soluzione ottima con una probabilità strettamente $<1$ per $t\rightarrow +\infty$ (la maggior
+          parte sono algoritmi greedy, algoritmi di ricerca locale, ...). Questi sono i "veri" algoritmi
+          euristici.
+          $$\exists I\in\mathcal{I}:\lim_{t\rightarrow +\infty}Pr[\delta_A(I,t)=0]<1$$
+\end{itemize}
+
+\paragraph{Classificazione generalizzata}\mbox{}\\
+Un ovvia generalizzazione sostituisce la ricerca per l'ottimo con un dato livello di approssimazione:
+$$\delta_A(I,t)=0\rightarrow\delta_A(I,t)\leq\alpha$$
+
+\begin{itemize}
+    \item \textbf{algoritmi $\alpha$-completi}: per ogni istanza $I\in\mathcal{I}$, trovano una soluzione $\alpha$-approssimata
+          in un tempo finito (questi essenzialmente è una descrizione formale per gli algoritmi $\alpha$-approssimati).
+
+    \item \textbf{algoritmi probabilisticamente ed approssimativamente $\alpha$-completi}: per ogni istanza $I\in\mathcal{I}$,
+          trovare una soluzione $\alpha$-approssimata con una probabilità di convergenza ad $1$ per $t\rightarrow+\infty$.
+    \item \textbf{algoritmi essenzialmente $\alpha$-completi}: per alcune istanze $I\in\mathcal{I}$ si trova
+          una soluzione $\alpha$-approssimata con una probabilità strettamente $<1$ per $t\rightarrow +\infty$.
+\end{itemize}
+Concludendo, ogni algoritmo fornisce compromessi tra :
+\begin{itemize}
+    \item una misura della qualità, descritta dalla soglia $\alpha$.
+    \item una misura del tempo, descritta dalla soglia $t$.
+\end{itemize}
+
 \end{document}
+
