@@ -28,6 +28,11 @@
     linkcolor=black,
     urlcolor=black
 }
+%Codice
+\usepackage{listings}
+\usepackage{algpseudocode}
+\usepackage{algorithm}
+
 
 \newcommand{\ovcal}[1]{\overline{\mathcal{#1}}}
 
@@ -2746,28 +2751,220 @@ numerati, come nella figura in alto a sinistra. In un caso tutti sono positivi e
 $W^+-W^-=(1+2+3)-0=6$; in un altro caso sono tutti negativi $W^+-W^-=0-(1+2+3)=-6$, e così via;
 in due casi la differenza è $0$$W^+-W^-=(1+2)-3=3-(1+2)=0$.
 
-Ci si aspetta dall'ipotesi nulla di essere in uno dei due casi dove la differenza è uguale a $0$.
-Ma nel caso contrario, \textit{quale è la probabilità?} Assumendo che le due popolazioni
-siano le stesse così che la mediana sia su $0$, la probabilità di essere in una situazione
-di differenza \textbf{non equa o peggiore} corrisponde alla somma delle probabilità per
-ogni numerazione nel caso: per esempio, se la differenza restituita fosse $6$ la sua
-probabilità è $\frac{1}{8}$. Se la differenza ottenuta è $4$, la probabilità di ottenere
-ciò o peggio è $\frac{2}{8}$ e così via.
+    Ci si aspetta dall'ipotesi nulla di essere in uno dei due casi dove la differenza è uguale a $0$.
+    Ma nel caso contrario, \textit{quale è la probabilità?} Assumendo che le due popolazioni
+    siano le stesse così che la mediana sia su $0$, la probabilità di essere in una situazione
+    di differenza \textbf{non equa o peggiore} corrisponde alla somma delle probabilità per
+    ogni numerazione nel caso: per esempio, se la differenza restituita fosse $6$ la sua
+    probabilità è $\frac{1}{8}$. Se la differenza ottenuta è $4$, la probabilità di ottenere
+    ciò o peggio è $\frac{2}{8}$ e così via.
 
-Quindi può essere calcolata attraverso l'enumerazione, o se sono presenti molte istanze,
-la legge dei grandi numeri dice che va bene approssimare con una distribuzione normale.
+    Quindi può essere calcolata attraverso l'enumerazione, o se sono presenti molte istanze,
+    la legge dei grandi numeri dice che va bene approssimare con una distribuzione normale.
 
-\paragraph{Possibili conclusioni}\mbox{}\\
-Il test di Wilcoxon può suggerire:
+    \paragraph{Possibili conclusioni}\mbox{}\\
+    Il test di Wilcoxon può suggerire:
+    \begin{itemize}
+        \item che uno dei due algoritmi è significativamente migliroe dell'altro.
+        \item che i due algoritmi sono statisticamente equivalenti.
+    \end{itemize}
+    In entrambi i casi è importante "tenere un occhio" su $p$, poiché è una risposta
+    stocastica.
+
+    Se il campione include istanze di tipi differenti, due algoritmi potrebbero essere
+    complessivamente equivalenti, ma non equivalenti sulle singole istanze delle classi.
+    Quindi se effettuo un test su $\delta_A(I)$ anziché $f_A(I)$? È una domanda aperta.
+    I risultati possono essere differenti utilizzando $\delta_A(I)$ significa che dando
+un peso minore alle istanze che hanno una soluzione ottimale maggiore. Probabilmente,
+se il risultato del test è differente nei due casi, il testo è probabilmente non
+affidabile.
+
+\section{Euristiche costruttive}
+Adesso che abbiamo fornito un ampia panoramica dei problemi e dei metodi di valutazione
+degli algoritmi sia a priori che a posteriori, possiamo considerare la prima delle
+tre classi di euristiche, le \textbf{euristiche costruttive}.
+
+\subsection{Introduzione alle euristiche costruttive}
+Per comprendere questo tipo di euristica dobbiamo ricordarci che i problemi di ottimizzazione
+combinatoria ammettono delle soluzioni $x$ che sono sempre sottoinsiemi di
+un dato ground set $B$, il quale è un insieme finito.
+
+Il fatto che noi abbiamo sottoinsiemi suggerisce un possibile modo di costruire una soluzione,
+ed in particolare le euristiche costruttive consistono nell'iniziare da un insieme vuoto
+iniziale $\emptyset$ e man mano aggiungere un elemento alla volta finché non si \textit{intuisce}
+che non ha senso introdurre nuovi elementi, terminando così l'algoritmo.
+Analizziamo passo a passo questo processo, considerando il sottoinsieme $x^{(t)}$
+aggiornato da una euristica costruttiva:
+\begin{enumerate}
+    \item Si inizia da un insieme vuoto: $x^{(0)}=\emptyset$ (il quale è ovviamente
+    sottoinsieme di una qualsiasi soluzione ottima). Sappiamo già che attraverso la
+    kernelization o utilizzando procedure di riduzione può essere dimostrato che
+    alcuni elementi del ground set sono necessariamente inclusi in almeno una soluzione ottima.
+    In tali casi, potrebbe essere una buona idea iniziare ad includere nel sottoinsieme originale
+    questi elementi "forzati".
+
+    \item Termina quando incontra una condizione di terminazione, il razionale di questa condizione
+    consiste nel fatto che aggiungere un elemento nel sottoinsieme corrente non avrebbe alcun senso
+    visto che non restituirebbe una soluzione ottima.
+
+    \item Seleziona il \textit{"migliore"} elemento $i^{(t)}\in B$ tra quelli \textit{"accettabili"}
+    allo step $t$.
+
+    \item Aggiungi $i^{(t)}$ al sottoinsieme corrente $x^{(t)}:x^{(t+1)}:=x^{(t)}\cup\{ i^{(t)}\}$
+    \item Tornare al passo $2$.
+\end{enumerate}
+
+\subsubsection{Il grafo di costruzione}
+Il grafo di costruzione (\textbf{construction graph}), è lo strumento di modellazione principale
+di questa costruttiva. Esso è un grafo diretto, costituito da nodi ed archi: i nodi di questo grafo
+costituiscono l'insieme $\mathcal{F}_A$ ($F$ sta per \textit{find}), il quale è anche conosciuto come
+\textbf{spazio di ricerca} (o \textit{search space}), il quale dipende dall'algoritmo $A$.
+
+In altre parole $\mathcal{F}_A$ dipende dal \textit{problema} che si vuole risolvere, ma per lo stesso
+problema possono esserci differenti spazi di ricerca corrispondenti a differenti
+algoritmi, quindi differenti euristiche costruttive.
+
+Lo spazio di ricerca è definito come la collezione di tutti i sottoinsiemi $x\subseteq B$ accettabili
+per l'algoritmo $A$.
+$$\mathcal{F}_A\subseteq 2^B$$
+Ogni \textit{nodo} è un sottoinsieme ed alcuni saranno le soluzioni mentre altri no. Siamo interessati nei
+sottoinsiemi che sono accettabili ed utili. Gli \textit{archi} connettono coppie di nodi,
+l'arco in se è la collezione di tutte le coppie $(x,x\cup\{i\})$ tali che
+$x\in \mathcal{F}_A ,i\in B\setminus x$ e $x\cup\{i\}\in \mathcal{F}_A$. Quindi, gli archi connettono
+un sottoinsieme della soluzione ad un sottoinsieme leggermente più grande che rappresenta l'estensione
+di un sottoinsieme ancora accettabile che include un nuovo elemento.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.6]{images/cons_graph.png}
+    \caption{Il grafo di costruzione visita una sequenza di sotto insiemi che porta alla soluzione ottima}
+\end{figure}
+Questo grafo è un \textbf{DAG} (\textit{Directed Acyclic Graph}). Ogni possibile esecuzione di
+$A$ è un \textbf{percorso massimo} del grafo di costruzione (contando sia il sottoinsieme
+vuoto che un sottoinsieme la cui estensione non può essere accettata).
+
+Il rettangolo del grafo di costruzione rappresenta le $2^B$, ovvero tutti i possibili
+sottoinsiemi del ground set $B$. Questa collezione di sottoinsiemi
+è partizione in classi che dipendono dalla loro cardinalità, quindi la prima classe (quella
+più a sinistra) contiene solamente un possibile sottoinsieme, ovvero quello contenente l'insieme
+vuoto $\emptyset$ (contenente tutti i sottoinsiemi di $0$ elementi). Nella seconda classe
+dei sottoinsiemi possibili si trovano gli elementi singoli, poi le coppie, ecc. Sono
+presenti $n+1$ classi che vanno da cardinalità $0$ fino a $n$. All'interno dell'insieme
+potenza (o dei sottoinsiemi possibili), è presente lo spazio di ricerca degli algoritmi $\mathcal{F}_A$,
+il quale contiene alcuni sottoinsiemi che sono considerati \textit{"utili"} per l'algoritmo: in
+particolare contiene l'insieme vuoto (l'algoritmo parte da quello), e altri insiemi che ha senso
+tenere conto.
+
+Solitamente sottoinsiemi che sono al di fuori dello spazio di ricerca sono quelli che non hanno senso di
+essere fissati, visto che non sono fattibili o perché non sono particolarmente "interessanti" ed
+ogni altro sottoinsieme che non può essere raggiunto da $\mathcal{F}_A$ non è rilevante. Come prima
+l'insieme delle soluzioni fattibili viene denotato con $X$, e l'insieme delle soluzioni ottime $X^*$.
+
+Nell spazio di ricerca è presente un insieme di archi che connettono coppie di nodi, il secondo nodo
+della coppia corrisponde al primo sottoinsieme della coppia più un certo elemento.
+
+Come è possibile vedere dalle figure partire dal sottoinsieme vuoto è una soluzione accettabile,
+le soluzioni non \textit{accettabili} si trovano al di fuori dello spazio di ricerca, e di fatti
+non sono presenti archi che vanno al di fuori di questo. Quindi, ogni esecuzione di un algoritmo è un
+percorso massimo all'interno del grafo di costruzione, che parte dal sottoinsieme vuoto e raggiunge
+una soluzione, la quale idealmente dovrebbe essere ottimale o almeno fattibile. Nel caso ottimale,
+il percorso termina quando incontra una soluzione ottima, questo è il caso degli
+algoritmi di Dijkstra, Prim, Kruskal.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.8]{images/cons_graph_1.png}
+    \caption{Il grafo di costruzione visita una sequenza di sotto insiemi che porta ad una soluzione
+    fattibile ma non ottimale}
+\end{figure}
+
+Negli altri casi, come nella figura sovrastante, il percorso potrebbe non terminare in una soluzione
+ottima ma fattibile $x\in X$, questo è il caso degli algoritmi euristici come quelli usati per
+KP e MDP.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.8]{images/cons_graph_2.png}
+    \caption{Il grafo di costruzione visita una sequenza di sotto insiemi che porta ad una soluzione non fattibile}
+\end{figure}
+Il percorso potrebbe terminare in una soluzione non fattibile $x\notin X$ (ma accettabile poiché presente
+nello spazio di ricerca), come per esempio il TSP su un grafo non completo.
+
+\paragraph{Esempio di costruzione di grafi}\mbox{}\\
+Un esempio di grafo di costruzione è quello per il TSP per trovare il Nearest-Neighbour in
+un grafo completo. L'idea è quella di iniziare con un insieme di archi vuoto, quindi $x^{(0)}=\emptyset$,
+e sono presenti $n-1$ archi uscenti.
+
+La costruzione del grafo sarà un albero con $n-1$ archi e $n$ nodi; il numero di percorsi dall'insieme
+vuoto alle foglie sarà esattamente $(n-1)!$, questo è il numero delle possibili esecuzioni
+dell'algoritmo.
+
+\paragraph{Proprietà dello spazio di ricerca}\mbox{}\\
 \begin{itemize}
-    \item che uno dei due algoritmi è significativamente migliroe dell'altro.
-    \item che i due algoritmi sono statisticamente equivalenti.
-\end{itemize}
-Se il campione include istanze di tipi differenti, due algoritmi potrebbero essere
-complessivamente equivalenti, ma non equivalenti sulle singole istanze delle classi.
+    \item Include l'insieme vuoto $\emptyset\in\mathcal{F}_A$, visto che ogni algoritmo generalmente
+    inizia da quello.
 
-In entrambi i casi è importante "tenere un occhio" su $p$, poiché è una risposta
-stocastica.
+    \item In generale include l'insieme delle soluzioni fattibili $X\subseteq\mathcal{F}_A$, a volte
+    alcune soluzioni possono essere rimosse da esso nel caso in cui risultino ovviamente non ottimali:
+    per esempio l'SCP dove inizia con un insieme vuoto di colonne ogni colonna è a aggiunta, in un
+    dato punto la soluzione fattibile viene raggiunta ma non ha senso aggiungere
+    altre colonne perché i nuovi sottoinsiemi saranno fattibili ma anche più costosi.
+
+    \item I sottoinsiemi di $\mathcal{F}_A$ devono essere raggiungibili dal punto di partenza,
+    altrimenti non avrebbe senso aggiungere una soluzione che non è raggiungibile dall'inizio. Un
+    insieme candidato è la collezione delle \textbf{soluzioni parziali}, che sono le soluzioni
+    generalmente non fattibili ma sono sottoinsiemi di soluzioni fattibili. Seguire una soluzione
+    parziale fornisce almeno un percorso per una soluzione fattibile $\in X$.
+
+\end{itemize}
+\paragraph{Esempi di spazi di ricerca}\mbox{}\\
+Lo spazio di ricerca potrebbe include tutte le soluzioni fattibili tali che:
+$$\mathcal{F}_A\equiv X$$
+come nel KP; potrebbe includere tutte le soluzioni parziali e tutte le soluzioni fattibili, tale che:
+$$\mathcal{F}_A\equiv \bigcup_{x\in X} 2^x$$
+per esempio nel MDP, nel quale non solo i sottoinsiemi dei $k$ punti sono considerati ma anche
+quelli più piccoli o nell'algoritmo di Kruskal; lo spazio di ricerca potrebbe includere solo
+alcune soluzioni parziali:
+$$\mathcal{F}_A\subset \bigcup_{x\in X} 2^x$$
+un esempio di questo è l'algoritmo di PRim per MSP, il quale non consider tutte le soluzioni
+parziali ma considera un albero che è in aumento rimanendo connesso finché non diventa ricoprente.
+Le soluzioni possono essere definite come uno speciale sottoinsieme non sufficiente per garantire
+la fattibilità:
+$$ U_{x\in X}2^x \mathcal{F}_A$$
+un esempio di questo è il TSP, dove $\mathcal{F}_a$ può essere definito su tutti i
+sottoinsiemi di archi che non includono diramazioni o sotto percorsi, non può
+essere definito come "tutti i sottoinsiemi che fanno parte delle soluzioni fattibili"
+visto che è un problema di decisione NP-completo.
+
+\subsection{Condizione di terminazione}
+Un euristica costruttiva $A$ termina in due casi. Quando il sottoinsieme corrente $x^{t}$
+non può essere esteso senza che lasci lo spazio di ricerca $\mathcal{F}_A$ :
+$$x^{(t)}\cup\{i\}\notin\mathcal{F}_A\text{   }\forall i\in B\setminus x^{(t)}$$
+o in maniera pressoché equivalente, non ha un arco uscente:
+$$\Delta_A^+(x^{(t)})=\{i\in B\setminus x^{(t)}:x^{(t)}\cup\{i\}\in\mathcal{F}_A\}$$
+
+Sono possibili differenti comportamenti:
+\begin{itemize}
+    \item Talvolta tutti i sottoinsiemi visitati sono fattibili (es. KP).
+    \item Di solito l'ultimo sottoinsieme è l'unica soluzione fattibile.
+    \item $x^{(t)}$ potrebbe muoversi dentro e fuori $X$ (o $X^*$), seppur improbabile.
+\end{itemize}
+
+\section{Struttura di algoritmi euristici costruttivi}
+\begin{algorithm}
+    \caption{Pseudo codice - Euristica Costruttiva}
+    \begin{algorithmic}
+    \State $x:=\emptyset$
+    \State $x^*:=\emptyset$
+
+    \If{$x\in X$}
+        \State $i \gets i-1$
+    \Else
+        \If{$i\leq 3$}
+            \State $i \gets i+2$
+        \EndIf
+    \EndIf
+    \end{algorithmic}
+\end{algorithm}
+
+
 
 
 \end{document}
