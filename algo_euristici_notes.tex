@@ -13,7 +13,7 @@
 \pagestyle{fancy} % Set default style for all content pages (not TOC, etc)
 
 %Prefisso della caption delle figure
-\captionsetup[figure]{labelformat=empty}% redefines the caption setup of the figures environment in the beamer class.
+\captionsetup[figure]{}% redefines the caption setup of the figures environment in the beamer class.
 
 \usepackage{amsmath}
 \usepackage{amsfonts}
@@ -32,10 +32,11 @@
 \usepackage{listings}
 \usepackage{algpseudocode}
 \usepackage{algorithm}
-
-
+\usepackage{booktabs}
+\usepackage{amssymb}
+\usepackage{chngcntr}
+\counterwithin{figure}{section}
 \newcommand{\ovcal}[1]{\overline{\mathcal{#1}}}
-
 
 \title{\textbf{Algoritmi Euristici}}
 \author{Manuel Pagliuca}
@@ -2775,196 +2776,596 @@ in due casi la differenza è $0$$W^+-W^-=(1+2)-3=3-(1+2)=0$.
     complessivamente equivalenti, ma non equivalenti sulle singole istanze delle classi.
     Quindi se effettuo un test su $\delta_A(I)$ anziché $f_A(I)$? È una domanda aperta.
     I risultati possono essere differenti utilizzando $\delta_A(I)$ significa che dando
-un peso minore alle istanze che hanno una soluzione ottimale maggiore. Probabilmente,
-se il risultato del test è differente nei due casi, il testo è probabilmente non
-affidabile.
+    un peso minore alle istanze che hanno una soluzione ottimale maggiore. Probabilmente,
+    se il risultato del test è differente nei due casi, il testo è probabilmente non
+    affidabile.
 
-\section{Euristiche costruttive}
-Adesso che abbiamo fornito un ampia panoramica dei problemi e dei metodi di valutazione
-degli algoritmi sia a priori che a posteriori, possiamo considerare la prima delle
-tre classi di euristiche, le \textbf{euristiche costruttive}.
+    \section{Euristiche costruttive}
+    Adesso che abbiamo fornito un ampia panoramica dei problemi e dei metodi di valutazione
+    degli algoritmi sia a priori che a posteriori, possiamo considerare la prima delle
+    tre classi di euristiche, le \textbf{euristiche costruttive}.
 
-\subsection{Introduzione alle euristiche costruttive}
-Per comprendere questo tipo di euristica dobbiamo ricordarci che i problemi di ottimizzazione
-combinatoria ammettono delle soluzioni $x$ che sono sempre sottoinsiemi di
-un dato ground set $B$, il quale è un insieme finito.
+    \subsection{Introduzione alle euristiche costruttive}
+    Per comprendere questo tipo di euristica dobbiamo ricordarci che i problemi di ottimizzazione
+    combinatoria ammettono delle soluzioni $x$ che sono sempre sottoinsiemi di
+    un dato ground set $B$, il quale è un insieme finito.
 
-Il fatto che noi abbiamo sottoinsiemi suggerisce un possibile modo di costruire una soluzione,
-ed in particolare le euristiche costruttive consistono nell'iniziare da un insieme vuoto
-iniziale $\emptyset$ e man mano aggiungere un elemento alla volta finché non si \textit{intuisce}
-che non ha senso introdurre nuovi elementi, terminando così l'algoritmo.
-Analizziamo passo a passo questo processo, considerando il sottoinsieme $x^{(t)}$
-aggiornato da una euristica costruttiva:
-\begin{enumerate}
-    \item Si inizia da un insieme vuoto: $x^{(0)}=\emptyset$ (il quale è ovviamente
-    sottoinsieme di una qualsiasi soluzione ottima). Sappiamo già che attraverso la
-    kernelization o utilizzando procedure di riduzione può essere dimostrato che
-    alcuni elementi del ground set sono necessariamente inclusi in almeno una soluzione ottima.
-    In tali casi, potrebbe essere una buona idea iniziare ad includere nel sottoinsieme originale
-    questi elementi "forzati".
+    Il fatto che noi abbiamo sottoinsiemi suggerisce un possibile modo di costruire una soluzione,
+    ed in particolare le euristiche costruttive consistono nell'iniziare da un insieme vuoto
+    iniziale $\emptyset$ e man mano aggiungere un elemento alla volta finché non si \textit{intuisce}
+    che non ha senso introdurre nuovi elementi, terminando così l'algoritmo.
+    Analizziamo passo a passo questo processo, considerando il sottoinsieme $x^{(t)}$
+    aggiornato da una euristica costruttiva:
+    \begin{enumerate}
+        \item Si inizia da un insieme vuoto: $x^{(0)}=\emptyset$ (il quale è ovviamente
+              sottoinsieme di una qualsiasi soluzione ottima). Sappiamo già che attraverso la
+              kernelization o utilizzando procedure di riduzione può essere dimostrato che
+              alcuni elementi del ground set sono necessariamente inclusi in almeno una soluzione ottima.
+              In tali casi, potrebbe essere una buona idea iniziare ad includere nel sottoinsieme originale
+              questi elementi "forzati".
 
-    \item Termina quando incontra una condizione di terminazione, il razionale di questa condizione
-    consiste nel fatto che aggiungere un elemento nel sottoinsieme corrente non avrebbe alcun senso
-    visto che non restituirebbe una soluzione ottima.
+        \item Termina quando incontra una condizione di terminazione, il razionale di questa condizione
+              consiste nel fatto che aggiungere un elemento nel sottoinsieme corrente non avrebbe alcun senso
+              visto che non restituirebbe una soluzione ottima.
 
-    \item Seleziona il \textit{"migliore"} elemento $i^{(t)}\in B$ tra quelli \textit{"accettabili"}
-    allo step $t$.
+        \item Seleziona il \textit{"migliore"} elemento $i^{(t)}\in B$ tra quelli \textit{"accettabili"}
+              allo step $t$.
 
-    \item Aggiungi $i^{(t)}$ al sottoinsieme corrente $x^{(t)}:x^{(t+1)}:=x^{(t)}\cup\{ i^{(t)}\}$
-    \item Tornare al passo $2$.
-\end{enumerate}
+        \item Aggiungi $i^{(t)}$ al sottoinsieme corrente $x^{(t)}:x^{(t+1)}:=x^{(t)}\cup\{ i^{(t)}\}$
+        \item Tornare al passo $2$.
+    \end{enumerate}
 
-\subsubsection{Il grafo di costruzione}
-Il grafo di costruzione (\textbf{construction graph}), è lo strumento di modellazione principale
-di questa costruttiva. Esso è un grafo diretto, costituito da nodi ed archi: i nodi di questo grafo
-costituiscono l'insieme $\mathcal{F}_A$ ($F$ sta per \textit{find}), il quale è anche conosciuto come
-\textbf{spazio di ricerca} (o \textit{search space}), il quale dipende dall'algoritmo $A$.
+    \subsubsection{Il grafo di costruzione}
+    Il grafo di costruzione (\textbf{construction graph}), è lo strumento di modellazione principale
+    di questa costruttiva. Esso è un grafo diretto, costituito da nodi ed archi: i nodi di questo grafo
+    costituiscono l'insieme $\mathcal{F}_A$ ($F$ sta per \textit{find}), il quale è anche conosciuto come
+    \textbf{spazio di ricerca} (o \textit{search space}), il quale dipende dall'algoritmo $A$.
 
-In altre parole $\mathcal{F}_A$ dipende dal \textit{problema} che si vuole risolvere, ma per lo stesso
-problema possono esserci differenti spazi di ricerca corrispondenti a differenti
-algoritmi, quindi differenti euristiche costruttive.
+    In altre parole $\mathcal{F}_A$ dipende dal \textit{problema} che si vuole risolvere, ma per lo stesso
+    problema possono esserci differenti spazi di ricerca corrispondenti a differenti
+    algoritmi, quindi differenti euristiche costruttive.
 
-Lo spazio di ricerca è definito come la collezione di tutti i sottoinsiemi $x\subseteq B$ accettabili
-per l'algoritmo $A$.
-$$\mathcal{F}_A\subseteq 2^B$$
-Ogni \textit{nodo} è un sottoinsieme ed alcuni saranno le soluzioni mentre altri no. Siamo interessati nei
-sottoinsiemi che sono accettabili ed utili. Gli \textit{archi} connettono coppie di nodi,
-l'arco in se è la collezione di tutte le coppie $(x,x\cup\{i\})$ tali che
+    Lo spazio di ricerca è definito come la collezione di tutti i sottoinsiemi $x\subseteq B$ accettabili
+    per l'algoritmo $A$.
+    $$\mathcal{F}_A\subseteq 2^B$$
+    Ogni \textit{nodo} è un sottoinsieme ed alcuni saranno le soluzioni mentre altri no. Siamo interessati nei
+    sottoinsiemi che sono accettabili ed utili. Gli \textit{archi} connettono coppie di nodi,
+    l'arco in se è la collezione di tutte le coppie $(x,x\cup\{i\})$ tali che
 $x\in \mathcal{F}_A ,i\in B\setminus x$ e $x\cup\{i\}\in \mathcal{F}_A$. Quindi, gli archi connettono
-un sottoinsieme della soluzione ad un sottoinsieme leggermente più grande che rappresenta l'estensione
-di un sottoinsieme ancora accettabile che include un nuovo elemento.
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.6]{images/cons_graph.png}
-    \caption{Il grafo di costruzione visita una sequenza di sotto insiemi che porta alla soluzione ottima}
-\end{figure}
-Questo grafo è un \textbf{DAG} (\textit{Directed Acyclic Graph}). Ogni possibile esecuzione di
+    un sottoinsieme della soluzione ad un sottoinsieme leggermente più grande che rappresenta l'estensione
+    di un sottoinsieme ancora accettabile che include un nuovo elemento.
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.6]{images/cons_graph.png}
+        \caption{Il grafo di costruzione visita una sequenza di sotto insiemi che porta alla soluzione ottima}
+    \end{figure}
+    Questo grafo è un \textbf{DAG} (\textit{Directed Acyclic Graph}). Ogni possibile esecuzione di
 $A$ è un \textbf{percorso massimo} del grafo di costruzione (contando sia il sottoinsieme
-vuoto che un sottoinsieme la cui estensione non può essere accettata).
+    vuoto che un sottoinsieme la cui estensione non può essere accettata).
 
-Il rettangolo del grafo di costruzione rappresenta le $2^B$, ovvero tutti i possibili
-sottoinsiemi del ground set $B$. Questa collezione di sottoinsiemi
-è partizione in classi che dipendono dalla loro cardinalità, quindi la prima classe (quella
-più a sinistra) contiene solamente un possibile sottoinsieme, ovvero quello contenente l'insieme
-vuoto $\emptyset$ (contenente tutti i sottoinsiemi di $0$ elementi). Nella seconda classe
-dei sottoinsiemi possibili si trovano gli elementi singoli, poi le coppie, ecc. Sono
-presenti $n+1$ classi che vanno da cardinalità $0$ fino a $n$. All'interno dell'insieme
-potenza (o dei sottoinsiemi possibili), è presente lo spazio di ricerca degli algoritmi $\mathcal{F}_A$,
-il quale contiene alcuni sottoinsiemi che sono considerati \textit{"utili"} per l'algoritmo: in
-particolare contiene l'insieme vuoto (l'algoritmo parte da quello), e altri insiemi che ha senso
-tenere conto.
+    Il rettangolo del grafo di costruzione rappresenta le $2^B$, ovvero tutti i possibili
+    sottoinsiemi del ground set $B$. Questa collezione di sottoinsiemi
+    è partizione in classi che dipendono dalla loro cardinalità, quindi la prima classe (quella
+    più a sinistra) contiene solamente un possibile sottoinsieme, ovvero quello contenente l'insieme
+    vuoto $\emptyset$ (contenente tutti i sottoinsiemi di $0$ elementi). Nella seconda classe
+    dei sottoinsiemi possibili si trovano gli elementi singoli, poi le coppie, ecc. Sono
+    presenti $n+1$ classi che vanno da cardinalità $0$ fino a $n$. All'interno dell'insieme
+    potenza (o dei sottoinsiemi possibili), è presente lo spazio di ricerca degli algoritmi $\mathcal{F}_A$,
+    il quale contiene alcuni sottoinsiemi che sono considerati \textit{"utili"} per l'algoritmo: in
+    particolare contiene l'insieme vuoto (l'algoritmo parte da quello), e altri insiemi che ha senso
+    tenere conto.
 
-Solitamente sottoinsiemi che sono al di fuori dello spazio di ricerca sono quelli che non hanno senso di
-essere fissati, visto che non sono fattibili o perché non sono particolarmente "interessanti" ed
-ogni altro sottoinsieme che non può essere raggiunto da $\mathcal{F}_A$ non è rilevante. Come prima
-l'insieme delle soluzioni fattibili viene denotato con $X$, e l'insieme delle soluzioni ottime $X^*$.
+    Solitamente sottoinsiemi che sono al di fuori dello spazio di ricerca sono quelli che non hanno senso di
+    essere fissati, visto che non sono fattibili o perché non sono particolarmente "interessanti" ed
+    ogni altro sottoinsieme che non può essere raggiunto da $\mathcal{F}_A$ non è rilevante. Come prima
+    l'insieme delle soluzioni fattibili viene denotato con $X$, e l'insieme delle soluzioni ottime $X^*$.
 
-Nell spazio di ricerca è presente un insieme di archi che connettono coppie di nodi, il secondo nodo
-della coppia corrisponde al primo sottoinsieme della coppia più un certo elemento.
+    Nell spazio di ricerca è presente un insieme di archi che connettono coppie di nodi, il secondo nodo
+    della coppia corrisponde al primo sottoinsieme della coppia più un certo elemento.
 
-Come è possibile vedere dalle figure partire dal sottoinsieme vuoto è una soluzione accettabile,
-le soluzioni non \textit{accettabili} si trovano al di fuori dello spazio di ricerca, e di fatti
-non sono presenti archi che vanno al di fuori di questo. Quindi, ogni esecuzione di un algoritmo è un
-percorso massimo all'interno del grafo di costruzione, che parte dal sottoinsieme vuoto e raggiunge
-una soluzione, la quale idealmente dovrebbe essere ottimale o almeno fattibile. Nel caso ottimale,
-il percorso termina quando incontra una soluzione ottima, questo è il caso degli
-algoritmi di Dijkstra, Prim, Kruskal.
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.8]{images/cons_graph_1.png}
-    \caption{Il grafo di costruzione visita una sequenza di sotto insiemi che porta ad una soluzione
-    fattibile ma non ottimale}
-\end{figure}
+    Come è possibile vedere dalle figure partire dal sottoinsieme vuoto è una soluzione accettabile,
+    le soluzioni non \textit{accettabili} si trovano al di fuori dello spazio di ricerca, e di fatti
+    non sono presenti archi che vanno al di fuori di questo. Quindi, ogni esecuzione di un algoritmo è un
+    percorso massimo all'interno del grafo di costruzione, che parte dal sottoinsieme vuoto e raggiunge
+    una soluzione, la quale idealmente dovrebbe essere ottimale o almeno fattibile. Nel caso ottimale,
+    il percorso termina quando incontra una soluzione ottima, questo è il caso degli
+    algoritmi di Dijkstra, Prim, Kruskal.
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.8]{images/cons_graph_1.png}
+        \caption{Il grafo di costruzione visita una sequenza di sotto insiemi che porta ad una soluzione
+            fattibile ma non ottimale}
+    \end{figure}
 
-Negli altri casi, come nella figura sovrastante, il percorso potrebbe non terminare in una soluzione
-ottima ma fattibile $x\in X$, questo è il caso degli algoritmi euristici come quelli usati per
-KP e MDP.
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.8]{images/cons_graph_2.png}
-    \caption{Il grafo di costruzione visita una sequenza di sotto insiemi che porta ad una soluzione non fattibile}
-\end{figure}
-Il percorso potrebbe terminare in una soluzione non fattibile $x\notin X$ (ma accettabile poiché presente
-nello spazio di ricerca), come per esempio il TSP su un grafo non completo.
+    Negli altri casi, come nella figura sovrastante, il percorso potrebbe non terminare in una soluzione
+    ottima ma fattibile $x\in X$, questo è il caso degli algoritmi euristici come quelli usati per
+    KP e MDP.
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.8]{images/cons_graph_2.png}
+        \caption{Il grafo di costruzione visita una sequenza di sotto insiemi che porta ad una soluzione non fattibile}
+    \end{figure}
+    Il percorso potrebbe terminare in una soluzione non fattibile $x\notin X$ (ma accettabile poiché presente
+    nello spazio di ricerca), come per esempio il TSP su un grafo non completo.
 
-\paragraph{Esempio di costruzione di grafi}\mbox{}\\
-Un esempio di grafo di costruzione è quello per il TSP per trovare il Nearest-Neighbour in
-un grafo completo. L'idea è quella di iniziare con un insieme di archi vuoto, quindi $x^{(0)}=\emptyset$,
-e sono presenti $n-1$ archi uscenti.
+    \paragraph{Esempio di costruzione di grafi}\mbox{}\\
+    Un esempio di grafo di costruzione è quello per il TSP per trovare il Nearest-Neighbour in
+    un grafo completo. L'idea è quella di iniziare con un insieme di archi vuoto, quindi $x^{(0)}=\emptyset$,
+    e sono presenti $n-1$ archi uscenti.
 
-La costruzione del grafo sarà un albero con $n-1$ archi e $n$ nodi; il numero di percorsi dall'insieme
-vuoto alle foglie sarà esattamente $(n-1)!$, questo è il numero delle possibili esecuzioni
-dell'algoritmo.
+    La costruzione del grafo sarà un albero con $n-1$ archi e $n$ nodi; il numero di percorsi dall'insieme
+    vuoto alle foglie sarà esattamente $(n-1)!$, questo è il numero delle possibili esecuzioni
+    dell'algoritmo.
 
-\paragraph{Proprietà dello spazio di ricerca}\mbox{}\\
+    \paragraph{Proprietà dello spazio di ricerca}\mbox{}\\
+    \begin{itemize}
+        \item Include l'insieme vuoto $\emptyset\in\mathcal{F}_A$, visto che ogni algoritmo generalmente
+              inizia da quello.
+
+        \item In generale include l'insieme delle soluzioni fattibili $X\subseteq\mathcal{F}_A$, a volte
+              alcune soluzioni possono essere rimosse da esso nel caso in cui risultino ovviamente non ottimali:
+              per esempio l'SCP dove inizia con un insieme vuoto di colonne ogni colonna è a aggiunta, in un
+              dato punto la soluzione fattibile viene raggiunta ma non ha senso aggiungere
+              altre colonne perché i nuovi sottoinsiemi saranno fattibili ma anche più costosi.
+
+        \item I sottoinsiemi di $\mathcal{F}_A$ devono essere raggiungibili dal punto di partenza,
+              altrimenti non avrebbe senso aggiungere una soluzione che non è raggiungibile dall'inizio. Un
+              insieme candidato è la collezione delle \textbf{soluzioni parziali}, che sono le soluzioni
+              generalmente non fattibili ma sono sottoinsiemi di soluzioni fattibili. Seguire una soluzione
+              parziale fornisce almeno un percorso per una soluzione fattibile $\in X$.
+
+    \end{itemize}
+    \paragraph{Esempi di spazi di ricerca}\mbox{}\\
+    Lo spazio di ricerca potrebbe include tutte le soluzioni fattibili tali che:
+    $$\mathcal{F}_A\equiv X$$
+    come nel KP; potrebbe includere tutte le soluzioni parziali e tutte le soluzioni fattibili, tale che:
+    $$\mathcal{F}_A\equiv \bigcup_{x\in X} 2^x$$
+    per esempio nel MDP, nel quale non solo i sottoinsiemi dei $k$ punti sono considerati ma anche
+    quelli più piccoli o nell'algoritmo di Kruskal; lo spazio di ricerca potrebbe includere solo
+    alcune soluzioni parziali:
+    $$\mathcal{F}_A\subset \bigcup_{x\in X} 2^x$$
+    un esempio di questo è l'algoritmo di PRim per MSP, il quale non consider tutte le soluzioni
+    parziali ma considera un albero che è in aumento rimanendo connesso finché non diventa ricoprente.
+    Le soluzioni possono essere definite come uno speciale sottoinsieme non sufficiente per garantire
+    la fattibilità:
+    $$ U_{x\in X}2^x \mathcal{F}_A$$
+    un esempio di questo è il TSP, dove $\mathcal{F}_a$ può essere definito su tutti i
+    sottoinsiemi di archi che non includono diramazioni o sotto percorsi, non può
+    essere definito come "tutti i sottoinsiemi che fanno parte delle soluzioni fattibili"
+    visto che è un problema di decisione NP-completo.
+
+    \subsection{Condizione di terminazione}
+    Un euristica costruttiva $A$ termina in due casi. Quando il sottoinsieme corrente $x^{t}$
+    non può essere esteso senza che lasci lo spazio di ricerca $\mathcal{F}_A$ :
+    $$x^{(t)}\cup\{i\}\notin\mathcal{F}_A\text{   }\forall i\in B\setminus x^{(t)}$$
+    o in maniera pressoché equivalente, non ha un arco uscente:
+    $$\Delta_A^+(x^{(t)})=\{i\in B\setminus x^{(t)}:x^{(t)}\cup\{i\}\in\mathcal{F}_A\}$$
+
+    Sono possibili differenti comportamenti:
+    \begin{itemize}
+        \item Talvolta tutti i sottoinsiemi visitati sono fattibili (es. KP).
+        \item Di solito l'ultimo sottoinsieme è l'unica soluzione fattibile.
+        \item $x^{(t)}$ potrebbe muoversi dentro e fuori $X$ (o $X^*$), seppur improbabile.
+    \end{itemize}
+
+    \subsection{Struttura di algoritmi euristici costruttivi}
+    \begin{algorithm}[H]
+        \caption{Pseudo codice - Euristica Costruttiva}
+        \label{alg:cons_heu}
+        \begin{algorithmic}
+            \State $x:=\emptyset$
+            \State $x^*:=\emptyset$
+
+            \If{$x\in X$}
+            \State $f^*:=f(x);$
+            \Else
+            \State{$f^*:=+\infty;$}
+            \EndIf
+
+            \While{$\Delta_A^+(x)\neq\emptyset$}
+            \State $i:=arg\underset{i\in\Delta_A^+(x)}{min}\varphi(i,x);$
+            \State $x:x\cup\{i\};$
+            \If{$x\in X$ and $f(x)<f^*$}
+            \State $x^* := x;$
+            \State $f^* := f(x);$
+            \EndIf
+            \EndWhile
+            \State $Return(x^*.f^*);$
+        \end{algorithmic}
+    \end{algorithm}
+
+    Il percorso (la sequenza di sottoinsiemi) visitato dall'algoritmo è determinato
+    da:
+    \begin{itemize}
+        \item l'insieme $\Delta_A^+(x)\subseteq B\setminus x$, il quale è derivato
+              dal grafo di costruzione.
+        \item il criterio di selezione $\varPhi_A:B\times \mathcal{F}_A\implies\mathbb{R}$ utilizzato
+              per selezionare l'elemento $i$ da aggiungere al sottoinsieme corrente $x^{(t)}$ per generare
+              $x^{(t+1)}$, che può essere visto come una funzione peso su gli archi $(x,x\cup {i})$.
+    \end{itemize}
+    La soluzione restituita è quella migliore visitata durante l'esecuzione (solitamente è l'ultima).
+
+    \subsection{Definizione del grafo di costruzione}
+    Idealmente, lo spazio di ricerca $\mathcal{F}_A$ dovrebbe includere:
+    \begin{itemize}
+        \item Il sotto insieme vuoto $\empty \in \mathcal{F}_A$
+        \item Tutte le soluzioni possibili $X\subseteq\mathcal{F}_A$ (questo escludendo
+              le soluzioni non ottime).
+        \item solo sottoinsiemi raggiungibili da $\emptyset$ (i sottoinsiemi non raggiungibili sono inutili).
+    \end{itemize}
+    I candidati naturali sono le soluzioni parziali (sottoinsiemi delle soluzioni fattibili), ma questi
+    richiedono un test di inclusione veloce per rispondere alla domanda:
+    \textit{il sottoinsieme $x^{(t)}$ è una soluzione parziale?} o meglio $\exists x \in X : x^{(t)}\subseteq x?$
+    o almeno dare un fast update test: sia $x^{(t)}$, allora $x^{(t)} \cup \{i\}\in\mathcal{F}_A?$
+    Sfortunatamente, questo problema generalizza la fattibilità del problema: \textit{è qui presente qualsiasi soluzione fattibile?}.
+    Questo potrebbe essere un problema NP-completo, in questo caso si ha necessità di rilassare lo spazio di ricerca.
+
+    Se la funzione oggettiva potesse essere estesa da $X$ a $\mathcal{F}_A$, allora sembrerebbe naturale
+    utilizzare la funzione oggettiva come \textbf{criterio di selezione}.
+    $$\varphi(i,x)=f(x\cup\{i\})$$
+    \begin{algorithm}[H]
+        \caption{Pseudo codice - Euristica Costruttiva (funzione oggettiva)}
+        \label{alg:cons_heu_fx}
+        \begin{algorithmic}
+            \State $x:=\emptyset$
+            \State $x^*:=\emptyset$
+
+            \If{$x\in X$}
+            \State $f^*:=f(x);$
+            \Else
+            \State{$f^*:=+\infty;$}
+            \EndIf
+
+            \While{$\Delta_A^+(x)\neq\emptyset$}
+            \State $i:=arg\underset{i\in\Delta_A^+(x)}{min}f(x\cup\{i\});$
+            \State $x:x\cup\{i\};$
+            \If{$x\in X$ and $f(x)<f^*$}
+            \State $x^* := x;$
+            \State $f^* := f(x);$
+            \EndIf
+            \EndWhile
+            \State $Return(x^*.f^*);$
+        \end{algorithmic}
+    \end{algorithm}
+
+    \subsection{Il problema dello zaino frazionario (FKP)}
+    Selezionando da un insieme di oggetti di volume identico un sottoinsieme di
+    valore massimo tale che possa essere contenuto all'interno dello zaino, il quale dispone di una
+    capacità massima limitata.
+
+    In questo problema la capacità impone un vincolo sulla cardinalità delle possibili soluzioni,
+    esse sono $|x|\leq\lfloor \frac{V}{v}\rfloor$.
+    $$\varphi(i,x)=f(x\cup\{i\})$$
+    \begin{algorithm}[H]
+        \caption{Pseudo codice - GreedyFKP}
+        \begin{algorithmic}
+            \State $x:=\emptyset$
+            \State $x^*:=\emptyset$
+
+            \If{$x\in X$}
+            \State $f^*:=f(x);$
+            \Else
+            \State{$f^*:=+\infty;$}
+            \EndIf
+
+            \While{$|x|<\lfloor\frac{V}{v}\rfloor$}
+            \State $i:=arg\underset{i\in B\setminus x}{max}\phi_i;$
+            \State $x:x\cup\{i\};$
+            \If{$x\in X$ and $f(x)<f^*$}
+            \State $x^* := x;$
+            \State $f^* := f(x);$
+            \EndIf
+            \EndWhile
+            \State $Return(x^*.f^*);$
+        \end{algorithmic}
+    \end{algorithm}
+    Definiamo $\mathcal{F}_A = X$, dove il sottoinsieme $x$ può essere esteso finché $|x|<\lfloor\frac{V}{v}\rfloor$.
+    Un qualsiasi elemento di $B\setminus x$ estende $x$. La funzione oggettiva è additiva, e quindi:
+    $$f(x\cup\{i\})=f(x)+\phi_i\implies arg\underset{i\in B\setminus x }{max} f(x\cup\{i\}) = arg\underset{i\in B\setminus x }{max}\phi_i$$
+    L'ultimo sottoinsieme visitato è la migliore soluzione trovata.
+    Consideriamo il seguente esempio:
+    \[
+        \begin{tabular}{c | c c c c c c c}
+            B      & a & b & c & d & e & f \\
+            \midrule
+            $\phi$ & 7 & 2 & 4 & 5 & 4 & 1 \\
+        \end{tabular}
+    \]
+    $$v_i=1\text{ }\forall i\in B$$
+    $$V=4$$
+    L'algoritmo eseguirà i seguenti step:
+    \begin{itemize}
+        \item $x:=\emptyset;$
+        \item Dato che $|x|=0<4$ allora calcola $i:=a$ ed aggiorna $x:=\{a\};$
+        \item Dato che $|x|=1<4$ allora calcola $i:=d$ ed aggiorna $x:=\{a,d\};$
+        \item Dato che $|x|=2<4$ allora calcola $i:=c$ ed aggiorna $x:=\{a,c,d\};$
+        \item Dato che $|x|=3<4$ allora calcola $i:=e$ ed aggiorna $x:=\{a,c,d,e\};$
+        \item Dato che $|x|\nless 4$, allora termina.
+    \end{itemize}
+    Questo algoritmo trova sempre la soluzione ottima.
+    \subsection{Il problema dello zaino (KP)}
+    Select from a set of object od different volume a maximum value subset which could be contained
+    on knapsack of limited capacity.
+    \begin{algorithm}[H]
+        \caption{Pseudo codice - Greedy KP}
+        \begin{algorithmic}
+            \State $x:=\emptyset$
+            \State $x^*:=\emptyset$
+            \State $f*=0$
+
+            \While{$\exists i \in B\setminus x :v_i\leq V-\sum_{j\in x}v_j$}
+            \State $i:=arg\underset{\exists i \in B\setminus x :v_i\leq V-\sum_{j\in x}v_j}{max}\phi_i;$
+            \State $x:x\cup\{i\};$
+            \EndWhile
+            \State $Return(x,f(x));$
+        \end{algorithmic}
+    \end{algorithm}
+    Definire $\mathcal{F}_A = X$, solo alcuni elementi di $B\setminus x$ estendono la fattibilità di $c$
+    $$\Delta_A^+(x)=\{i\in B\setminus x:\sum_{j\in x}v_j+v : i \leq V\}$$
+
+    La funzione oggettiva è additiva e quindi
+    $$f(x\cup{i})=f(x)+\phi_i\implies arg\underset{i\in\Delta_A^+(x)}{max}f(x\cup\{i\})=arg\underset{i\in\Delta_A^+(x)}{\phi_i}$$
+    L'ultimo sottoinsieme visitato è la migliore soluzione trovata.
+    \[
+        \begin{tabular}{c | c c c c c c c}
+            B      & a & b & c & d & e & f \\
+            \midrule
+            $\phi$ & 7 & 2 & 4 & 5 & 4 & 1 \\
+            v      & 5 & 3 & 2 & 3 & 1 & 1 \\
+        \end{tabular}
+    \]
+    L'algoritmo esegue i seguenti step:
+    \begin{itemize}
+        \item $x:=\emptyset;$
+        \item Dato che $\Delta_A^+\neq\emptyset$ selezionare $i:=\{a\};$ ed aggiornare $x:=\{a\};$
+        \item Dato che $\Delta_A^+\neq\emptyset$ selezionare $i:=\{d\};$ ed aggiornare $x:=\{a,d\};$
+        \item Dato che $\Delta_A^+ = \emptyset$, terminare.
+    \end{itemize}
+    Questo algoritmo non trova una soluzione ottima
+    \subsection{Maximum Diversity Problem}
+    Selezionare da un insieme di punti un sottoinsieme di $k$ tale che la somma delle distanza
+    fra le coppie di questo insieme sia massima.
+    \begin{algorithm}[H]
+        \caption{Pseudo Codice - GreedyMDP}
+        \begin{algorithmic}
+            \State $x:=\emptyset$
+            \While{$|x|<k$}
+            \State $i:=arg\underset{i \in B\setminus x}{max}\sum_{j\in x}d_{ij};$
+            \State $x:x\cup\{i\};$
+            \EndWhile
+            \State $Return(x,f(x));$
+        \end{algorithmic}
+    \end{algorithm}
+
+    Definire lo spazio di ricerca $\mathcal{F}_A$ come l'insieme di tutte le soluzioni parziali. Il
+    sottoinsieme $x$ può essere esteso finché viene soddisfatta la condizione del problema $|x|<k$.
+    Un qualsiasi elemento di $B$ estende $x$ in una maniera fattibile. La funzione oggettiva è quadratica:
+    $$f(x\cup\{i\})=f(x)+2\sum_{j\in x}d_{ij}+d_{ii}\implies arg\underset{i\in B\setminus x}{max}f(x\cup \{i\})=arg\underset{i\in B\setminus x}{max}\sum_{j\in x} d_{ij}$$
+    L'ultimo sotto insieme visitato è la soluzione migliore (è l'unica fattibile) trovata.
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.5]{images/MDP_construct.png}
+        \caption{Maximum Diversity Problem}
+    \end{figure}
+
+    L'algoritmo ha due grossi svantaggi:
+    \begin{itemize}
+        \item Al primo passo, tutti i punti sono equivalenti.
+        \item Il risultato finale non è ottimale anche se: il primo passo seleziona la coppia di
+              punti più distanti o l'algoritmo viene ripetuto selezionando ogni punto come il primo.
+    \end{itemize}
+
+    \subsubsection{Travelling Salesman Problem}
+    Dato un grafo diretto ed una funzione di costo definita su gli archi, trovare il ciclo di costo
+    minimo che sia in grado di visitare tutti i nodi del grafo.
+
+    Lo spazio di ricerca $\mathcal{F}_A$ è definito come la collezione di tutti i sottoinsiemi di archi che
+    formano un particolare sotto percorso e mantengono il grado dei nodi $\leq 1$, per tutti i nodi (è
+    un sovra insieme di tutte le soluzioni parziali).
+    Il criterio di selezione è la funzione oggettiva, essendo additiva.
+
+    \begin{algorithm}[H]
+        \caption{Pseudo Codice - GreedyTSP}
+        \begin{algorithmic}
+            \State $x:=\emptyset$
+            \State $x*:=\emptyset$
+            \State $f*:=\infty$
+            \While{$\Delta_A^+(x)\neq \emptyset$}
+            \State $i:=arg\underset{i \in \Delta_A^+(x)}{min}\;$
+            \State $x:x\cup\{i\};$
+            \EndWhile
+            \If {$x\in X$}
+            \State $x^*:=x;$
+            \State $f^*:=f(x);$
+            \EndIf
+            \State $Return(x*,f^*);$
+        \end{algorithmic}
+    \end{algorithm}
+    Solo l'ultimo insieme visitato può essere fattibile (se trovato!).
+    Per semplicità consideriamo un grafo simmetrico.
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.5]{images/TSP_simm.png}
+        \caption{TSP grafo simmetrico}
+    \end{figure}
+    L'algoritmo eseguirà i seguenti passi:
+    \begin{itemize}
+        \item $x:=\emptyset;$
+        \item Visto che $\Delta_A^+(x)\neq\emptyset$ selezioniamo $i:=(3,5)$ ed aggiorniamo $x;$
+        \item Visto che $\Delta_A^+(x)\neq\emptyset$ selezioniamo $i:=(2,4)$ ed aggiorniamo $x((5,3)\notin\Delta_A^+(x));$
+        \item Visto che $\Delta_A^+(x)\neq\emptyset$ selezioniamo $i:=(5,2)$ ed aggiorniamo $x((4,2)\notin\Delta_A^+(x));$
+        \item Visto che $\Delta_A^+(x)\neq\emptyset$ selezioniamo $i:=(4,1)$ ed aggiorniamo $x:$
+              notare che $(2,5),(4,5),(5,4),(3,4)$ e $(4,3)\notin \Delta_A^+(x)$
+        \item Visto che $\Delta_A^+(x)=\emptyset$, terminiamo.
+    \end{itemize}
+    L'algoritmo non trova una soluzione fattibile, ma una soluzione fattibile esiste: aggiungendo
+    l'arco $(1,3)$ (quello tratteggiato in figura) permette di trovare una soluzione fattibile anche
+    nel caso in cui costi $100$ (seppur non ottima).
+    \subsection{Riassumendo}
+    Un'euristica costruttiva $A$ trova:
+    \begin{itemize}
+        \item Una soluzione ottimale quando $\Delta_A^+(x^{(t)})$ e $\varphi_A(i,x)$ garantiscono
+              che il sotto insieme corrente $x^{(t)}$ sia sempre incluso almeno in una soluzione ottima.
+        \item Una soluzione fattibile quando $\Delta_A^+(x^{(t)})$ garantisce che il sottoinsieme
+              corrente $x^{(t)}$ sia sempre incluso in almeno una soluzione fattibile.
+        \item Un soto insieme generale quando queste proprietà sono perse ad un passo $t$.
+    \end{itemize}
+    Un algoritmo costruttivo ideale mantiene sempre una "via" aperta verso la soluzione
+    ottima. In pratica, alcune di queste proprietà vengono perse durante qualche
+    step dell'algoritmo (solitamente).
+    \paragraph{Caratteristiche rilevanti}\mbox{}\\
+    \textit{Quali caratteristiche permettono un algoritmo costruttivo, di trovare l'ottimo?}
+    \begin{itemize}
+        \item Uno spazio di ricerca uguale alla regione di fattibilità? No, perché questo viene tenuto
+        \item Un problema vincolato dalla cardinalità? Questo spiegherebbe il fallimento del KP,
+              ma non basta per il MDP e TSP.
+        \item La presenza di una funzione oggettiva additiva?
+    \end{itemize}
+    Non esiste una caratterizzazione generale dei problemi risolti in maniera ottimale dagli algoritmi
+    costruttivi. Sono però presenti caratterizzazioni per classi più grandi di problemi.
+
+    \subsection{Una caratterizzazione nel caso additivo}
+    Assumendo che:
+    \begin{itemize}
+        \item la funzione sia additiva:
+              $$\exists\phi : B\rightarrow\mathbb{N}:f(x)=\sum_{i\in x}\phi_i$$
+        \item le soluzioni siano la \textbf{basi} (sottoinsiemi massimi) dello spazio di ricerca:
+              $$X=\mathcal{B}_\mathcal{F}=\{Y\in\mathcal{F}:\nexists Y'\in\mathcal{F}:Y\subset Y'\}$$
+    \end{itemize}
+    Questa è una situazione molto frequente come nel caso di KP, MAX-SAT, TSP ma non di MDP, SCP.
+    In questo caso, l'algoritmo costruttivo trova sempre la soluzione ottima se e solo se $(B,\mathcal{F})$
+    è un \textit{matroid embedding}. Visto che la definizione di tale insieme è molto complessa,
+    concentriamoci sulla definizione di alcune strutture importanti (il concetto non verrà
+    affrontato durante questo corso):
+    \begin{itemize}
+        \item \textbf{Greedoidi}
+        \item \textbf{Matroidi}
+    \end{itemize}
+
+    \subsection{Greedoidi}
+    Un greedoide è una coppia di oggetti $(B,\mathcal{F})$ con
+$\mathcal{F}\subseteq 2^B$ è una coppia tale che soddisfi i seguenti assiomi:
+    \begin{itemize}
+        \item L'assioma \textbf{banale}: $\emptyset\in\mathcal{F}$
+        \item L'assioma di \textbf{accessibilità}: se $x\in\mathcal{F}$ e $x\neq\emptyset$ allora
+              $\exists i\in x:x\setminus\{i\}\in\mathcal{F}$. Un qualsiasi sottoinsieme accettabile può
+              essere costruito aggiungendo elementi in un ordine adatto. Quindi deve essere possibile
+              rimuovere $1$ elemento tale che si rimanga ancora nello spazio di ricerca.
+        \item L'assioma di \textbf{scambio}: se $x,y\in\mathcal{F}$ con $|x|=|y|+1$. allora $\exists i\in x\setminus y$
+              tale che $y\cup\{i\}\in\mathcal{F}$. Ovvero. un qualsiasi sottoinsieme accettabile può
+              essere esteso con un elemento adatto (per forza visto che rispettano entrambi il vincolo)
+              di un qualsiasi altro sotto insieme di cardinalità più grande.
+    \end{itemize}
+    L'assioma di scambio implica che tutte le \textbf{basi} (ovvero i sottoinsiemi massimi)
+    abbiano la stessa cardinalità. Tutte queste condizioni vengono mantenute nel caso FKP, e MST (
+    sia Kruskal che Prim), mentre non vengono mantenute per il problema generale del KP e TSP.
+    Vengono mantenute anche nel MDP, ma in quel caso la funzione oggettiva non è additiva. In generale
+    gli algoritmi costruttivi non sono esatti sui greedoidi.
+
+
+    \subsection{Matroidi}
+    Un matroide è un insieme di sistema $(B,\mathcal{F})$ con $\mathcal{F}\subseteq 2^B$ tale che:
+    \begin{itemize}
+        \item L'assioma \textbf{banale}: $\emptyset\in\mathcal{F}$
+        \item L'assioma di \textbf{eredità}: se $x\in\mathcal{F}$ e $y\subset x$ allora $y\in\mathcal{F}$. Ovvero
+              che un qualsiasi sottoinsieme accettabile può essere costruito aggiungendo i suoi elementi
+              in un qualsiasi ordine.
+        \item L'assioma di \textbf{scambio}: se $x,y\in\mathcal{F}$ con $|x|=|y|+1$. allora $\exists i\in x\setminus y$
+              tale che $y\cup\{i\}\in\mathcal{F}$. Ovvero. un qualsiasi sottoinsieme accettabile può
+              essere esteso con un elemento adatto di un qualsiasi altro sotto insieme di cardinalità
+              più grande.
+    \end{itemize}
+
+    L'assioma di eredità è una versione più forte dell'assioma di accessibilità dei
+    greedoidi. Viene mantenuto nello spazio di ricerca dell'algoritmo di Kruskal per il problema
+    del MST. Ma non viene mantenuto nello spazio di ricerca dell'algoritmo di Prim.
+
+    $$x=\{(A,D),(D,H),(E,F),(B,F),(C,G)\}$$
+    $$y=\{(A,E),(B,H),(E,F),(E,H)\}$$
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.5]{images/matr_mst.png}
+        \caption{Dimostrazione dell'assioma di scambio}
+    \end{figure}
+
+    \subsubsection{Matroide uniforme per KP/FKP}
+    $$\mathcal{x\subseteq B:|x|\leq\lfloor\frac{V}{v}\rfloor}$$
+    \begin{itemize}
+        \item Assioma banale: l'insieme vuoto rispetta il vincolo di cardinalità.
+        \item Assioma di eredità: se $x$ rispetta il vincolo di cardinalità, tutti
+              i suoi sottoinsiemi lo rispetteranno.
+        \item Assioma di scambio: se $x$ e $y$ rispettano il vincolo di cardinalità e
+              $|x|=|y|+1$, uno può sempre aggiungere un elemento adatto di $x$ ad $y$ senza violare
+              la cardinalità.
+    \end{itemize}
+    Questo per quanto riguarda FKP, per il KP i primi due assiomi vengono mantenuti, mentre l'ultimo
+    no.
+    Consideriamo il seguente esempio:
+    $$V=6$$
+    $$v=[3 3 2 2 1]$$
+    Sia $x=\{3,4,5\}$ che $y=\{1,2\}$ si trovano in $\mathcal{F}$, ma nessun elemento di $x$ può
+    essere aggiunto ad $y$.
+
+    \subsubsection{Matroide grafico MST (Minimum Spanning Tree)}
+    $$\mathcal{F}=\{x\subseteq B:x\text{ non formi cicli }\}$$
+    \begin{itemize}
+        \item Assioma banale: l'insieme vuoto degli archi non forma cicli.
+        \item Assioma di eredità: se $x$ è aciclico, tutti is suoi sotto insiemi sono aciclici.
+        \item Assioma di scambio: se $x$ ed $y$ sono aciclici e $|x|= |y|+1$, allora è sempre
+              possibile aggiungere un arco "adatto" (che rispetta il vincolo) di $x$ ad $y$ senza
+              formare alcun ciclo.
+    \end{itemize}
+    \subsubsection{Matroide per TSP}
+    Nel caso del TSP i primi due assiomi vengono mantenuti:
+    \begin{itemize}
+        \item l'insieme vuoto non ha percorsi ed gradi sono $\leq 1$
+        \item un qualsiasi sottoinsieme proprio di un insieme $\in\mathcal{F}$ appartiene ad $\mathcal{F}$.
+    \end{itemize}
+    Tuttavia il terzo assioma viene violato, consideriamo il seguente esempio: $y=\{(1,2),(2,3)\}$ ed $x=\{(3,1),(1,4),(4,2)\}$.
+    \begin{figure}
+        \centering
+        \includegraphics[scale=0.5]{images/matroid_tsp.png}
+        \caption{Esempio TSP}
+    \end{figure}
+
+    L'ottimalità dell'algoritmo Greedy può essere dimostrata utilizzando i greedoidi,
+    se l'assioma di scambio viene rafforzato:
+    \[
+        \begin{cases}
+            x\in\mathcal{F},y\in\mathcal{B}_\mathcal{F}\text{ tale che } x\subseteq y \\
+            i\in B\setminus y\text{ tale che } x\cup\{i\}\in\mathcal{F}
+        \end{cases}
+        \implies
+        \exists j\in y\setminus x :
+        \begin{cases}
+            x\cup\{j\}\in\mathcal{F} \\
+            y\cup\{i\}\setminus\{j\}\in\mathcal{F}
+        \end{cases}
+    \]
+    Data una base ed uno dei suoi sottoinsiemi (dalla quale la base risulta
+    accessibile), se è presente un elemento che "si smarrisce" nel sottoinsieme della base,
+    deve esserci un altro elemento che continua sul percorso giusto e deve essere
+    fattibile scambiare due elementi nella base.
+    \subsubsection{Greedoidi con forti assiomi di scambio : MST}
+    Un esempio classi di greedoide con un forte assioma di scambio è dato da:
+    $$B=\text{ insieme degli archi di un grafo}$$
+    $$\mathcal{F}=\text{ collezione degli alberi che includono un dato vertice } v_1$$
+    Questo porta all'algoritmo di Prim per il problema del minimo albero ricoprente
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.5]{images/greedoid_mst.png}
+    \end{figure}
+    L'assioma banale e quello di accessibilità rimangono validi mentre (quello
+    di eredità no). Mentre l'assioma di scambio mantiene una forma forte.
+
+    Notare che l'ottimalità di un algoritmo costruttivo $A$ dipende da:
 \begin{itemize}
-    \item Include l'insieme vuoto $\emptyset\in\mathcal{F}_A$, visto che ogni algoritmo generalmente
-    inizia da quello.
-
-    \item In generale include l'insieme delle soluzioni fattibili $X\subseteq\mathcal{F}_A$, a volte
-    alcune soluzioni possono essere rimosse da esso nel caso in cui risultino ovviamente non ottimali:
-    per esempio l'SCP dove inizia con un insieme vuoto di colonne ogni colonna è a aggiunta, in un
-    dato punto la soluzione fattibile viene raggiunta ma non ha senso aggiungere
-    altre colonne perché i nuovi sottoinsiemi saranno fattibili ma anche più costosi.
-
-    \item I sottoinsiemi di $\mathcal{F}_A$ devono essere raggiungibili dal punto di partenza,
-    altrimenti non avrebbe senso aggiungere una soluzione che non è raggiungibile dall'inizio. Un
-    insieme candidato è la collezione delle \textbf{soluzioni parziali}, che sono le soluzioni
-    generalmente non fattibili ma sono sottoinsiemi di soluzioni fattibili. Seguire una soluzione
-    parziale fornisce almeno un percorso per una soluzione fattibile $\in X$.
-
-\end{itemize}
-\paragraph{Esempi di spazi di ricerca}\mbox{}\\
-Lo spazio di ricerca potrebbe include tutte le soluzioni fattibili tali che:
-$$\mathcal{F}_A\equiv X$$
-come nel KP; potrebbe includere tutte le soluzioni parziali e tutte le soluzioni fattibili, tale che:
-$$\mathcal{F}_A\equiv \bigcup_{x\in X} 2^x$$
-per esempio nel MDP, nel quale non solo i sottoinsiemi dei $k$ punti sono considerati ma anche
-quelli più piccoli o nell'algoritmo di Kruskal; lo spazio di ricerca potrebbe includere solo
-alcune soluzioni parziali:
-$$\mathcal{F}_A\subset \bigcup_{x\in X} 2^x$$
-un esempio di questo è l'algoritmo di PRim per MSP, il quale non consider tutte le soluzioni
-parziali ma considera un albero che è in aumento rimanendo connesso finché non diventa ricoprente.
-Le soluzioni possono essere definite come uno speciale sottoinsieme non sufficiente per garantire
-la fattibilità:
-$$ U_{x\in X}2^x \mathcal{F}_A$$
-un esempio di questo è il TSP, dove $\mathcal{F}_a$ può essere definito su tutti i
-sottoinsiemi di archi che non includono diramazioni o sotto percorsi, non può
-essere definito come "tutti i sottoinsiemi che fanno parte delle soluzioni fattibili"
-visto che è un problema di decisione NP-completo.
-
-\subsection{Condizione di terminazione}
-Un euristica costruttiva $A$ termina in due casi. Quando il sottoinsieme corrente $x^{t}$
-non può essere esteso senza che lasci lo spazio di ricerca $\mathcal{F}_A$ :
-$$x^{(t)}\cup\{i\}\notin\mathcal{F}_A\text{   }\forall i\in B\setminus x^{(t)}$$
-o in maniera pressoché equivalente, non ha un arco uscente:
-$$\Delta_A^+(x^{(t)})=\{i\in B\setminus x^{(t)}:x^{(t)}\cup\{i\}\in\mathcal{F}_A\}$$
-
-Sono possibili differenti comportamenti:
-\begin{itemize}
-    \item Talvolta tutti i sottoinsiemi visitati sono fattibili (es. KP).
-    \item Di solito l'ultimo sottoinsieme è l'unica soluzione fattibile.
-    \item $x^{(t)}$ potrebbe muoversi dentro e fuori $X$ (o $X^*$), seppur improbabile.
+    \item le proprietà del problema (es. la funzione oggettiva additiva, basi
+          come soluzioni fattibili).
+    \item le proprietà dello spazio di ricerca $\mathcal{F}_A$
 \end{itemize}
 
-\section{Struttura di algoritmi euristici costruttivi}
-\begin{algorithm}
-    \caption{Pseudo codice - Euristica Costruttiva}
-    \begin{algorithmic}
-    \State $x:=\emptyset$
-    \State $x^*:=\emptyset$
-
-    \If{$x\in X$}
-        \State $i \gets i-1$
-    \Else
-        \If{$i\leq 3$}
-            \State $i \gets i+2$
-        \EndIf
-    \EndIf
-    \end{algorithmic}
-\end{algorithm}
-
-
-
+\subsection{Algoritmi non esatti}
 
 \end{document}
