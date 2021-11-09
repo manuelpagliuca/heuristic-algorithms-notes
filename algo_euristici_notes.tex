@@ -36,7 +36,8 @@
 \usepackage{amssymb}
 
 \usepackage{chngcntr}
-\counterwithout{figure}{chapter}
+\counterwithin{figure}{section}
+
 
 \newcommand{\ovcal}[1]{\overline{\mathcal{#1}}}
 
@@ -97,7 +98,7 @@ Un problema è una domanda che viene effettuata su un \textbf{sistema matematico
 \begin{enumerate}
     \item \textbf{problemi di decisione}: la loro soluzione è un booleano.
     \item \textbf{problemi di ricerca}: la loro soluzione è un qualsiasi sottoinsieme \textit{fattibile}.
-    \item \textbf{problemi di ottimizzazione}: la loro soluzione è un numero il quale è il \textit{minimo} o \textit{massimo} valore di una \textbf{funzione oggettiva}
+    \item \textbf{problemi di ottimizzazione}: la loro soluzione è un numero il quale è il \textit{minimo} o \textit{massimo} valore di una \textbf{funzione obiettivo}
           definita su dei sottoinsiemi fattibili.
     \item \textbf{problemi di conteggio}: la loro soluzione è il \textit{numero} di sottoinsiemi \textit{fattibili}.
     \item \textbf{problemi di enumerazione}: la loro soluzione è la collezione di tutti i sottoinsiemi \textit{fattibili}.
@@ -110,13 +111,14 @@ I problemi di ottimizzazione possono essere combinati con i problemi di ricerca,
 Un problema di ottimizzazione e ricerca può essere rappresentato con:
 $$opt_{x\in X}f(x)$$
 Dove $x$ rappresenta una \textbf{sottosistema fattibile} che è una delle soluzioni, la quale soddisfa le condizioni fornite dal problema. Invece, $X$
-è lo \textbf{spazio delle soluzioni fattibili}. Invece la funzione, si chiama \textbf{funzione oggettiva} ed è mappata in questa maniera $f:X \rightarrow R$,
+è lo \textbf{spazio delle soluzioni fattibili}. Invece la funzione, si chiama \textbf{funzione obiettivo} ed è mappata in questa maniera $f:X \rightarrow R$,
 il suo compito è quello di \textit{misurare quantitativamente} la qualità di ogni sottosistema (o soluzione).
-Generalmente, in quanto problema di ottimizzazione, la funzione oggettiva è \textit{massimizzabile} o \textit{minimizzabile}, questo viene denotato con $opt\in {min,max}$.
+Generalmente, in quanto problema di ottimizzazione, la funzione obiettivo è \textit{massimizzabile} o \textit{minimizzabile}, questo viene denotato con $opt\in {min,max}$.
 
-Il problema consiste nel determinare il \textbf{valore ottimale della funzione oggettiva} assieme alla \textbf{soluzione ottima} tale che sia un sottoinsieme. Il valore ottimale della funzione oggettiva viene chiamato $f^*$, ed è il risultato della seguente equazione:
+Il problema consiste nel determinare il \textbf{valore ottimale della funzione obiettivo} assieme alla \textbf{soluzione ottima} tale che sia un sottoinsieme.
+Il valore ottimale della funzione obiettivo viene chiamato $f^*$, ed è il risultato della seguente equazione:
 $$f^*=opt_{x\in X}f(x)$$
-Ovvero un valore che consiste nel minimo o massimo della funzione oggettiva. Mentre, la soluzione ottima tale che sia un sottoinsieme si chiamerà $x^*$:
+Ovvero un valore che consiste nel minimo o massimo della funzione obiettivo. Mentre, la soluzione ottima tale che sia un sottoinsieme si chiamerà $x^*$:
 $$x^*\in X^*=arg\textit{ } opt_{x\in X}f(x)={x^* \in X : f(x^*)=opt_{x\in X}f(x)}$$
 Ovvero, vogliamo trovare una soluzione ottima nell'intero insieme di tutte le soluzioni ottime, anche se solitamente una è abbastanza, la notazione $arg$
 sta per l'intero insieme delle soluzioni (ne basta una).
@@ -134,7 +136,7 @@ I problemi di ottimizzazione e ricerca sono di forte interesse poiché diversi c
 \end{itemize}
 
 L'\textbf{ottimizzazione esatta} è costosa da un punto di vista computazionale e non sempre desiderabile (per questo gli algoritmi euristici sono favoriti);
-perciò, solitamente, le funzioni di valutazione sono delle \textit{approssimazioni} di quello che realmente accade. In questo corso assumeremo il punto di vista dell'ottimizzazione, cercando di ottimizzare al meglio possibile la funzione oggettiva.
+perciò, solitamente, le funzioni di valutazione sono delle \textit{approssimazioni} di quello che realmente accade. In questo corso assumeremo il punto di vista dell'ottimizzazione, cercando di ottimizzare al meglio possibile la funzione obiettivo.
 
 Diversi problemi possono spesso essere ridotti in problemi di ottimizzazione e ricerca
 \begin{itemize}
@@ -308,7 +310,7 @@ Per esempio, nella seguente tabella sono mostrati tutti gli elementi di $E$ con 
           non è appartenente alla regione di fattibilità $X$ (ma solo al ground set), perciò verrà chiamata \textbf{soluzione infattibile}.
 \end{itemize}
 
-Tra le soluzioni fattibili proposte la \textbf{funzione oggettiva} propone di prendere la soluzione \textit{massima}, ma visto che $x''$ non è fattibile, prenderemo come soluzione $x'$.
+Tra le soluzioni fattibili proposte la \textbf{funzione obiettivo} propone di prendere la soluzione \textit{massima}, ma visto che $x''$ non è fattibile, prenderemo come soluzione $x'$.
 \subsubsection{Maximum Diversity Problem (MDP)}
 Il problema della diversità massima, \textit{Maximum Diversity Problem}, è un problema importante per il corso e
 verrà utilizzato come esempio per la parte di laboratorio. Questo è un problema
@@ -325,7 +327,7 @@ Il problema chiede di selezionare da un insieme di punti $P$ un sottoinsieme di 
 Questo è un problema CO, perché il numero di sottoinsiemi possibili è finito, ed in particolare è un problema CO perché le soluzioni sono sottoinsiemi del ground set.
 Il ground set, banalmente, è l'insieme dei punti $B\equiv P$, mentre la regione di fattibilità include tutti i sottoinsiemi composti da $k$ punti.
 $$X=\left\{x\subseteq B : |x| = k \right\}$$
-La funzione oggettiva è la sommatoria di tutte le distanze tra le coppie di punti in $x$:
+La funzione obiettivo è la sommatoria di tutte le distanze tra le coppie di punti in $x$:
 $$max\underset{x\in X}{f(x)}=\sum_{(i,j):i,j\in x}d_{ij}$$
 
 Per esempio, consideriamo un dataset costituito da $7$ punti e considerando un $k=3$, questo significa che vogliamo trovare
@@ -352,48 +354,48 @@ un sottoinsieme costituito da $3$ punti tale che le coppie abbiano distanza mass
     \label{fig:cand_sol_2_MDP}
 \end{figure}
 
-La prima soluzione $x'$, considerando una metrica \textit{non fornita} ha come valutazione della funzione oggettiva $f(x')=24$, ed è un sottoinsieme tale per cui
+La prima soluzione $x'$, considerando una metrica \textit{non fornita} ha come valutazione della funzione obiettivo $f(x')=24$, ed è un sottoinsieme tale per cui
 la sua cardinalità sia $\leq k$, e quindi appartenente alla regione di fattibilità $X$.
 
-La seconda soluzione ha come soluzione della funzione oggettiva $f(x'')=46$, questo è anche fattibile visto che $|x''|=k$, ed è una soluzione preferibile alla prima visto che
-stiamo cercando il sottoinsieme che soddisfi massimo della funzione oggettiva.
+La seconda soluzione ha come soluzione della funzione obiettivo $f(x'')=46$, questo è anche fattibile visto che $|x''|=k$, ed è una soluzione preferibile alla prima visto che
+stiamo cercando il sottoinsieme che soddisfi massimo della funzione obiettivo.
 
-\subsubsection{Interludio 1: la funzione oggettiva}
-Fermiamoci un attimo e pensiamo qualcosa a riguardo di questo problema, in particolare soffermiamoci sulla funzione oggettiva.
+\subsubsection{Interludio 1: la funzione obiettivo}
+Fermiamoci un attimo e pensiamo qualcosa a riguardo di questo problema, in particolare soffermiamoci sulla funzione obiettivo.
 Questa viene data come funzione che ha come dominio la regione di fattibilità e giunge al
 codominio all'insieme dei numeri naturali.
 $$f:X\rightarrow \mathbb{N}$$
 
-Il calcolo di questa funzione potrebbe essere molto complesso ed estenuante, ogni singola soluzione ha il proprio valore rispetto alla funzione oggettiva
+Il calcolo di questa funzione potrebbe essere molto complesso ed estenuante, ogni singola soluzione ha il proprio valore rispetto alla funzione obiettivo
 e si dovrebbe andare a controllare ogni volta in una tabella per svolgere il calcolo, non è una cosa molto interessante da fare.
 
 Questo ovviamente, non è il caso dei precedenti problemi in quanto semplici da svolgere.
 
-In particolare il problema KP una funzione oggettiva \textbf{additiva}, nel calcolare la $f$ dobbiamo effettuare delle somme
+In particolare il problema KP una funzione obiettivo \textbf{additiva}, nel calcolare la $f$ dobbiamo effettuare delle somme
 con il valore della funzione ausiliaria $\phi$ definita sul ground set, ricordando che nel problema KP, $B \equiv E$.
 $$\phi : B\rightarrow \mathbb{N} \text{ induce } f(x)=\sum_{j\in x}\phi_j : X \rightarrow \mathbb{N}$$
 Questo è interessante perché significa che si deve memorizzare solamente il valore della funzione ausiliaria $\phi$,
-i quali sono $|B|$ valori, e non $2^B$, come sarebbe per i valori della funzione oggettiva che è definita su $X$.
+i quali sono $|B|$ valori, e non $2^B$, come sarebbe per i valori della funzione obiettivo che è definita su $X$.
 
-Lo stesso accade per il problema MDP e la sua funzione ausiliaria $d$, anche se quest'ultima ha una funzione oggettiva quadratica,
+Lo stesso accade per il problema MDP e la sua funzione ausiliaria $d$, anche se quest'ultima ha una funzione obiettivo quadratica,
 poi fornito un $n=|B|$ di punti nel caso peggiore si dovranno sommare $\frac{n(n-1)}{2}$ (numero di archi in un grafo completo) distanze, tuttavia però il
 calcolo rimane \textit{"solamente"} una somma, quindi avente una \textbf{complessità polinomiale}.
 \newline
 Nel problema KP una volta che il valore viene fornito per uno specifico sottoinsieme, rimane possibile modificare gli elementi
-e ricalcolare il valore della funzione oggettiva facilmente. Il valore della funzione oggettiva nel caso del MDP va trattato in maniera differente
+e ricalcolare il valore della funzione obiettivo facilmente. Il valore della funzione obiettivo nel caso del MDP va trattato in maniera differente
 per essere calcolato in tempo lineare (poiché quadratica).
 
 Un'altra importante osservazione è che il problema KP e MDP sono definiti sull'intero insieme delle possibili (non fattibili)
 soluzioni $2^B$, e questo è generalmente inutile visto che stiamo cercando
 una soluzione fattibile (in alcuni casi questo però sarà utile).
 
-Per riassumere, quando guardiamo un problema cerchiamo di capire come la funzione oggettiva è costituita:
+Per riassumere, quando guardiamo un problema cerchiamo di capire come la funzione obiettivo è costituita:
 \begin{itemize}
     \item È una funzione additiva?
     \item È una funzione quadratica?
     \item È una funzione semplice da calcolare?
     \item È una funzione semplice da aggiornare?
-    \item Su cosa è definita la funzione oggettiva?
+    \item Su cosa è definita la funzione obiettivo?
 \end{itemize}
 
 \subsection{Insieme dei problemi di partizionamento}
@@ -470,7 +472,7 @@ questo sottoinsieme non è compreso all'interno della regione di fattibilità.
 $$x''=\left\{(a,1),(b,1),(c,2),(d,2),(e,2),(f,3),(g,4),(h,1),(i,4)\right\}\notin X$$
 $$f(x'')=4$$
 Considerando il caso in cui $x''$ fosse una soluzione fattibile avremmo scelto quella tra le soluzioni
-proposte, poiché la funzione oggettiva effettua l'ottimizzazione sul minimo.
+proposte, poiché la funzione obiettivo effettua l'ottimizzazione sul minimo.
 
 \subsubsection{Parallel Machine Scheduling Problem (PMSP)}
 Il Parallel Machine Scheduling Problem (PMSP), è un problema nel quale un insieme di attività (tasks) deve essere diviso lungo un set di macchine in modo che
@@ -491,7 +493,7 @@ sottolineare che la sequenza in cui i task sono eseguiti non è rilevante, invec
 
 La regione di fattibilità include tutte le partizioni delle attività nella macchine:
 $$X=\left\{ x\subseteq B : |x\cap B_t|=1 \text{ } \forall t \in T \right\} $$
-La \textbf{funzione oggettiva} ha come obiettivo quello di minimizzare il massimo della sommatoria delle lunghezze di tempo per ogni task di ogni macchina:
+La \textbf{funzione obiettivo} ha come obiettivo quello di minimizzare il massimo della sommatoria delle lunghezze di tempo per ogni task di ogni macchina:
 $$min\underset{x\in X}{f(x)}=max\underset{m\in M}{}\sum_{t:(t,m)\in x} d_t$$
 
 In parole povere, vogliamo trovare il sottoinsieme $x$ che minimizza il tempo di completamento di ciascuna
@@ -518,7 +520,7 @@ $$x'=\left\{(T1,M1),(T2,M2),(T3,M2),(T4,M2),(T5,M1),(T6,M3)\right\}\in X$$
 $$f(x')=95$$
 Possiamo notare che questa è una \textbf{soluzione fattibile},
 visto che ogni task accade al meno ed al massimo una volta.
-Notiamo che il valore assunto dalla funzione oggettiva è $95$, questo proprio
+Notiamo che il valore assunto dalla funzione obiettivo è $95$, questo proprio
 perché l'ultimo task ha un tempo di completamento pari a $95$.
 
 \begin{figure}[H]
@@ -532,28 +534,28 @@ Consideriamo la seconda soluzione proposta:
 $$x''=\left\{(T1,M1),(T2,M1),(T3,M2),(T4,M2),(T5,M2),(T6,M3)\right\}\in X$$
 $$f(x'')=120$$
 Notiamo che anche questa è una \textbf{soluzione fattibile} visto che ogni task accade al
-minimo ed al massimo una volta, in questo casa la funzione oggettiva assume come valore $120$.
+minimo ed al massimo una volta, in questo casa la funzione obiettivo assume come valore $120$.
 Questo significa che fra le due soluzioni proposte la prima è quella \textbf{ottima}.
 
-\subsubsection{Interludio 2: la funzione oggettiva, ancora}
+\subsubsection{Interludio 2: la funzione obiettivo, ancora}
 È necessario familiarizzare con il fatto che il ground set $B$ non è sempre uno degli insiemi
 forniti nel problema, ma può essere formato dalla combinazione (come il prodotto cartesiano)
 di diversi insiemi forniti. Ora affrontiamo la domande proposte nell'ultimo interludio.
 
 \textit{Le funzioni oggettivi di che tipo sono? (additive, quadratiche,...)}
 Questa volta le funzioni oggettive per il BPP e PMSP \textbf{non} sono additive, e non sono neanche banali.
-È presente un algoritmo polinomiale per calcolare la funzione oggettiva, seppur non complesso,
+È presente un algoritmo polinomiale per calcolare la funzione obiettivo, seppur non complesso,
 non è semplice come per i problemi precedenti.
 
 Notiamo che piccole modifiche alle soluzioni hanno un impatto \textit{variabile} sull'obiettivo, per esempio
 consideriamo la seconda soluzione $x''$ del PMSP:
 \begin{itemize}
     \item Spostare il task $T5$ sulla macchina $M1$, allunga il tempo di completamento complessivo$M1$,
-          il risultato della funzione oggettiva cambia perché viene incrementato del task spostato (\textit{\textbf{impatto corrispondente al tempo del task spostato}}).
+          il risultato della funzione obiettivo cambia perché viene incrementato del task spostato (\textit{\textbf{impatto corrispondente al tempo del task spostato}}).
     \item Spostare il task $T5$ sulla macchina $M3$, non modifica il tempo di completamento complessivo
-          delle macchine, il risultato della funzione oggettiva rimane lo stesso (\textit{\textbf{impatto zero}}).
+          delle macchine, il risultato della funzione obiettivo rimane lo stesso (\textit{\textbf{impatto zero}}).
     \item Spostare il task $T2$ sulla macchina $M2$, comporta una modifica dei tempi di completamento
-          complessivi, il risultato della funzione oggettiva cambia poiché l'ultimo task viene spostato (\textit{\textbf{impatto intermedio}})
+          complessivi, il risultato della funzione obiettivo cambia poiché l'ultimo task viene spostato (\textit{\textbf{impatto intermedio}})
 
 \end{itemize}
 
@@ -563,7 +565,7 @@ In fatti, l'impatto di una modifica di una soluzione dipende :
     \item E dagli elementi non modificati (questo è contrario alle cose dette nell'interludio 1).
 \end{itemize}
 
-Un punto interessante è che la funzione oggettiva del PMSP tende ad essere \textbf{piatta}, ovvero che sono presenti
+Un punto interessante è che la funzione obiettivo del PMSP tende ad essere \textbf{piatta}, ovvero che sono presenti
 molteplici soluzioni all'interno del problema dove il valore della funzione rimane lo stesso anche se avvengono
 delle modifiche (l'esempio precedente, la soluzione $x''$ rimane fissa per diverse combinazioni su $120$).
 
@@ -603,7 +605,7 @@ gli assegnamenti semplici che sono:
 $$X=\left\{x\subseteq B : |x\cap B_v|=1 \text{ }\forall v \in V \right\}$$
 $$B_{xj}=\{(x_j,0),(x_j,1)\}$$
 
-La \textbf{funzione oggettiva} (come sempre ottimizzata):
+La \textbf{funzione obiettivo} (come sempre ottimizzata):
 $$max\underset{x\in X}{f(x)}=\sum_{i:C_i(x)=1}w_i$$
 L'obiettivo è quello di massimizzare il peso totale della \textit{formula logica soddisfatta}
 segnata come $C_i(x)=1 \text{ per } i=1,...,n$ (dove $n$ è il numero di formule logiche presenti).
@@ -618,10 +620,10 @@ $$w_i=1 \forall C_i$$
 
 Consideriamo adesso la seguente soluzione:
 $$x=\left\{(x_1,0),(x_2,0),(x_3,1 ),(x_4,1)\right\}$$
-La funzione oggettiva per questa soluzione assume valore $f(x)=5$, significa che soddisfa
+La funzione obiettivo per questa soluzione assume valore $f(x)=5$, significa che soddisfa
 $5$ formule delle $7$.
 
-\textit{Risulta semplice trovare il valore della funzione oggettiva?} Non proprio, la complessità
+\textit{Risulta semplice trovare il valore della funzione obiettivo?} Non proprio, la complessità
 della funzione oggettive è polinomiale
 
 In caso di pesi uniformi sono presenti un campo ristretto di valori, che vanno da $0$ a $n$,
@@ -646,7 +648,7 @@ La \textbf{regione di fattibilità} include tutti i sottoinsiemi delle colonne c
 tutte le righe.
 $$X=\left\{x\subseteq B : \sum_{j\in x}a_{ij}\geq 1 \text{ }\forall i \in R\right\}$$
 
-L'obiettivo è \textit{minimizzare} il costo totale delle colonne selezionate, la \textbf{funzione oggettiva}
+L'obiettivo è \textit{minimizzare} il costo totale delle colonne selezionate, la \textbf{funzione obiettivo}
 è additiva, molto veloce da calcolare ed aggiornare, però la \textit{fattibilità} non è
 semplice da ottenere.
 $$min\underset{x\in X}{f(x)}=\sum_{j\in x}c_j$$
@@ -751,7 +753,7 @@ Prendiamo in considerazione la seguente matrice:
 \end{figure}
 
 
-La prima soluzione proposta è $x'=\left\{c_2,c_4\right\}\in X$, con valutazione della funzione oggettiva
+La prima soluzione proposta è $x'=\left\{c_2,c_4\right\}\in X$, con valutazione della funzione obiettivo
 $f(x')=20$. Questa è una soluzione \textbf{fattibile}, visto che non presenti conflitti sulle righe delle colonne
 selezionate.
 
@@ -762,7 +764,7 @@ selezionate.
     \label{fig:snd_sol_SPP}
 \end{figure}
 In questo caso \textbf{non è una soluzione fattibile}, visto che avviene il conflitto sulla terza riga, anche quando
-la valutazione della funzione oggettiva era meglio della prima soluzione, le somme valutate non sono ottenute dalla
+la valutazione della funzione obiettivo era meglio della prima soluzione, le somme valutate non sono ottenute dalla
 regione di fattibilità $X$.
 
 \subsection{Set Partitioning Problem}
@@ -819,7 +821,7 @@ Ora consideriamo la seconda soluzione candidata:
 $$x''=\left\{c_1,c_5,c_6\right\}\notin X$$
 $$f(x'')=15$$
 
-Anche se il risultato della funzione oggettiva ha un valore migliore (più piccolo) rispetto a quello della
+Anche se il risultato della funzione obiettivo ha un valore migliore (più piccolo) rispetto a quello della
 prima soluzione, la soluzione $x''$ \textbf{non è una soluzione fattibile}. Questo perché, gli elementi sulla terza
 riga si trovano in conflitto ($\sum_{j\in x}a_{ij}\geq 1$), ed anche perché la seconda riga non viene \textit{coperta}
 da alcuna colonna ($\sum_{j\in x}a_{ij}=0$).
@@ -844,7 +846,7 @@ Oppure può essere difficile:
 \end{itemize}
 
 Alcuni algoritmi ingrandiscono al regione di fattibilità da $X$ a $X'$ (processo detto \textit{"rilassamento"}),
-la funzione oggettiva $f$ deve essere estesa anch'essa da $X$ a $X'$, ma spesso $X'\setminus X$ provvede delle
+la funzione obiettivo $f$ deve essere estesa anch'essa da $X$ a $X'$, ma spesso $X'\setminus X$ provvede delle
 soluzioni migliori.
 
 \subsection{Problemi sui grafi}
@@ -888,7 +890,7 @@ Guardiamo la seconda soluzione proposta:
     \label{fig:snd_sol_VCP}
 \end{figure}
 
-Invece, la seconda soluzione \textbf{non è una soluzione fattibile}, anche se la funzione oggettiva porta ad un
+Invece, la seconda soluzione \textbf{non è una soluzione fattibile}, anche se la funzione obiettivo porta ad un
 risultato che è più convincente della soluzione precedente, questo sottoinsieme non appartiene alla regione di
 fattibilità (il sottoinsieme di vertici selezionato non è incidente a tutti gli archi del grafo, e.g.: $(d,e)$).
 
@@ -985,7 +987,7 @@ Anche la seconda soluzione è una \textbf{soluzione fattibile}.
 \subsubsection{Interludio 5: le relazioni tra i problemi}
 Come al solito le domande che uno si dovrebbe porre per un qualsiasi problema sono le solite :
 \begin{itemize}
-    \item \textit{Come si calcola la funzione oggettiva?}
+    \item \textit{Come si calcola la funzione obiettivo?}
     \item \textit{Cosa succede se togliamo un vertice?}
     \item \textit{Come si verifica la fattibilità?}
     \item \textit{Cosa succede se aggiungiamo o rimuoviamo un vertice ad una soluzione fattibile?}
@@ -1081,7 +1083,7 @@ del sottoinsieme). Inoltre, una visita del grafo utilizzando gli archi del sotto
 nodi, in altre parole non sono previste sotto visite di $G$.
 
 \textit{Cosa accade se si effettua una modifica di una soluzione fattibile?} Questo dipende dal tipo della modifica
-effettuata sulla soluzione, potrebbe essere necessario ricalcolare la funzione oggettiva.
+effettuata sulla soluzione, potrebbe essere necessario ricalcolare la funzione obiettivo.
 
 \textit{Risulta difficile trovare una soluzione fattibile?} Trovare una soluzione che sia fattibile
 potrebbe essere altrettanto difficile; in generale un grafo Hamiltoniano (ovvero che presenta un
@@ -1176,10 +1178,10 @@ Questa \textbf{non è} una soluzione fattibile, visto che il sotto albero destro
 la capacità massima (nonostante il sottoinsieme sia un albero ricoprente).
 
 Il costo delle operazioni principali cambia, il testi di fattibilità richiede solamente la somma
-dei pesi, calcolare la funzione oggettiva richiede risolvere un problema
+dei pesi, calcolare la funzione obiettivo richiede risolvere un problema
 MST (\textit{Minimum Spanning Tree}).
 
-La funzione oggettiva risulta:
+La funzione obiettivo risulta:
 \begin{itemize}
     \item \textbf{Lenta da valutare}, calcolare un MST per ogni sottoinsieme.
     \item \textbf{Lenta da aggiornare}, ricalcolare un MST per ogni sottoinsieme modificato.
@@ -1189,7 +1191,7 @@ Se il grafo è \textbf{completo}, i test di ammissibilità sono:
     \item \textbf{Veloci da eseguire}, sommare i pesi dei vertici per ogni sotto albero.
     \item \textbf{Veloci da aggiornare}, sommare i pesi aggiunti e sottrarre quelli rimossi.
 \end{itemize}
-Visto che la funzione oggettiva è \textbf{additiva}, è abbastanza semplice da valutare, ma mentre
+Visto che la funzione obiettivo è \textbf{additiva}, è abbastanza semplice da valutare, ma mentre
 è semplice da ricalcolare, è più difficile verificarne la fattibilità, eccetto per situazioni banali.
 
 Trovare uno \textbf{albero ricoprente capacitato} è un problema fortemente NP-completo, quindi spesso
@@ -1204,7 +1206,7 @@ una maniera simile ad una visita DFS. \paragraph{Descrizione alternativa}
 Il CMSTP ed il VRP condividono una complicazione interessante: differenti definizioni del
 ground set $B$ sono possibili e naturali.
 \begin{itemize}
-    \item La descrizione come insieme di archi sembra preferibile per gestire la funzione oggettiva.
+    \item La descrizione come insieme di archi sembra preferibile per gestire la funzione obiettivo.
     \item La descrizione che utilizza un insieme di coppie del tipo
           \newline$(vertice, albero)/(nodo/ciclo)$ sembra migliore per generare
           soluzioni ottime ed ha a che fare con la fattibilità.
@@ -1217,12 +1219,12 @@ che quanto sono aggiornate, in maniera che il fardello di mantenerle aggiornate 
 Per riassumere, le domande che ci si deve chiedere a riguardo di un problema sono:
 
 \begin{itemize}
-    \item Come si calcola la funzione oggettiva?
+    \item Come si calcola la funzione obiettivo?
     \item Come provo che un sottoinsieme sia fattibile?
     \item Come trovo una soluzione fattibile?
     \item Come valutare il test di fattibilità?
     \item Cosa succede quando un cambiamento alla soluzione fattibile viene effettuato: è ancora fattibile?
-          Sicuramente non lo è più? È necessario rivalutare da capo la funzione oggettiva o c'è una soluzione migliore?
+          Sicuramente non lo è più? È necessario rivalutare da capo la funzione obiettivo o c'è una soluzione migliore?
     \item Quale è la definizione corretta di ground set? Sono qui presenti più definizioni possibili?
     \item Sono presenti relazioni tra questo ed un altro problema?
 \end{itemize}
@@ -1388,7 +1390,7 @@ L'\textbf{algoritmo esaustivo}:
 \begin{itemize}
     \item Considera ogni sottoinsieme $x\subseteq B$ tale che $x\in 2^{|B|}$.
     \item Testi la fattibilità (se $x\in X$) in un tempo $\alpha(n)$.
-    \item In caso positivo, risolve la funzione oggettiva $f(x)$ in tempo $\beta(n)$.
+    \item In caso positivo, risolve la funzione obiettivo $f(x)$ in tempo $\beta(n)$.
     \item Se necessario, aggiorna il miglior valore trovato finora.
 \end{itemize}
 
@@ -1807,24 +1809,24 @@ L'efficacia di un algoritmo euristico può essere investigata in due modi:
 \subsection{Distanza tra le soluzioni}
 Come detto precedentemente, dobbiamo dare un significato al concetto di distanza, e possiamo fornire
 molteplici interpretazioni differenti.\\L'efficacia di un algoritmo di ottimizzazione euristico $A$
-è misurata dalla \textbf{differenza} tra il valore $f_A(I)$ (la funzione oggettiva sull'istanza
+è misurata dalla \textbf{differenza} tra il valore $f_A(I)$ (la funzione obiettivo sull'istanza
 $I$ calcolata da $A$) e il valore ottimale $f*(I)$ (la soluzione migliore per l'istanza $I$).
 
 \subsubsection{Differenza assoluta}
 Una possibile definizione iniziale tra due valori:
 $$\widetilde{\delta}_A(I)=|f_A(I)-f^{*}(I)|$$
 Seppure questa definizione è molto naturale ed ovvia, è raramente utilizzata in pratica poiché dipende
-dall'unità di misura della funzione oggettiva: basa pensare di provare a minimizzare il tempo complessivo
+dall'unità di misura della funzione obiettivo: basa pensare di provare a minimizzare il tempo complessivo
 nel caso del TSP e che lo si misuri in giorni. Si potrebbe provare ad utilizzare ore, minuti o secondi
 anziché ed il valore di $\widetilde{\delta}_A(I)$ dipenderà fortemente da questa scelta. Questo sarà
-valido quando la funzione oggettiva è un numero puro.
+valido quando la funzione obiettivo è un numero puro.
 
 \subsubsection{Differenza relativa}
 La seconda definizione è basata sull'idea che calcolare la differenza relativa rispetto alla soluzione
 ottimale.
 $$\delta_A(I)=\frac{|f_A(I)-f^*(I)|}{f^*(I)}$$
 Questo è un approccio molto frequente nell'analisi sperimentale ed il suo vantaggio è che nel caso in
-cui la funzione oggettiva abbia un unità di misura, allora il rapporto (\textit{rateo}) ottenuto sarà
+cui la funzione obiettivo abbia un unità di misura, allora il rapporto (\textit{rateo}) ottenuto sarà
 un numero \textit{puro}.
 
 \subsubsection{Rapporto di approssimazione}
@@ -2067,7 +2069,7 @@ grafo).
 Questo è bello finché una soluzione per il grafo completo viene trovata con costo nullo, allora potrai
 veramente risolvere il problema del TSP nella forma decisionale anche sul grafo non completo, il quale
 è un problema fortemente NP-completo. Quest non può essere fatto esattamente, a meno che $P=NP$, il
-che è difficile. La funzione oggettiva di una qualsiasi istanza $\overline{I}$ è:
+che è difficile. La funzione obiettivo di una qualsiasi istanza $\overline{I}$ è:
 \[\begin{cases}
         f^*(\overline{I})=0     & \text{Se }A_0\text{ contiene un ciclo Hamiltoniano} \\
         f^*(\overline{I})\geq 1 & \text{Altrimenti}
@@ -3002,11 +3004,11 @@ $A$ è un \textbf{percorso massimo} del grafo di costruzione (contando sia il so
     Sfortunatamente, questo problema generalizza la fattibilità del problema: \textit{è qui presente qualsiasi soluzione fattibile?}.
     Questo potrebbe essere un problema NP-completo, in questo caso si ha necessità di rilassare lo spazio di ricerca.
 
-    Se la funzione oggettiva potesse essere estesa da $X$ a $\mathcal{F}_A$, allora sembrerebbe naturale
-    utilizzare la funzione oggettiva come \textbf{criterio di selezione}.
+    Se la funzione obiettivo potesse essere estesa da $X$ a $\mathcal{F}_A$, allora sembrerebbe naturale
+    utilizzare la funzione obiettivo come \textbf{criterio di selezione}.
     $$\varphi(i,x)=f(x\cup\{i\})$$
     \begin{algorithm}[H]
-        \caption{Pseudo codice - Euristica Costruttiva (funzione oggettiva)}
+        \caption{Pseudo codice - Euristica Costruttiva (funzione obiettivo)}
         \label{alg:cons_heu_fx}
         \begin{algorithmic}
             \State $x:=\emptyset$
@@ -3062,468 +3064,498 @@ $A$ è un \textbf{percorso massimo} del grafo di costruzione (contando sia il so
         \end{algorithmic}
     \end{algorithm}
     Definiamo $\mathcal{F}_A = X$, dove il sottoinsieme $x$ può essere esteso finché $|x|<\lfloor\frac{V}{v}\rfloor$.
-    Un qualsiasi elemento di $B\setminus x$ estende $x$. La funzione oggettiva è additiva, e quindi:
-$$f(x\cup\{i\})=f(x)+\phi_i\implies arg\underset{i\in B\setminus x }{max} f(x\cup\{i\}) = arg\underset{i\in B\setminus x }{max}\phi_i$$
-L'ultimo sottoinsieme visitato è la migliore soluzione trovata.
-Consideriamo il seguente esempio:
-\[
-    \begin{tabular}{c | c c c c c c c}
-        B      & a & b & c & d & e & f \\
-        \midrule
-        $\phi$ & 7 & 2 & 4 & 5 & 4 & 1 \\
-    \end{tabular}
-\]
-$$v_i=1\text{ }\forall i\in B$$
-$$V=4$$
-L'algoritmo eseguirà i seguenti step:
-\begin{itemize}
-    \item $x:=\emptyset;$
-    \item Dato che $|x|=0<4$ allora calcola $i:=a$ ed aggiorna $x:=\{a\};$
-    \item Dato che $|x|=1<4$ allora calcola $i:=d$ ed aggiorna $x:=\{a,d\};$
-    \item Dato che $|x|=2<4$ allora calcola $i:=c$ ed aggiorna $x:=\{a,c,d\};$
-    \item Dato che $|x|=3<4$ allora calcola $i:=e$ ed aggiorna $x:=\{a,c,d,e\};$
-    \item Dato che $|x|\nless 4$, allora termina.
-\end{itemize}
-Questo algoritmo trova sempre la soluzione ottima.
-\subsection{Il problema dello zaino (KP)}
-Select from a set of object od different volume a maximum value subset which could be contained
-on knapsack of limited capacity.
-\begin{algorithm}[H]
-    \caption{Pseudo codice - Greedy KP}
-    \begin{algorithmic}
-        \State $x:=\emptyset$
-        \State $x^*:=\emptyset$
-        \State $f*=0$
+    Un qualsiasi elemento di $B\setminus x$ estende $x$. La funzione obiettivo è additiva, e quindi:
+    $$f(x\cup\{i\})=f(x)+\phi_i\implies arg\underset{i\in B\setminus x }{max} f(x\cup\{i\}) = arg\underset{i\in B\setminus x }{max}\phi_i$$
+    L'ultimo sottoinsieme visitato è la migliore soluzione trovata.
+    Consideriamo il seguente esempio:
+    \[
+        \begin{tabular}{c | c c c c c c c}
+            B      & a & b & c & d & e & f \\
+            \midrule
+            $\phi$ & 7 & 2 & 4 & 5 & 4 & 1 \\
+        \end{tabular}
+    \]
+    $$v_i=1\text{ }\forall i\in B$$
+    $$V=4$$
+    L'algoritmo eseguirà i seguenti step:
+    \begin{itemize}
+        \item $x:=\emptyset;$
+        \item Dato che $|x|=0<4$ allora calcola $i:=a$ ed aggiorna $x:=\{a\};$
+        \item Dato che $|x|=1<4$ allora calcola $i:=d$ ed aggiorna $x:=\{a,d\};$
+        \item Dato che $|x|=2<4$ allora calcola $i:=c$ ed aggiorna $x:=\{a,c,d\};$
+        \item Dato che $|x|=3<4$ allora calcola $i:=e$ ed aggiorna $x:=\{a,c,d,e\};$
+        \item Dato che $|x|\nless 4$, allora termina.
+    \end{itemize}
+    Questo algoritmo trova sempre la soluzione ottima.
+    \subsection{Il problema dello zaino (KP)}
+    Select from a set of object od different volume a maximum value subset which could be contained
+    on knapsack of limited capacity.
+    \begin{algorithm}[H]
+        \caption{Pseudo codice - Greedy KP}
+        \begin{algorithmic}
+            \State $x:=\emptyset$
+            \State $x^*:=\emptyset$
+            \State $f*=0$
 
-        \While{$\exists i \in B\setminus x :v_i\leq V-\sum_{j\in x}v_j$}
-        \State $i:=arg\underset{\exists i \in B\setminus x :v_i\leq V-\sum_{j\in x}v_j}{max}\phi_i;$
-        \State $x:x\cup\{i\};$
-        \EndWhile
-        \State $Return(x,f(x));$
-    \end{algorithmic}
-\end{algorithm}
-Definire $\mathcal{F}_A = X$, solo alcuni elementi di $B\setminus x$ estendono la fattibilità di $c$
-$$\Delta_A^+(x)=\{i\in B\setminus x:\sum_{j\in x}v_j+v : i \leq V\}$$
+            \While{$\exists i \in B\setminus x :v_i\leq V-\sum_{j\in x}v_j$}
+            \State $i:=arg\underset{\exists i \in B\setminus x :v_i\leq V-\sum_{j\in x}v_j}{max}\phi_i;$
+            \State $x:x\cup\{i\};$
+            \EndWhile
+            \State $Return(x,f(x));$
+        \end{algorithmic}
+    \end{algorithm}
+    Definire $\mathcal{F}_A = X$, solo alcuni elementi di $B\setminus x$ estendono la fattibilità di $c$
+    $$\Delta_A^+(x)=\{i\in B\setminus x:\sum_{j\in x}v_j+v : i \leq V\}$$
 
-La funzione oggettiva è additiva e quindi
-$$f(x\cup{i})=f(x)+\phi_i\implies arg\underset{i\in\Delta_A^+(x)}{max}f(x\cup\{i\})=arg\underset{i\in\Delta_A^+(x)}{\phi_i}$$
-L'ultimo sottoinsieme visitato è la migliore soluzione trovata.
-\[
-    \begin{tabular}{c | c c c c c c c}
-        B      & a & b & c & d & e & f \\
-        \midrule
-        $\phi$ & 7 & 2 & 4 & 5 & 4 & 1 \\
-        v      & 5 & 3 & 2 & 3 & 1 & 1 \\
-    \end{tabular}
-\]
-L'algoritmo esegue i seguenti step:
-\begin{itemize}
-    \item $x:=\emptyset;$
-    \item Dato che $\Delta_A^+\neq\emptyset$ selezionare $i:=\{a\};$ ed aggiornare $x:=\{a\};$
-    \item Dato che $\Delta_A^+\neq\emptyset$ selezionare $i:=\{d\};$ ed aggiornare $x:=\{a,d\};$
-    \item Dato che $\Delta_A^+ = \emptyset$, terminare.
-\end{itemize}
-Questo algoritmo non trova una soluzione ottima
-\subsection{Maximum Diversity Problem}
-Selezionare da un insieme di punti un sottoinsieme di $k$ tale che la somma delle distanza
-fra le coppie di questo insieme sia massima.
-\begin{algorithm}[H]
-    \caption{Pseudo Codice - GreedyMDP}
-    \begin{algorithmic}
-        \State $x:=\emptyset$
-        \While{$|x|<k$}
-        \State $i:=arg\underset{i \in B\setminus x}{max}\sum_{j\in x}d_{ij};$
-        \State $x:x\cup\{i\};$
-        \EndWhile
-        \State $Return(x,f(x));$
-    \end{algorithmic}
-\end{algorithm}
+    La funzione obiettivo è additiva e quindi
+    $$f(x\cup{i})=f(x)+\phi_i\implies arg\underset{i\in\Delta_A^+(x)}{max}f(x\cup\{i\})=arg\underset{i\in\Delta_A^+(x)}{\phi_i}$$
+    L'ultimo sottoinsieme visitato è la migliore soluzione trovata.
+    \[
+        \begin{tabular}{c | c c c c c c c}
+            B      & a & b & c & d & e & f \\
+            \midrule
+            $\phi$ & 7 & 2 & 4 & 5 & 4 & 1 \\
+            v      & 5 & 3 & 2 & 3 & 1 & 1 \\
+        \end{tabular}
+    \]
+    L'algoritmo esegue i seguenti step:
+    \begin{itemize}
+        \item $x:=\emptyset;$
+        \item Dato che $\Delta_A^+\neq\emptyset$ selezionare $i:=\{a\};$ ed aggiornare $x:=\{a\};$
+        \item Dato che $\Delta_A^+\neq\emptyset$ selezionare $i:=\{d\};$ ed aggiornare $x:=\{a,d\};$
+        \item Dato che $\Delta_A^+ = \emptyset$, terminare.
+    \end{itemize}
+    Questo algoritmo non trova una soluzione ottima
+    \subsection{Maximum Diversity Problem}
+    Selezionare da un insieme di punti un sottoinsieme di $k$ tale che la somma delle distanza
+    fra le coppie di questo insieme sia massima.
+    \begin{algorithm}[H]
+        \caption{Pseudo Codice - GreedyMDP}
+        \begin{algorithmic}
+            \State $x:=\emptyset$
+            \While{$|x|<k$}
+            \State $i:=arg\underset{i \in B\setminus x}{max}\sum_{j\in x}d_{ij};$
+            \State $x:x\cup\{i\};$
+            \EndWhile
+            \State $Return(x,f(x));$
+        \end{algorithmic}
+    \end{algorithm}
 
-Definire lo spazio di ricerca $\mathcal{F}_A$ come l'insieme di tutte le soluzioni parziali. Il
-sottoinsieme $x$ può essere esteso finché viene soddisfatta la condizione del problema $|x|<k$.
-Un qualsiasi elemento di $B$ estende $x$ in una maniera fattibile. La funzione oggettiva è quadratica:
-$$f(x\cup\{i\})=f(x)+2\sum_{j\in x}d_{ij}+d_{ii}\implies arg\underset{i\in B\setminus x}{max}f(x\cup \{i\})=arg\underset{i\in B\setminus x}{max}\sum_{j\in x} d_{ij}$$
-L'ultimo sotto insieme visitato è la soluzione migliore (è l'unica fattibile) trovata.
+    Definire lo spazio di ricerca $\mathcal{F}_A$ come l'insieme di tutte le soluzioni parziali. Il
+    sottoinsieme $x$ può essere esteso finché viene soddisfatta la condizione del problema $|x|<k$.
+    Un qualsiasi elemento di $B$ estende $x$ in una maniera fattibile. La funzione obiettivo è quadratica:
+    $$f(x\cup\{i\})=f(x)+2\sum_{j\in x}d_{ij}+d_{ii}\implies arg\underset{i\in B\setminus x}{max}f(x\cup \{i\})=arg\underset{i\in B\setminus x}{max}\sum_{j\in x} d_{ij}$$
+    L'ultimo sotto insieme visitato è la soluzione migliore (è l'unica fattibile) trovata.
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.5]{images/MDP_construct.png}
-    \caption{Maximum Diversity Problem}
-\end{figure}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.5]{images/MDP_construct.png}
+        \caption{Maximum Diversity Problem}
+    \end{figure}
 
-L'algoritmo ha due grossi svantaggi:
-\begin{itemize}
-    \item Al primo passo, tutti i punti sono equivalenti.
-    \item Il risultato finale non è ottimale anche se: il primo passo seleziona la coppia di
-          punti più distanti o l'algoritmo viene ripetuto selezionando ogni punto come il primo.
-\end{itemize}
+    L'algoritmo ha due grossi svantaggi:
+    \begin{itemize}
+        \item Al primo passo, tutti i punti sono equivalenti.
+        \item Il risultato finale non è ottimale anche se: il primo passo seleziona la coppia di
+              punti più distanti o l'algoritmo viene ripetuto selezionando ogni punto come il primo.
+    \end{itemize}
 
-\subsubsection{Travelling Salesman Problem}
-Dato un grafo diretto ed una funzione di costo definita su gli archi, trovare il ciclo di costo
-minimo che sia in grado di visitare tutti i nodi del grafo.
+    \subsubsection{Travelling Salesman Problem}
+    Dato un grafo diretto ed una funzione di costo definita su gli archi, trovare il ciclo di costo
+    minimo che sia in grado di visitare tutti i nodi del grafo.
 
-Lo spazio di ricerca $\mathcal{F}_A$ è definito come la collezione di tutti i sottoinsiemi di archi che
-formano un particolare sotto percorso e mantengono il grado dei nodi $\leq 1$, per tutti i nodi (è
-un sovra insieme di tutte le soluzioni parziali).
-Il criterio di selezione è la funzione oggettiva, essendo additiva.
+    Lo spazio di ricerca $\mathcal{F}_A$ è definito come la collezione di tutti i sottoinsiemi di archi che
+    formano un particolare sotto percorso e mantengono il grado dei nodi $\leq 1$, per tutti i nodi (è
+    un sovra insieme di tutte le soluzioni parziali).
+    Il criterio di selezione è la funzione obiettivo, essendo additiva.
 
-\begin{algorithm}[H]
-    \caption{Pseudo Codice - GreedyTSP}
-    \begin{algorithmic}
-        \State $x:=\emptyset$
-        \State $x*:=\emptyset$
-        \State $f*:=\infty$
-        \While{$\Delta_A^+(x)\neq \emptyset$}
-        \State $i:=arg\underset{i \in \Delta_A^+(x)}{min}\;$
-        \State $x:x\cup\{i\};$
-        \EndWhile
-        \If {$x\in X$}
-        \State $x^*:=x;$
-        \State $f^*:=f(x);$
-        \EndIf
-        \State $Return(x*,f^*);$
-    \end{algorithmic}
-\end{algorithm}
-Solo l'ultimo insieme visitato può essere fattibile (se trovato!).
-Per semplicità consideriamo un grafo simmetrico.
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.5]{images/TSP_simm.png}
-    \caption{TSP grafo simmetrico}
-\end{figure}
-L'algoritmo eseguirà i seguenti passi:
-\begin{itemize}
-    \item $x:=\emptyset;$
-    \item Visto che $\Delta_A^+(x)\neq\emptyset$ selezioniamo $i:=(3,5)$ ed aggiorniamo $x;$
-    \item Visto che $\Delta_A^+(x)\neq\emptyset$ selezioniamo $i:=(2,4)$ ed aggiorniamo $x((5,3)\notin\Delta_A^+(x));$
-    \item Visto che $\Delta_A^+(x)\neq\emptyset$ selezioniamo $i:=(5,2)$ ed aggiorniamo $x((4,2)\notin\Delta_A^+(x));$
-    \item Visto che $\Delta_A^+(x)\neq\emptyset$ selezioniamo $i:=(4,1)$ ed aggiorniamo $x:$
-          notare che $(2,5),(4,5),(5,4),(3,4)$ e $(4,3)\notin \Delta_A^+(x)$
-    \item Visto che $\Delta_A^+(x)=\emptyset$, terminiamo.
-\end{itemize}
-L'algoritmo non trova una soluzione fattibile, ma una soluzione fattibile esiste: aggiungendo
-l'arco $(1,3)$ (quello tratteggiato in figura) permette di trovare una soluzione fattibile anche
-nel caso in cui costi $100$ (seppur non ottima).
-\subsection{Riassumendo}
-Un'euristica costruttiva $A$ trova:
-\begin{itemize}
-    \item Una soluzione ottimale quando $\Delta_A^+(x^{(t)})$ e $\varphi_A(i,x)$ garantiscono
-          che il sotto insieme corrente $x^{(t)}$ sia sempre incluso almeno in una soluzione ottima.
-    \item Una soluzione fattibile quando $\Delta_A^+(x^{(t)})$ garantisce che il sottoinsieme
-          corrente $x^{(t)}$ sia sempre incluso in almeno una soluzione fattibile.
-    \item Un soto insieme generale quando queste proprietà sono perse ad un passo $t$.
-\end{itemize}
-Un algoritmo costruttivo ideale mantiene sempre una "via" aperta verso la soluzione
-ottima. In pratica, alcune di queste proprietà vengono perse durante qualche
-step dell'algoritmo (solitamente).
-\paragraph{Caratteristiche rilevanti}\mbox{}\\
-\textit{Quali caratteristiche permettono un algoritmo costruttivo, di trovare l'ottimo?}
-\begin{itemize}
-    \item Uno spazio di ricerca uguale alla regione di fattibilità? No, perché questo viene tenuto
-    \item Un problema vincolato dalla cardinalità? Questo spiegherebbe il fallimento del KP,
-          ma non basta per il MDP e TSP.
-    \item La presenza di una funzione oggettiva additiva?
-\end{itemize}
-Non esiste una caratterizzazione generale dei problemi risolti in maniera ottimale dagli algoritmi
-costruttivi. Sono però presenti caratterizzazioni per classi più grandi di problemi.
+    \begin{algorithm}[H]
+        \caption{Pseudo Codice - GreedyTSP}
+        \begin{algorithmic}
+            \State $x:=\emptyset$
+            \State $x*:=\emptyset$
+            \State $f*:=\infty$
+            \While{$\Delta_A^+(x)\neq \emptyset$}
+            \State $i:=arg\underset{i \in \Delta_A^+(x)}{min}\;$
+            \State $x:x\cup\{i\};$
+            \EndWhile
+            \If {$x\in X$}
+            \State $x^*:=x;$
+            \State $f^*:=f(x);$
+            \EndIf
+            \State $Return(x*,f^*);$
+        \end{algorithmic}
+    \end{algorithm}
+    Solo l'ultimo insieme visitato può essere fattibile (se trovato!).
+    Per semplicità consideriamo un grafo simmetrico.
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.5]{images/TSP_simm.png}
+        \caption{TSP grafo simmetrico}
+    \end{figure}
+    L'algoritmo eseguirà i seguenti passi:
+    \begin{itemize}
+        \item $x:=\emptyset;$
+        \item Visto che $\Delta_A^+(x)\neq\emptyset$ selezioniamo $i:=(3,5)$ ed aggiorniamo $x;$
+        \item Visto che $\Delta_A^+(x)\neq\emptyset$ selezioniamo $i:=(2,4)$ ed aggiorniamo $x((5,3)\notin\Delta_A^+(x));$
+        \item Visto che $\Delta_A^+(x)\neq\emptyset$ selezioniamo $i:=(5,2)$ ed aggiorniamo $x((4,2)\notin\Delta_A^+(x));$
+        \item Visto che $\Delta_A^+(x)\neq\emptyset$ selezioniamo $i:=(4,1)$ ed aggiorniamo $x:$
+              notare che $(2,5),(4,5),(5,4),(3,4)$ e $(4,3)\notin \Delta_A^+(x)$
+        \item Visto che $\Delta_A^+(x)=\emptyset$, terminiamo.
+    \end{itemize}
+    L'algoritmo non trova una soluzione fattibile, ma una soluzione fattibile esiste: aggiungendo
+    l'arco $(1,3)$ (quello tratteggiato in figura) permette di trovare una soluzione fattibile anche
+    nel caso in cui costi $100$ (seppur non ottima).
+    \subsection{Riassumendo}
+    Un'euristica costruttiva $A$ trova:
+    \begin{itemize}
+        \item Una soluzione ottimale quando $\Delta_A^+(x^{(t)})$ e $\varphi_A(i,x)$ garantiscono
+              che il sotto insieme corrente $x^{(t)}$ sia sempre incluso almeno in una soluzione ottima.
+        \item Una soluzione fattibile quando $\Delta_A^+(x^{(t)})$ garantisce che il sottoinsieme
+              corrente $x^{(t)}$ sia sempre incluso in almeno una soluzione fattibile.
+        \item Un soto insieme generale quando queste proprietà sono perse ad un passo $t$.
+    \end{itemize}
+    Un algoritmo costruttivo ideale mantiene sempre una "via" aperta verso la soluzione
+    ottima. In pratica, alcune di queste proprietà vengono perse durante qualche
+    step dell'algoritmo (solitamente).
+    \paragraph{Caratteristiche rilevanti}\mbox{}\\
+    \textit{Quali caratteristiche permettono un algoritmo costruttivo, di trovare l'ottimo?}
+    \begin{itemize}
+        \item Uno spazio di ricerca uguale alla regione di fattibilità? No, perché questo viene tenuto
+        \item Un problema vincolato dalla cardinalità? Questo spiegherebbe il fallimento del KP,
+              ma non basta per il MDP e TSP.
+        \item La presenza di una funzione obiettivo additiva?
+    \end{itemize}
+    Non esiste una caratterizzazione generale dei problemi risolti in maniera ottimale dagli algoritmi
+    costruttivi. Sono però presenti caratterizzazioni per classi più grandi di problemi.
 
-\subsection{Una caratterizzazione nel caso additivo}
-Assumendo che:
-\begin{itemize}
-    \item la funzione sia additiva:
-          $$\exists\phi : B\rightarrow\mathbb{N}:f(x)=\sum_{i\in x}\phi_i$$
-    \item le soluzioni siano la \textbf{basi} (sottoinsiemi massimi) dello spazio di ricerca:
-          $$X=\mathcal{B}_\mathcal{F}=\{Y\in\mathcal{F}:\nexists Y'\in\mathcal{F}:Y\subset Y'\}$$
-\end{itemize}
-Questa è una situazione molto frequente come nel caso di KP, MAX-SAT, TSP ma non di MDP, SCP.
-In questo caso, l'algoritmo costruttivo trova sempre la soluzione ottima se e solo se $(B,\mathcal{F})$
-è un \textit{matroid embedding}. Visto che la definizione di tale insieme è molto complessa,
-concentriamoci sulla definizione di alcune strutture importanti (il concetto non verrà
-affrontato durante questo corso):
-\begin{itemize}
-    \item \textbf{Greedoidi}
-    \item \textbf{Matroidi}
-\end{itemize}
+    \subsection{Una caratterizzazione nel caso additivo}
+    Assumendo che:
+    \begin{itemize}
+        \item la funzione sia additiva:
+              $$\exists\phi : B\rightarrow\mathbb{N}:f(x)=\sum_{i\in x}\phi_i$$
+        \item le soluzioni siano la \textbf{basi} (sottoinsiemi massimi) dello spazio di ricerca:
+              $$X=\mathcal{B}_\mathcal{F}=\{Y\in\mathcal{F}:\nexists Y'\in\mathcal{F}:Y\subset Y'\}$$
+    \end{itemize}
+    Questa è una situazione molto frequente come nel caso di KP, MAX-SAT, TSP ma non di MDP, SCP.
+    In questo caso, l'algoritmo costruttivo trova sempre la soluzione ottima se e solo se $(B,\mathcal{F})$
+    è un \textit{matroid embedding}. Visto che la definizione di tale insieme è molto complessa,
+    concentriamoci sulla definizione di alcune strutture importanti (il concetto non verrà
+    affrontato durante questo corso):
+    \begin{itemize}
+        \item \textbf{Greedoidi}
+        \item \textbf{Matroidi}
+    \end{itemize}
 
-\subsection{Greedoidi}
-Un greedoide è una coppia di oggetti $(B,\mathcal{F})$ con
+    \subsection{Greedoidi}
+    Un greedoide è una coppia di oggetti $(B,\mathcal{F})$ con
 $\mathcal{F}\subseteq 2^B$ è una coppia tale che soddisfi i seguenti assiomi:
-\begin{itemize}
-    \item L'assioma \textbf{banale}: $\emptyset\in\mathcal{F}$
-    \item L'assioma di \textbf{accessibilità}: se $x\in\mathcal{F}$ e $x\neq\emptyset$ allora
-          $\exists i\in x:x\setminus\{i\}\in\mathcal{F}$. Un qualsiasi sottoinsieme accettabile può
-          essere costruito aggiungendo elementi in un ordine adatto. Quindi deve essere possibile
-          rimuovere $1$ elemento tale che si rimanga ancora nello spazio di ricerca.
-    \item L'assioma di \textbf{scambio}: se $x,y\in\mathcal{F}$ con $|x|=|y|+1$. allora $\exists i\in x\setminus y$
-          tale che $y\cup\{i\}\in\mathcal{F}$. Ovvero. un qualsiasi sottoinsieme accettabile può
-          essere esteso con un elemento adatto (per forza visto che rispettano entrambi il vincolo)
-          di un qualsiasi altro sotto insieme di cardinalità più grande.
-\end{itemize}
-L'assioma di scambio implica che tutte le \textbf{basi} (ovvero i sottoinsiemi massimi)
-abbiano la stessa cardinalità. Tutte queste condizioni vengono mantenute nel caso FKP, e MST (
-sia Kruskal che Prim), mentre non vengono mantenute per il problema generale del KP e TSP.
-Vengono mantenute anche nel MDP, ma in quel caso la funzione oggettiva non è additiva. In generale
-gli algoritmi costruttivi non sono esatti sui greedoidi.
+    \begin{itemize}
+        \item L'assioma \textbf{banale}: $\emptyset\in\mathcal{F}$
+        \item L'assioma di \textbf{accessibilità}: se $x\in\mathcal{F}$ e $x\neq\emptyset$ allora
+              $\exists i\in x:x\setminus\{i\}\in\mathcal{F}$. Un qualsiasi sottoinsieme accettabile può
+              essere costruito aggiungendo elementi in un ordine adatto. Quindi deve essere possibile
+              rimuovere $1$ elemento tale che si rimanga ancora nello spazio di ricerca.
+        \item L'assioma di \textbf{scambio}: se $x,y\in\mathcal{F}$ con $|x|=|y|+1$. allora $\exists i\in x\setminus y$
+              tale che $y\cup\{i\}\in\mathcal{F}$. Ovvero. un qualsiasi sottoinsieme accettabile può
+              essere esteso con un elemento adatto (per forza visto che rispettano entrambi il vincolo)
+              di un qualsiasi altro sotto insieme di cardinalità più grande.
+    \end{itemize}
+    L'assioma di scambio implica che tutte le \textbf{basi} (ovvero i sottoinsiemi massimi)
+    abbiano la stessa cardinalità. Tutte queste condizioni vengono mantenute nel caso FKP, e MST (
+    sia Kruskal che Prim), mentre non vengono mantenute per il problema generale del KP e TSP.
+    Vengono mantenute anche nel MDP, ma in quel caso la funzione obiettivo non è additiva. In generale
+    gli algoritmi costruttivi non sono esatti sui greedoidi.
 
 
-\subsection{Matroidi}
-Un matroide è un insieme di sistema $(B,\mathcal{F})$ con $\mathcal{F}\subseteq 2^B$ tale che:
-\begin{itemize}
-    \item L'assioma \textbf{banale}: $\emptyset\in\mathcal{F}$
-    \item L'assioma di \textbf{eredità}: se $x\in\mathcal{F}$ e $y\subset x$ allora $y\in\mathcal{F}$. Ovvero
-          che un qualsiasi sottoinsieme accettabile può essere costruito aggiungendo i suoi elementi
-          in un qualsiasi ordine.
-    \item L'assioma di \textbf{scambio}: se $x,y\in\mathcal{F}$ con $|x|=|y|+1$. allora $\exists i\in x\setminus y$
-          tale che $y\cup\{i\}\in\mathcal{F}$. Ovvero. un qualsiasi sottoinsieme accettabile può
-          essere esteso con un elemento adatto di un qualsiasi altro sotto insieme di cardinalità
-          più grande.
-\end{itemize}
+    \subsection{Matroidi}
+    Un matroide è un insieme di sistema $(B,\mathcal{F})$ con $\mathcal{F}\subseteq 2^B$ tale che:
+    \begin{itemize}
+        \item L'assioma \textbf{banale}: $\emptyset\in\mathcal{F}$
+        \item L'assioma di \textbf{eredità}: se $x\in\mathcal{F}$ e $y\subset x$ allora $y\in\mathcal{F}$. Ovvero
+              che un qualsiasi sottoinsieme accettabile può essere costruito aggiungendo i suoi elementi
+              in un qualsiasi ordine.
+        \item L'assioma di \textbf{scambio}: se $x,y\in\mathcal{F}$ con $|x|=|y|+1$. allora $\exists i\in x\setminus y$
+              tale che $y\cup\{i\}\in\mathcal{F}$. Ovvero. un qualsiasi sottoinsieme accettabile può
+              essere esteso con un elemento adatto di un qualsiasi altro sotto insieme di cardinalità
+              più grande.
+    \end{itemize}
 
-L'assioma di eredità è una versione più forte dell'assioma di accessibilità dei
-greedoidi. Viene mantenuto nello spazio di ricerca dell'algoritmo di Kruskal per il problema
-del MST. Ma non viene mantenuto nello spazio di ricerca dell'algoritmo di Prim.
+    L'assioma di eredità è una versione più forte dell'assioma di accessibilità dei
+    greedoidi. Viene mantenuto nello spazio di ricerca dell'algoritmo di Kruskal per il problema
+    del MST. Ma non viene mantenuto nello spazio di ricerca dell'algoritmo di Prim.
 
-$$x=\{(A,D),(D,H),(E,F),(B,F),(C,G)\}$$
-$$y=\{(A,E),(B,H),(E,F),(E,H)\}$$
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.5]{images/matr_mst.png}
-    \caption{Dimostrazione dell'assioma di scambio}
-\end{figure}
+    $$x=\{(A,D),(D,H),(E,F),(B,F),(C,G)\}$$
+    $$y=\{(A,E),(B,H),(E,F),(E,H)\}$$
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.5]{images/matr_mst.png}
+        \caption{Dimostrazione dell'assioma di scambio}
+    \end{figure}
 
-\subsubsection{Matroide uniforme per KP/FKP}
-$$\mathcal{x\subseteq B:|x|\leq\lfloor\frac{V}{v}\rfloor}$$
-\begin{itemize}
-    \item Assioma banale: l'insieme vuoto rispetta il vincolo di cardinalità.
-    \item Assioma di eredità: se $x$ rispetta il vincolo di cardinalità, tutti
-          i suoi sottoinsiemi lo rispetteranno.
-    \item Assioma di scambio: se $x$ e $y$ rispettano il vincolo di cardinalità e
-          $|x|=|y|+1$, uno può sempre aggiungere un elemento adatto di $x$ ad $y$ senza violare
-          la cardinalità.
-\end{itemize}
-Questo per quanto riguarda FKP, per il KP i primi due assiomi vengono mantenuti, mentre l'ultimo
-no.
-Consideriamo il seguente esempio:
-$$V=6$$
-$$v=[3 3 2 2 1]$$
-Sia $x=\{3,4,5\}$ che $y=\{1,2\}$ si trovano in $\mathcal{F}$, ma nessun elemento di $x$ può
-essere aggiunto ad $y$.
+    \subsubsection{Matroide uniforme per KP/FKP}
+    $$\mathcal{x\subseteq B:|x|\leq\lfloor\frac{V}{v}\rfloor}$$
+    \begin{itemize}
+        \item Assioma banale: l'insieme vuoto rispetta il vincolo di cardinalità.
+        \item Assioma di eredità: se $x$ rispetta il vincolo di cardinalità, tutti
+              i suoi sottoinsiemi lo rispetteranno.
+        \item Assioma di scambio: se $x$ e $y$ rispettano il vincolo di cardinalità e
+              $|x|=|y|+1$, uno può sempre aggiungere un elemento adatto di $x$ ad $y$ senza violare
+              la cardinalità.
+    \end{itemize}
+    Questo per quanto riguarda FKP, per il KP i primi due assiomi vengono mantenuti, mentre l'ultimo
+    no.
+    Consideriamo il seguente esempio:
+    $$V=6$$
+    $$v=[3 3 2 2 1]$$
+    Sia $x=\{3,4,5\}$ che $y=\{1,2\}$ si trovano in $\mathcal{F}$, ma nessun elemento di $x$ può
+    essere aggiunto ad $y$.
 
-\subsubsection{Matroide grafico MST (Minimum Spanning Tree)}
-$$\mathcal{F}=\{x\subseteq B:x\text{ non formi cicli }\}$$
-\begin{itemize}
-    \item Assioma banale: l'insieme vuoto degli archi non forma cicli.
-    \item Assioma di eredità: se $x$ è aciclico, tutti is suoi sotto insiemi sono aciclici.
-    \item Assioma di scambio: se $x$ ed $y$ sono aciclici e $|x|= |y|+1$, allora è sempre
-          possibile aggiungere un arco "adatto" (che rispetta il vincolo) di $x$ ad $y$ senza
-          formare alcun ciclo.
-\end{itemize}
-\subsubsection{Matroide per TSP}
-Nel caso del TSP i primi due assiomi vengono mantenuti:
-\begin{itemize}
-    \item l'insieme vuoto non ha percorsi ed gradi sono $\leq 1$
-    \item un qualsiasi sottoinsieme proprio di un insieme $\in\mathcal{F}$ appartiene ad $\mathcal{F}$.
-\end{itemize}
-Tuttavia il terzo assioma viene violato, consideriamo il seguente esempio: $y=\{(1,2),(2,3)\}$ ed $x=\{(3,1),(1,4),(4,2)\}$.
-\begin{figure}
-    \centering
-    \includegraphics[scale=0.5]{images/matroid_tsp.png}
-    \caption{Esempio TSP}
-\end{figure}
+    \subsubsection{Matroide grafico MST (Minimum Spanning Tree)}
+    $$\mathcal{F}=\{x\subseteq B:x\text{ non formi cicli }\}$$
+    \begin{itemize}
+        \item Assioma banale: l'insieme vuoto degli archi non forma cicli.
+        \item Assioma di eredità: se $x$ è aciclico, tutti is suoi sotto insiemi sono aciclici.
+        \item Assioma di scambio: se $x$ ed $y$ sono aciclici e $|x|= |y|+1$, allora è sempre
+              possibile aggiungere un arco "adatto" (che rispetta il vincolo) di $x$ ad $y$ senza
+              formare alcun ciclo.
+    \end{itemize}
+    \subsubsection{Matroide per TSP}
+    Nel caso del TSP i primi due assiomi vengono mantenuti:
+    \begin{itemize}
+        \item l'insieme vuoto non ha percorsi ed gradi sono $\leq 1$
+        \item un qualsiasi sottoinsieme proprio di un insieme $\in\mathcal{F}$ appartiene ad $\mathcal{F}$.
+    \end{itemize}
+    Tuttavia il terzo assioma viene violato, consideriamo il seguente esempio: $y=\{(1,2),(2,3)\}$ ed $x=\{(3,1),(1,4),(4,2)\}$.
+    \begin{figure}
+        \centering
+        \includegraphics[scale=0.5]{images/matroid_tsp.png}
+        \caption{Esempio TSP}
+    \end{figure}
 
-L'ottimalità dell'algoritmo Greedy può essere dimostrata utilizzando i greedoidi,
-se l'assioma di scambio viene rafforzato:
-\[
-    \begin{cases}
-        x\in\mathcal{F},y\in\mathcal{B}_\mathcal{F}\text{ tale che } x\subseteq y \\
-        i\in B\setminus y\text{ tale che } x\cup\{i\}\in\mathcal{F}
-    \end{cases}
-    \implies
-    \exists j\in y\setminus x :
-    \begin{cases}
-        x\cup\{j\}\in\mathcal{F} \\
-        y\cup\{i\}\setminus\{j\}\in\mathcal{F}
-    \end{cases}
-\]
-Data una base ed uno dei suoi sottoinsiemi (dalla quale la base risulta
-accessibile), se è presente un elemento che "si smarrisce" nel sottoinsieme della base,
-deve esserci un altro elemento che continua sul percorso giusto e deve essere
-fattibile scambiare due elementi nella base.
-\subsubsection{Greedoidi con forti assiomi di scambio : MST}
-Un esempio classi di greedoide con un forte assioma di scambio è dato da:
-$$B=\text{ insieme degli archi di un grafo}$$
-$$\mathcal{F}=\text{ collezione degli alberi che includono un dato vertice } v_1$$
-Questo porta all'algoritmo di Prim per il problema del minimo albero ricoprente
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.5]{images/greedoid_mst.png}
-\end{figure}
-L'assioma banale e quello di accessibilità rimangono validi mentre (quello
-di eredità no). Mentre l'assioma di scambio mantiene una forma forte.
+    L'ottimalità dell'algoritmo Greedy può essere dimostrata utilizzando i greedoidi,
+    se l'assioma di scambio viene rafforzato:
+    \[
+        \begin{cases}
+            x\in\mathcal{F},y\in\mathcal{B}_\mathcal{F}\text{ tale che } x\subseteq y \\
+            i\in B\setminus y\text{ tale che } x\cup\{i\}\in\mathcal{F}
+        \end{cases}
+        \implies
+        \exists j\in y\setminus x :
+        \begin{cases}
+            x\cup\{j\}\in\mathcal{F} \\
+            y\cup\{i\}\setminus\{j\}\in\mathcal{F}
+        \end{cases}
+    \]
+    Data una base ed uno dei suoi sottoinsiemi (dalla quale la base risulta
+    accessibile), se è presente un elemento che "si smarrisce" nel sottoinsieme della base,
+    deve esserci un altro elemento che continua sul percorso giusto e deve essere
+    fattibile scambiare due elementi nella base.
+    \subsubsection{Greedoidi con forti assiomi di scambio : MST}
+    Un esempio classi di greedoide con un forte assioma di scambio è dato da:
+    $$B=\text{ insieme degli archi di un grafo}$$
+    $$\mathcal{F}=\text{ collezione degli alberi che includono un dato vertice } v_1$$
+    Questo porta all'algoritmo di Prim per il problema del minimo albero ricoprente
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.5]{images/greedoid_mst.png}
+    \end{figure}
+    L'assioma banale e quello di accessibilità rimangono validi mentre (quello
+    di eredità no). Mentre l'assioma di scambio mantiene una forma forte.
 
-Notare che l'ottimalità di un algoritmo costruttivo $A$ dipende da:
-\begin{itemize}
-    \item le proprietà del problema (es. la funzione oggettiva additiva, basi
-          come soluzioni fattibili).
-    \item le proprietà dello spazio di ricerca $\mathcal{F}_A$
-\end{itemize}
+    Notare che l'ottimalità di un algoritmo costruttivo $A$ dipende da:
+    \begin{itemize}
+        \item le proprietà del problema (es. la funzione obiettivo additiva, basi
+              come soluzioni fattibili).
+        \item le proprietà dello spazio di ricerca $\mathcal{F}_A$
+    \end{itemize}
 
-\subsection{Algoritmi non esatti}
+    \subsection{Algoritmi non esatti}
 
-Quando le proprietà algebriche di un problema non vengono soddisfastte, tali che l'algoritmo e
-lo spazio di ricerca non compongano una matroide o un greedoide con un forte assioma di scambio,
-può essere fatta una cosa, ovvero cercare di guidare il comportamento dell'algoritmo all'interno dello
-spazio di ricerca utilizzando un \textit{raffinamento} del criterio di selezione. Questo in maniera
-di forzarlo a dipendere sia su $i$ che su $x$, così da usare $\varphi_A (i,x)$.
+    Quando le proprietà algebriche di un problema non vengono soddisfastte, tali che l'algoritmo e
+    lo spazio di ricerca non compongano una matroide o un greedoide con un forte assioma di scambio,
+    può essere fatta una cosa, ovvero cercare di guidare il comportamento dell'algoritmo all'interno dello
+    spazio di ricerca utilizzando un \textit{raffinamento} del criterio di selezione. Questo in maniera
+    di forzarlo a dipendere sia su $i$ che su $x$, così da usare $\varphi_A (i,x)$.
 
-Questo magari non dimostra che l'algoritmo raggiunga la soluzione ottima ma abbastanza spesso otterrà
-risultati migliori, e magari alcune approssimazione potranno essere provate.
+    Questo magari non dimostra che l'algoritmo raggiunga la soluzione ottima ma abbastanza spesso otterrà
+    risultati migliori, e magari alcune approssimazione potranno essere provate.
 
-\paragraph{Algoritmo euristico costruittivo per KP}\mbox{}\\
-Nel KP i tre assiomi non sono soddisfatti, poiché l'assioma di scambio non è soddisfatto.
-In particolare, il problema è che l'oggetto non ha lo stesso volume ed una piccola cardinalità.
+    \paragraph{Algoritmo euristico costruittivo per KP}\mbox{}\\
+    Nel KP i tre assiomi non sono soddisfatti, poiché l'assioma di scambio non è soddisfatto.
+    In particolare, il problema è che l'oggetto non ha lo stesso volume ed una piccola cardinalità.
 
-Se il problema non ammette uno spazio di ricerca con delle proprietà adatte, uno deve mantenere
-da conto i vincoli del problema adottando:
-\begin{enumerate}
-    \item non solo una buona definizione di $\mathcal{F}_A$
-    \item ma anche una definizione sofisticata del criterio di selezione $\varphi_A(i,x)$,
-          questo permette risultati efficaci, anche se non probabilmente ottimali.
-\end{enumerate}
-Nel KP, l'inconveniente deriva dal volume degli oggetti: premettendo che gli oggetti abbiano
-un grande volume, ma anche un piccolo volume. Definiamo il criterio di selezione come il
-valore unitario $\varphi_A(i,x)=\frac{\phi_i}{v_i}$
-L'algoritmo risultante può avere delle brutte prestazioni, e con una piccola modifica può diventare
+    Se il problema non ammette uno spazio di ricerca con delle proprietà adatte, uno deve mantenere
+    da conto i vincoli del problema adottando:
+    \begin{enumerate}
+        \item non solo una buona definizione di $\mathcal{F}_A$
+        \item ma anche una definizione sofisticata del criterio di selezione $\varphi_A(i,x)$,
+              questo permette risultati efficaci, anche se non probabilmente ottimali.
+    \end{enumerate}
+    Nel KP, l'inconveniente deriva dal volume degli oggetti: premettendo che gli oggetti abbiano
+    un grande volume, ma anche un piccolo volume. Definiamo il criterio di selezione come il
+    valore unitario $\varphi_A(i,x)=\frac{\phi_i}{v_i}$
+    L'algoritmo risultante può avere delle brutte prestazioni, e con una piccola modifica può diventare
 $2$-approssimato.
 
-Consideriamo il seguente esempio con uno zaino di volume $V=8$:
-\begin{center}
-    \begin{tabular}{c | c c c c c c}
-        B             & a   & b    & c & d    & e & f \\
-        \midrule
-        $\varphi$     & 7   & 2    & 4 & 5    & 4 & 1 \\
-        $v$           & 5   & 3    & 2 & 3    & 1 & 1 \\
-        $\varphi / v$ & 1.4 & 0.67 & 2 & 1.67 & 4 & 1 \\
-    \end{tabular}
-\end{center}
-L'algoritmo esegue i seguenti passi:
-\begin{enumerate}
-    \item $x:=\emptyset, V_r=8$
-    \item $x:=\{e\}, V_r=7$
-    \item $x:=\{c,e\}, V_r=5$
-    \item $x:=\{c,d,e\}, V_r=2$
-    \item $x:=\{c,d,e,f\}, V_r=1$
-    \item Visto che $\Delta_A^+(x)=\emptyset$, termina.
-\end{enumerate}
-Il valore della soluzione trovata è $14$, mentre la soluzione ottima è $x^*=\{a,c,e\}$ ed
-il suo valore è $15$ - l'algoritmo non ha delle brutte prestazioni in questo caso. Tuttavia,
-ci sono dei casi critici, come il seguente zaino con un volume $V=10$.
-\begin{center}
-    \begin{tabular}{c|c c}
-        B           & a  & b  \\
-        \midrule
-        $\phi$      & 10 & 90 \\
-        $v$         & 1  & 10 \\
-        $\varphi/v$ & 10 & 9  \\
-    \end{tabular}
-\end{center}
+    Consideriamo il seguente esempio con uno zaino di volume $V=8$:
+    \begin{center}
+        \begin{tabular}{c | c c c c c c}
+            B             & a   & b    & c & d    & e & f \\
+            \midrule
+            $\varphi$     & 7   & 2    & 4 & 5    & 4 & 1 \\
+            $v$           & 5   & 3    & 2 & 3    & 1 & 1 \\
+            \midrule
+            $\varphi / v$ & 1.4 & 0.67 & 2 & 1.67 & 4 & 1 \\
+        \end{tabular}
+    \end{center}
+    L'algoritmo esegue i seguenti passi:
+    \begin{enumerate}
+        \item $x:=\emptyset, V_r=8$
+        \item $x:=\{e\}, V_r=7$
+        \item $x:=\{c,e\}, V_r=5$
+        \item $x:=\{c,d,e\}, V_r=2$
+        \item $x:=\{c,d,e,f\}, V_r=1$, l'oggetto $a$ non sta nello zaino.
+        \item Visto che $\Delta_A^+(x)=\emptyset$, termina.
+    \end{enumerate}
+    Il valore della soluzione trovata è $14$, mentre la soluzione ottima è $x^*=\{a,c,e\}$ ed
+    il suo valore è $15$ - l'algoritmo non ha delle brutte prestazioni in questo caso. Tuttavia,
+    ci sono dei casi critici, come il seguente zaino con un volume $V=10$. Questo è un algoritmo euristico,
+    è buono? solitamente si, ma sono presenti dei casi patologici dove non lo è:
+    \begin{center}
+        \begin{tabular}{c|c c}
+            B           & a  & b  \\
+            \midrule
+            $\phi$      & 10 & 90 \\
+            $v$         & 1  & 10 \\
+            \midrule
+            $\varphi/v$ & 10 & 9  \\
+        \end{tabular}
+    \end{center}
 
-L'algoritmo scegli l'oggetto $a$, il quale ha una rapporto pià alto, quindi termina. La soluzione
-ha un valore 10 (con l'euristica), ma la soluzione ottima è 90. Il motivo di questo errore
-è dato dal primo oggetto scartato ha si una grande volume ma anche un grande valore.
-\paragraph{Esempio di un'algoritmo 2-approssimato per KP}\mbox{}
-\begin{enumerate}
-    \item Si inizia con un sottoinsieme vuoto $x^{(0)}=\emptyset$
-    \item Trovare l'oggetto $i^{(t)}$ di valore unitario massimo in $B\setminus x^{(t-1)}$
-          $$i^{(t)}:=arg\underset{i\in B\setminus x^{(t-1)}}{max}\frac{\phi_{i^{(t)}}}{v_{i^{(t)}}}$$
-    \item Nel caso in cui rispetti la capacità, aggiungere $i^{(t)}$ a $x^{(t-1)}:x^{(t)}:=x^{(t-1)}\cup\{i^{(t)}\}$
-          e ritorna al passo 2.
-    \item Costruisci una soluzione con il primo oggetto rifiutato $x'=\{i^{(t)}\}$
-    \item Restituire la soluzione migliore tra $x$ e $x':f_A=max[f(x),f(x')]$
+    L'algoritmo scegli l'oggetto $a$, il quale ha una rapporto pià alto, quindi termina. La soluzione
+    ha un valore 10 (con l'euristica), ma la soluzione ottima è 90. Il motivo di questo errore
+    è dato dal primo oggetto scartato ha si una grande volume ma anche un grande valore. Stiamo
+    perdendo molto in questo caso.\\Vediamo un modo per risolvere questo problema:
 
-\end{enumerate}
+    \paragraph{Esempio di un'algoritmo 2-approssimato per KP}\mbox{}
+    Verrà mostrata una piccola dimostrazione di come questo algoritmo viene approssimato, tuttavia la dimostrazione
+    all'esame non verrà chiesta, ma rimane come requisito sapere l'esistenza di un algoritmo 2-approssimato che può
+    risolvere questo problema.
 
-Si può dimostrare facilmente che, la somma dei valori delle due soluzioni è una sovrastima
-della soluzione ottima
-$$f(x)+f(x')=\sum_{\tau =1}^t \phi_{i(\tau)}\geq f^*$$
-e che la migliore delle due soluzioni è almeno metà della loro somma
-$$f_A = max[f(x),f'(x)]\geq\frac{f(x)+f(x')}{2}\geq\frac{1}{2}f^*$$
+    \begin{enumerate}
+        \item Si inizia con un sottoinsieme vuoto $x^{(0)}=\emptyset$
+        \item Trovare l'oggetto $i^{(t)}$ di valore unitario massimo in $B\setminus x^{(t-1)}$
+              $$i^{(t)}:=arg\underset{i\in B\setminus x^{(t-1)}}{max}\frac{\phi_{i^{(t)}}}{v_{i^{(t)}}}$$
+        \item Nel caso in cui rispetti la capacità, aggiungere $i^{(t)}$ a $x^{(t-1)}:x^{(t)}:=x^{(t-1)}\cup\{i^{(t)}\}$
+              e ritorna al passo 2.
+        \item Costruisci una soluzione con il primo oggetto rifiutato $x'=\{i^{(t)}\}$
+        \item Restituire la soluzione migliore tra $x$ e $x':f_A=max[f(x),f(x')]$
 
-\paragraph{Euristica Nearest Neighbour per il TSP}\mbox{}\\
-Consideriamo il problema del TSP su un grafo completo $G=(N,A)$ con il solito spazio di ricerca
-(sottoinsieme degli archi senza sotto percorsi e con un grado $\leq 1$ su tutti i nodi).
+    \end{enumerate}
 
-L'algoritmo costruttivo trova sempre una soluzione fattibile, però la soluzione può essere
-infinitamente pessima.
+    Si può dimostrare facilmente che, la somma dei valori delle due soluzioni è una sovrastima
+    della soluzione ottima
+    $$f(x)+f(x')=\sum_{\tau =1}^t \phi_{i(\tau)}\geq f^*$$
+    e che la migliore delle due soluzioni è almeno metà della loro somma
+    $$f_A = max[f(x),f'(x)]\geq\frac{f(x)+f(x')}{2}\geq\frac{1}{2}f^*$$
 
-Cambiando lo spazio di ricerca $\mathcal{F}_A$, in maniera che includa tutti cammini che iniziano
-dal nodo 1.
+    \paragraph{Euristica Nearest Neighbour per il TSP}\mbox{}\\
+    Consideriamo il problema del TSP su un grafo completo $G=(N,A)$ con il solito spazio di ricerca
+    (sottoinsieme degli archi senza sotto percorsi e con un grado $\leq 1$ su tutti i nodi).
 
-Sia $N_x$ l'insieme dei nodi visitati da $x$: le estensioni accettabili di questi nodi sono tutti gli
-archi uscenti dall'ultimo nodo del cammino $x$ e che non terminano in un sotto-cammino
-$$\Delta_A^+(x)=\{(h,k)\in A : h=Last(x),k\notin N_x\text{ or } k=1 \text{ and } N_x=N\}$$
-Controlliamo gli assiomi:
-\begin{itemize}
-    \item l'assioma banale è mantenuto.
-    \item l'assioma di accessibilità è mantenuto : poiché rimuovere un arco restituisce un cammino che
-          inizia dal nodo 1.
-    \item l'assioma di eredità non viene mantenuto: non tutti i sottoinsiemi sono cammini.
-    \item l'assioma di scambio non viene mantenuto.
-\end{itemize}
+    L'algoritmo costruttivo trova sempre una soluzione fattibile, però la soluzione può essere
+    infinitamente pessima.
 
-L'euristica NN (Nearest Neighbour) adotta la funzione oggettiva come criterio di selezione:
-\begin{itemize}
-    \item Inizia con l'insieme vuoto degli archi $x^{(0)}=\emptyset$, che
-          rappresenta un percorso degenere che esce dal nodo 1 (la soluzione ottima
-          contiene sicuramente il nodo 1).
-    \item Trovare l'arco di costo minimo uscente dall'ultimo nodo di $x$
-          $$(i,j)= arg\underset{(h,k)\in\Delta_A^+(x)}{min}c_{hk}$$
-    \item Se $j\neq 1$, ritorna al punto 2; altrimenti, termina.
-\end{itemize}
-L'algoritmo è molto intuitivo e la sua complessità è $\Theta(n^2)$, non è esatto ma
+    Cambiando lo spazio di ricerca $\mathcal{F}_A$, in maniera che includa tutti cammini che iniziano
+    dal nodo 1.
+
+    Sia $N_x$ l'insieme dei nodi visitati da $x$: le estensioni accettabili di questi nodi sono tutti gli
+    archi uscenti dall'ultimo nodo del cammino $x$ e che non terminano in un sotto-cammino
+    $$\Delta_A^+(x)=\{(h,k)\in A : h=Last(x),k\notin N_x\text{ or } k=1 \text{ and } N_x=N\}$$
+    Quindi un estensione dell'attuale sotto insieme proposto come soluzione consiste in un arco
+    tale che il nodo $k$ non sia un nodo appartenente ad uno dei nodi già visitati a meno che non sia il
+    primo nodo (quando tutti i nodi sono stati visitati $N_x=N$).
+
+    Controlliamo gli assiomi:
+    \begin{itemize}
+        \item l'assioma banale è mantenuto.
+        \item l'assioma di accessibilità è mantenuto : poiché rimuovere un arco restituisce un cammino che
+              inizia dal nodo 1 (rimane sempre un arco, ovvero una soluzione appartenente allo spazio di ricerca,
+              secondo gli assiomi dei greedoidi).
+        \item l'assioma di eredità non viene mantenuto: non tutti i sottoinsiemi sono cammini.
+        \item l'assioma di scambio non viene mantenuto.
+    \end{itemize}
+
+    L'euristica NN (Nearest Neighbour) adotta la funzione obiettivo come criterio di selezione:
+    \begin{itemize}
+        \item Inizia con l'insieme vuoto degli archi $x^{(0)}=\emptyset$, che
+              rappresenta un percorso degenere che esce dal nodo 1 (la soluzione ottima
+              contiene sicuramente il nodo 1).
+        \item Trovare l'arco di costo minimo uscente dall'ultimo nodo di $x$
+              $$(i,j)= arg\underset{(h,k)\in\Delta_A^+(x)}{min}c_{hk}$$
+        \item Se $j\neq 1$, ritorna al punto 2; altrimenti, termina.
+    \end{itemize}
+    L'algoritmo è molto intuitivo e la sua complessità è $\Theta(n^2)$, non è esatto ma
 $\log n$-approssimato.
 
-Procediamo con un esempio numerico, consideriamo il seguente grafo completo:
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.4]{images/nume_exampl-NN-tsp.png}
-    \caption{Grafo completo (gli archi non sono riportati per maggiore chiarezza)}
-\end{figure}
+    Procediamo con un esempio numerico, consideriamo il seguente grafo completo:
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.4]{images/nume_exampl-NN-tsp.png}
+        \caption{Grafo completo (gli archi non sono riportati per maggiore chiarezza)}
+    \end{figure}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.4]{images/nume_exampl-NN-tsp1.png}
-    \caption{Euristica NN partendo dal nodo 1}
-    \label{fig:NN1}
-\end{figure}
-Eseguendo l'algoritmo partendo dal nodo 1 otteniamo il percorso sotto-ottimale mostrato in figura
-\ref{fig:NN1}. Tuttavia avviare l'algoritmo dal nodo 2 restituisce anch'esso un percorso sotto ottimale.
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.4]{images/nume_exampl-NN-tsp2.png}
-    \caption{Euristica NN partendo dal nodo 2}
-\end{figure}
-Più precisamente, avviare l'esecuzione dell'euristica da un qualsiasi nodo restituirà una soluzione
-sotto ottimale, significa che la soluzione ottima non è restituita da questo algoritmo dato un
-qualsiasi nodo.
-\begin{figure}
-    \centering
-    \includegraphics[scale=0.4]{images/nume_exampl-NN-tsp3.png}
-    \caption{Effettiva soluzione ottima}
-\end{figure}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.4]{images/nume_exampl-NN-tsp1.png}
+        \caption{Euristica NN partendo dal nodo 1}
+        \label{fig:NN1}
+    \end{figure}
+    Eseguendo l'algoritmo partendo dal nodo 1 otteniamo il percorso sotto-ottimale mostrato in figura
+    \ref{fig:NN1}. Tuttavia avviare l'algoritmo dal nodo 2 restituisce anch'esso un percorso sotto ottimale.
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.4]{images/nume_exampl-NN-tsp2.png}
+        \caption{Euristica NN partendo dal nodo 2}
+    \end{figure}
+    Più precisamente, avviare l'esecuzione dell'euristica da un qualsiasi nodo restituirà una soluzione
+    sotto ottimale, significa che la soluzione ottima non è restituita da questo algoritmo dato un
+    qualsiasi nodo.
+    \begin{figure}
+        \centering
+        \includegraphics[scale=0.4]{images/nume_exampl-NN-tsp3.png}
+        \caption{Effettiva soluzione ottima}
+    \end{figure}
 
-\subsection{Algoritmi costruttivi puri ed adattivi}
-Un algoritmo costruttivo $A$ è:
+    \subsection{Algoritmi costruttivi puri ed adattivi}
+    Un algoritmo costruttivo $A$ è:
+    \begin{itemize}
+        \item \textbf{puro} se il criterio di selezione $\varphi_A$ dipende solo dal nuovo elemento $i$.
+        \item \textbf{adattivo} se $\varphi_A$ dipende sia da $i$ che dalla soluzione corrente $x$.
+    \end{itemize}
+    Molto criteri $\varphi_A (i,x)$ ammettono forme equivalenti dipendendo solamente da $i$:
+    \begin{itemize}
+        \item nel KP, $\varphi_A(i,x) = f(x\cup\{i\})$ è equivalente a $\phi_i$ (questo perché la funzione obiettivo
+              è additiva, si può concentrarsi quindi solo sul valore $\phi$).
+        \item nel TSP, $\varphi_A((i,j),x)=f(x\cup\{(i,j)\})$ è equivalente a $c_{ij}$
+    \end{itemize}
+    Fin'ora abbiamo solamente visto algoritmi puramente costruttivi. Un criterio di selezione additivo
+    restituisce un algoritmo puramente costruttivo.
+
+    Mentre per dimostrazione la definizione di \textit{adattivo} utilizziamo il problema del Set Covering.
+
+    \paragraph{Set Covering}\mbox{}\\
+    Data una matrice binaria ed un vettore dei costi associato alle colonne, si vuole trovare un sotto insieme
+    delle colonne di costo minimo tali che coprano tutte le righe.
+
+    La funzione obiettivo è additiva, ma le soluzioni non sono delle basi, in quanto non sono sotto insiemi massimali,
+    questo perché più piccola la soluzione è meglio risulta. Inoltre, risulta necessario un criterio di selezione
+    adattivo $\phi_A(i,x)$, poiché uno \textit{puro} $\phi_A(i)$ potrebbe ripetitivamente scegliere colonne che
+coprono le stesse righe.\\Le idee più promettenti da seguire sono:
 \begin{itemize}
-    \item \textbf{puro} se il criterio di selezione $\varphi_A$ dipende solo dal nuovo elemento $i$.
-    \item \textbf{adattivo} se $\varphi_A$ dipende sia da $i$ che dalla soluzione corrente $x$.
+    \item
 \end{itemize}
-Molto criteri $\varphi_A (i,x)$ ammettono equivalenti forme dipendendo solamente da $i$:
-\begin{itemize}
-    \item nel KP, $\varphi_A(i,x)$
-\end{itemize}
-
-
 
 
 
