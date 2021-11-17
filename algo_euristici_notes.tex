@@ -3941,26 +3941,298 @@ $c_{s_i,k}+c_{k,s_{i+1}}-c_{s_i,s_i+1}$ implica che $c_{s_i,k}$ e $c_{s_i +1},k$
     \end{itemize}
     La complessità totale è $\Theta(n^3)$, può essere ridotta a $\Theta(n^2)$ utilizzando un vettore
     che contiene per ogni nodo esterno il suo nodo interno più vicino, ognuno dei $n-1$ passi:
+    \begin{itemize}
+        \item seleziona il nodo più vicino in $O(n)$.
+        \item crea due nuove inserzioni per ogni nodo esterno, la migliore delle quali possibilmente migliore il valore
+              salvato nel vettore; ognuno dei $O(n)$ miglioramenti si prende $O(1)$ tempo.
+    \end{itemize}
+
+    \paragraph{Euristica Farthest Insertion per il TSP}\mbox{}\\
+    La scelta del nodo più vicino al ciclo è naturale, ma ingannevole: visto che tutti i nodi devono essere visitati,
+    è preferibile andare trattare per primi i nodi più problematici (\textit{farthest}).
+
+    \begin{enumerate}
+        \item iniziare con un auto-ciclo a costo zero sul nodo 1: $x^{(0)}=\{(1,1)\}$
+        \item criterio di aggiunta: selezionare il nodo $k$ più lontano dal ciclo $x$
+              $$k=arg\;\underset{l\notin N_x}{max}\left(\underset{s_i\in N_x}{c_{s_i, l}}\right)$$
+        \item criterio di rimozione: selezionare l'arco $(s_i,s_{i+1})$ che minimizza i costi
+              $$(s_i,s_{i+1})=arg\;\underset{(s_i,s_{i+1})\in x}{min}(c_{s_i,k}+c_{k,s_{i+1}}-c_{s_i,s_{i+1}})$$
+        \item se il ciclo non visita tutti i nodi, tornare al punto 2; altrimenti termina.
+    \end{enumerate}
+    questa euristica risulta $\log n$-approssimata sotto la disuguaglianza triangolare, quindi peggiore delle precenti
+    euristiche (caso peggiore).
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.5]{images/farthest0.png}
+        \caption{si raggiunge subito il primo nodo più lontano da quello iniziale}
+    \end{figure}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.5]{images/farthest1.png}
+        \caption{si prosegue nella stessa maniera}
+    \end{figure}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.5]{images/farthest2.png}
+        \caption{si cerca l'inserimento nella migliore maniera possibile}
+    \end{figure}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.5]{images/farthest3.png}
+        \caption{il ciclo cresce con più regolarità, senza attraversamenti}
+    \end{figure}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.5]{images/farthest4.png}
+        \caption{termina quando il ciclo visita tutti i nodi}
+    \end{figure}
+
+    L'algoritmo FI esegue in $n-1$ passi, ad ogni passo $t$:
+    \begin{itemize}
+        \item calcola la distanza di $(n-t)$ nodi dal ciclo, ognuno in $\Theta(t)$ tempo.
+        \item seleziona il nodo della distanza massima.
+        \item calcola la rimozione di $t$ archi, ognuno in tempo $\Theta(1)$.
+        \item effettua la migliore rimozione/addizione.
+        \item decide quando terminare.
+    \end{itemize}
+    La complessità generale è di $\Theta(n^3)$, può essere ridotto a $\Theta(n^2)$ come nell'euristica NI.
+
+    \subsubsection{Efficacia ed efficienza}
+    Un algoritmo euristico costruttivo esegue al massimo $n=|B|$ passi che consistono in:
+    \begin{enumerate}
+        \item la costruzione $\Delta_A^+(x)$
+        \item il calcolo di $\varphi_A(i,x)$ per ogni $i\in\Delta_A^+(x)$
+        \item la selezione dell'elemento $i$ che minimizza $\varphi_A(i,x)$
+        \item l'aggiornamento di $x$ (e strutture dati ausiliarie)
+    \end{enumerate}
+    In generale, la complessità è un polinomio di basso ordine dominato dalle prime due componenti citate.
+    $$T_A(n)\in O\left(n(T_{\Delta_A^+(n)+T_{\varphi_A}(n)})\right)$$
+
+    \subsubsection{Caratteristiche generali degli algoritmi costruttivi}
+    \begin{itemize}
+        \item sono intuitivi.
+        \item sono semplici da progettare, analizzare ed implementare.
+        \item sono molto efficienti.
+        \item hanno un efficacia fortemente variabile:
+              \begin{itemize}
+                  \item su alcuni problemi garantiscono una soluzione ottimale.
+                  \item su altri problemi forniscono una garanzia di approssimazione.
+                  \item sulla maggior parte dei problemi forniscono soluzioni di qualità estremamente variabile,
+                        solitamente scarsa.
+                  \item su alcuni problemi non possono nemmeno garantire una soluzione fattibile.
+              \end{itemize}
+              Perciò risulta fondamentale studiare il problema prima dell'algoritmo.
+    \end{itemize}
+
+    \subsubsection{Quando sono usati gli algoritmi costruttivi}
+    \begin{itemize}
+        \item quando forniscono una soluzione ottimale.
+        \item quando il tempo di esecuzione è molto corto.
+        \item quanto il problema ha una dimensione rilevante o richiede computazioni complesse.
+        \item come componente di altri algoritmi, per esempio come: fase iniziale (algoritmi di scambio),
+              procedura base (algoritmi di ricombinazione).
+    \end{itemize}
+
+    \subsubsection{Euristiche distruttive}
+    Questo è un approccio esattamente complementare all'euristiche costruttive.
+    \begin{itemize}
+        \item si inizia a partire dall'intero ground set: $x^{(0)}:=B$
+        \item si rimuove un elemento per volta:
+              \begin{itemize}
+                  \item in maniera da rimanere nello spazio di ricerca $\mathcal{F}_A$.
+                        $$\Delta_A^+(x)=\{i\in x:x\setminus\{i\}\in\mathcal{F}_A\}$$
+                  \item massimizzando il criterio di selezione $\varphi_A(i,x)$
+              \end{itemize}
+        \item termina con $\Delta_A^+(x)=\emptyset$ (non è possibile rimanere nello spazio di ricerca $\mathcal{F}_A$).
+    \end{itemize}
+    un euristica distruttiva può essere descritta come:
+
+    \begin{algorithm}[H]
+        \caption{Euristica distruttiva - $Stingy(I)$}
+        \begin{algorithmic}
+            \State $x:=B$
+            \State $x*:=B$
+            \If {$x\in X$}
+            \State {$f^*:=f(x)$}
+            \Else
+            \State {$f^*:=+\infty$}
+            \EndIf
+            \While{$\Delta_A^+(x)\neq \emptyset$}
+            \State $i:=arg\underset{i \in \Delta_A^+(x)}{max}\varphi_A(i,x);$
+            \State $x:x\setminus\{i\};$
+            \EndWhile
+            \If {$x\in X\text{ and }f(x)<f^*$}
+            \State $x^*:=x;$
+            \State $f^*:=f(x);$
+            \EndIf
+            \State $Return(x^*,f^*);$
+        \end{algorithmic}
+    \end{algorithm}
+
+    \textit{Perché non sono molto utilizzate?} Quando le soluzioni sono molto più piccole del ground set
+$|x|<<|B|$ un'euristica distruttiva:
+    \begin{itemize}
+        \item richiede un maggior numero di passi.
+        \item è più possibile che effettui una decisione erronea ad uno dei primi step.
+        \item a volte richiede più tempo per calcolare $\Delta_A^+(x)$ e $\varphi_A(i,x)$
+    \end{itemize}
+    Quando una euristica costruttiva restituisce soluzioni ridondanti, è utile accodare una euristica
+    distruttiva al suo termine come fase di post-processing.
+
+    L'euristica distruttiva ausiliaria:
+    \begin{itemize}
+        \item inizia da una soluzione $x$ dell'euristica costruttiva, anziché $B$.
+        \item adotta come spazio di ricerca la regione di fattibilità:
+              $$\mathcal{F}_A=X\implies\Delta_A^+{(x)}=\{i\in x:x\setminus\{i\}\in X\}$$
+        \item adotta come criterio di selezione la funzione obiettivo:
+              $$\varphi_A(i,x)=f(x\setminus\{i\})$$
+        \item termina dopo pochi passi.
+    \end{itemize}
+
+    \paragraph{Euristica Costruttiva/Distruttiva per il SCP}\mbox{}\\
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.7]{images/scp_cd.png}
+    \end{figure}
+    \begin{enumerate}
+        \item L'euristica costruttiva selezione, in ordine, le colonne 1,2,4 e 3.
+        \item La soluzione è ridondante: la colonna 2 può essere rimossa
+        \item L'euristica costruttiva ausiliaria rimuove la colonna 2 e fornisce una soluzione ottimale $x^*=\{1,3,4\}$
+    \end{enumerate}
+
+    \subsubsection{Estensione degli algoritmi costruttivi}
+    Lo schema base degli algoritmi costruttivi può essere potenziato utilizzando:
+    \begin{enumerate}
+        \item un grafo di costruzione più efficace
+              \begin{itemize}
+                  \item aggiungere più di un elemento al corrente sottoinsieme $x$.
+                  \item aggiungere elementi ad $x$, ma anche rimuovere elementi da $x$.
+              \end{itemize}
+        \item utilizzando un criterio di selezione pià sofisticato:
+              \begin{itemize}
+                  \item funzioni \textbf{regret-based}, che stimano le potenziali future perdite associate con
+                        l'elemento $i$.
+                  \item funzioni \textbf{look-ahead}, che stimano il valore finale dell'obiettivo ottenuto
+                        aggiungendo $i$ ad $x$.
+              \end{itemize}
+    \end{enumerate}
+
+    \subsubsection{Euristiche costruttive regret-based}
+    Le decisioni prese nei passi iniziali possono fortemente restringere le scelte fattibili nei passi
+    successivi per via dei vincoli del problema.
+    \begin{itemize}
+        \item BPP: tutti gli oggetti devono essere messi in un container, ma gli assegnamenti
+              iniziali possono rendere non disponibili alcuni container per oggetti successivi.
+        \item TSP: tutti i nodi devono essere visitati, ma le decisioni di esplorazione
+              iniziali possono rendere la visita dei nodi successivi più costosa.
+        \item CMST: tutti i vertici devono essere collegati alla radice attraverso un sotto-albero,
+              ma i collegamenti iniziali potrebbero rendere alcuni sotto-alberi non disponibili per i vertici
+              successivi.
+    \end{itemize}
+
+    il criterio di selezione può tenerne conto implicitamente:
+    \begin{itemize}
+        \item BPP: l'euristica Decreasing First-Fit assegna gli oggetti più grande per prima.
+        \item TSP: l'euristica Fartest Insertion visita i nodi più lontani per prima.
+    \end{itemize}
+    Alcuni criteri di selezione mirano esplicitamente a lasciare insiemi più ampi di
+    buone scelte. Una tipica euristica regret-based consiste in:
+    \begin{itemize}
+        \item partizionare $\Delta_A^+(x)$ in classi disgiunte di scelte
+        \item calcolare un criterio di scelta base per tutte le scelte.
+        \item calcolare per ogni classe la differenza (\textit{regret}) tra la scelta migliore
+              e la seconda scelta migliore (oppure la media delle altre scelte, possibilmente pesata).
+              Questo stima il danno subito rimandando la scelta migliore.
+        \item scegliere la scelta migliore delle classi per la quale il "rimpianto" (criterio regret) è
+              il massimo.
+    \end{itemize}
+    Per esempio, consideriamo il CMSTP ed il ground set $B=V\times T$, tale che ogni elemento sia composto
+    dalla coppie $\langle vertice, sottoalbero \rangle$. Lasciamo che i pesi siano uniformi, quindi
+$w_v=1 \forall v\in V$ e che la capacità sia $W=2$.
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.7]{images/CMSTP_0.png}
+    \end{figure}
+    Lasciamo che lo spazio di ricerca $\mathcal{F}$ includa tutte le soluzioni parziali. L'algoritmo
+    greedy mette il vertice 2 nel sotto-albero 1, il vertice 3 nel sotto-albero; il vertice 4 nel sotto-albero
+    1 e finalmente il vertice 5 nel sotto-albero 2:
+    $$c(x)=1+1+2+100=104$$
+    L'algoritmo regret mette il vertice 2 nel sotto-albero 1, il vertice 3 nel sotto-albero 2; poi:
+
+    \begin{itemize}
+        \item il "rimpianto" del vertice 4 è la differenza $c(4,2)-c(4,1)=4-2=2$
+        \item il "rimpianto" del vertice 5 è la differenza $c(5,2)-c(5,1)=100-3=97$
+    \end{itemize}
+    L'algoritmo mette il vertice 5 nel sotto-albero 1 ed in fine il vertice 4 nel sotto-albero 2:
+    $$c(x)=1+3+1+4=9$$
+
+    \subsubsection{Euristica costruttiva roll-out}
+    Tale euristica costruttiva è anche conosciuta con il nome di \textbf{single-step look-ahead}, e
+    fu proposta da Bertsekas e Tsitsiklis (1997).
+
+    Da un'euristica costruttiva base $A$:
+    \begin{itemize}
+        \item si inizia con un insieme vuoto $x^{(0)}=\emptyset$
+        \item ad ogni passo $t$
+              \begin{itemize}
+                  \item si estende il sottoinsieme in una maniera fattibile: $x^{(t-1)}\cup\{i\},\forall i\in\Delta_A^+(x)$
+                  \item applicare l'euristica base ad ogni sottoinsieme esteso e calcolare la soluzione risultante
+                        $x_A(x^{(t-1)}\cup\{i\})$
+                  \item utilizzare il valore della soluzione come criterio di selezione per scegliere $i^{(t)}$
+                        $$\varphi_A(i,x)=f(x_A(x^{(t-1)}\cup\{i\}))$$
+              \end{itemize}
+        \item terminare quando $\Delta_A^+(x)$ è vuoto.
+    \end{itemize}
+    \textit{prova ogni mossa possibile, controlla il risultato (look-ahead), torna indietro e scegli la mossa}.
+    Il risultato dell'euristica di roll-out domina quello dell'euristica base. La complessità
+    rimane polinomiale, ma è molto più grande: nel casto peggiore $T_{roA}=|B|^2 T_A$
+
+Consideriamo il seguente esempio:
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{images/scp_ro.png}
+\end{figure}
+
+\begin{enumerate}
+    \item si inizia con il sottoinsieme vuoto: $x^{(0)}=\emptyset$
+    \item per ogni colonna $i$, applicare l'euristica costruttiva iniziando dal
+          sottoinsieme $x^{(0)}\cup\{i\}=\{i\}$
+          \begin{itemize}
+              \item per $i=1$, otteniamo $x_A(\{1\})=\{1\}$ di costo $f_A(\{1\})=25$
+              \item per $i=2$, otteniamo $x_A(\{2\})=\{2,3,5,4\}$ di costo $f_A(\{2\})=50$
+              \item per $i=3$, otteniamo $x_A(\{3\})=\{3,2,5,4\}$ di costo $f_A(\{3\})=50$
+              \item per $i=4$, otteniamo $x_A(\{4\})=\{4,2,5\}$ di costo $f_A(\{4\})=43$
+              \item per $i=5$, otteniamo $x_A(\{5\})=\{5,2,3,4\}$ di costo $f_A(\{5\})=50$
+          \end{itemize}
+    \item la migliore soluzione è la prima, quindi $i^{(1)}=1$
+    \item tutte le righe sono coperte: l'algoritmo termina.
+\end{enumerate}
+
+\paragraph{Euristica roll-out generalizzata}\mbox{}\\
+Lo schema può essere generalizzato:
 \begin{itemize}
-    \item seleziona il nodo più vicino in $O(n)$.
-    \item crea due nuove inserzioni per ogni nodo esterno, la migliore delle quali possibilmente migliore il valore
-          salvato nel vettore; ognuno dei $O(n)$ miglioramenti si prende $O(1)$ tempo.
+    \item applicare diverse euristiche base $A^{[1]},\dots , A^{[l]}$
+    \item incrementare il numero di passi look-ahead, ovvero usare $x^{(t-1)}\cup B^+$ con $|B^+|>1$
 \end{itemize}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Il risultato migliora e la complessità peggiora ulteriormente. Lo schema generale non
+cambia significativamente:
+\begin{itemize}
+    \item si inizia dall'insieme vuoto: $x^{0}=\emptyset$
+    \item ad ogni passo $t$
+          \begin{itemize}
+              \item per ogni possibile estensione $B^+\in\Delta_A^+(x^{(t-1)})$
+                    si applica ogni algoritmo base $A^{[l]}$ iniziando da $x^{(t-1)}\cup B^+$
+              \item il criterio di selezione è $min_l\; f_{A^{[l]}}(x^{(t-1)}\cup B^+)$
+              \item si utilizza il valore della soluzione migliore come criterio di selezione per $i^{(t)}$
+                    $$\varphi_A(i,x)=\underset{I=1,\dots,l}{f(x_A(x^{(t-1)}\cup\{i\}))}$$
+          \end{itemize}
+    \item quando $\Delta_A^+(x)$ è vuoto, termina.
+\end{itemize}
 
 
 
