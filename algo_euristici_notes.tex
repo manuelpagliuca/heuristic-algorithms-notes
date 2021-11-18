@@ -2,6 +2,7 @@
 \usepackage{newunicodechar}
 \usepackage[OT1]{fontenc}
 \usepackage{mathpazo}
+
 \usepackage[italian]{babel}
 \usepackage{caption}
 \usepackage[dvipsnames]{xcolor}
@@ -4233,6 +4234,261 @@ cambia significativamente:
           \end{itemize}
     \item quando $\Delta_A^+(x)$ è vuoto, termina.
 \end{itemize}
+
+\subsection{Metaeuristiche costruttive}
+Gli algoritmi costruttivi hanno forti limitazioni su molti problemi, \textit{cosa si può fare senza abbandonare
+lo schema generale?} Si può iterare lo schema generale per generare potenzialmente molte soluzioni
+diverse:
+\begin{itemize}
+    \item \textbf{l'efficienza diminuisce}: i tempi computazionali vengono sommati.
+    \item \textbf{l'efficacia aumenta}: la migliore soluzione viene restituita.
+\end{itemize}
+Quini il \textit{trade-off} deve essere attentamente impostato (in base al tempo computazionale e spaziale
+disponibile). Questo schema iterato si chiama \textbf{multi-start}, che come abbiamo detto applica
+differenti algoritmi ad ogni iterazione $I=1,\dots,l$ (questo richiede di definire molteplici
+$\mathcal{F}_{A_I}$ e $\varphi_{A_I}$).
+Il caso più semplice di metaeuristica che potrebbe anche non essere classificato come metaeuristica
+è quello precedentemente descritto ("meta" dal greco, "andare oltre").
+Tuttavia, risulta più flessibile applicare metaeuristiche che sfruttano:
+\begin{itemize}
+    \item \textbf{randomizzazione}, ovvero operazioni basate su un seme casuale (pseudo), come nel
+    caso degli algoritmi semi-greedy, \textit{GRASP} e \textit{Ant System}.
+    \item \textbf{memoria}, ovvero operazioni basate sulle soluzioni delle precedenti iterazioni,
+    come nel caso del \textit{ART}, \textit{meccanismo di perturbazione dei costi} ed \textit{Ant System}.
+\end{itemize}
+
+\subsubsection{Condizione di terminazione}
+Prima di considerare l'approccio \textbf{multi-start}, parliamo della condizione di terminazione di quest'ultimo.
+Lo schema iterato può essere considerato idealmente infinito. In, pratica si possono utilizzare
+condizioni di terminazione \textbf{assolute} o \textbf{relative}. Le prime:
+\begin{enumerate}
+    \item un dato numero totale di esplorazioni del vicinato o un dato numero di ripetizioni della ricerca
+    locale.
+    \item un dato tempo totale di esecuzione.
+    \item un dato valore del'obiettivo.
+    \item un dato miglioramento dell'obiettivo rispetto alla soluzione di partenza o alla "relativa"
+    condizione di terminazione.
+\end{enumerate}
+Condizione di terminazione relative:
+\begin{enumerate}
+    \item un dato numero di esplorazioni del vicinato o di ripetizioni dopo l'ultimo miglioramento di
+    $f^*$.
+    \item un dato tempo di esecuzione dopo l'ultimo miglioramento
+    \item un dato valore minimo del rapporto tra miglioramento della funzione obiettivo e numero di
+    esplorazioni o tempo d'esecuzione.
+\end{enumerate}
+
+\subsubsection{Multi-start}
+Il multi-start (o \textbf{restart}) è un approccio molto semplice e naturale:
+\begin{itemize}
+    \item definisce differenti spazi di ricerca $\mathcal{F}_{A^{[I]}}$ ed il criterio
+    di selezione $\varphi_{A^{[I]}}(i,x)$
+    \item applico ogni algoritmo risultante $A^{{l}}$ per ottenere la relativa soluzione $x^{[I]}$
+    \item restituisco la soluzione migliore $x= arg\;\underset{I=1,\dots,l}{min}f\left(x^{[I]}\right)$
+\end{itemize}
+un caso tipico è quello di regolare $\varphi_A(i,x)$ con parametri numeri $\mu$. Il grafo di costruzione
+può modellare questa situazione con:
+\begin{itemize}
+    \item includendo tutti i nodi e archi ammessi da almeno un algoritmo $A^{[I]}$
+    $$\mathcal{F}_A=\bigcup_{I=1}^l \mathcal{F}_A^{[l]}$$
+    \item impostare il peso degli archi dipendendo su $I:\varphi_A(i,x,I)=\varphi_A^{[I]}(i,x)$
+    \item impostare un peso infinito sugli archi che sono proibiti in un algoritmo specifico
+    $A^{[I]}:\varphi_A(i,x,I)=+\infty$
+\end{itemize}
+
+\paragraph{Esempio}\mbox{}\\
+Un intera famiglia di euristiche per il TSP può essere ottenuta impostando:
+\begin{itemize}
+    \item il criterio di inserzione:
+    $$i^*_k=arg\;\underset{i\in\{1,\dots,|x|\}}{min}\gamma:{i,k}=\mu_1(c_{s_i,k}+c_{k,s_{i+1}})-(1-\mu_1)c_{s_i,s_{i+1}}$$
+    dove $\mu_1\in[0;1]$ regola la relativa forza:
+    \begin{itemize}
+        \item dell'incremento in costo dato dall'aggiunta del nodo $k$.
+        \item del decremento in costo dato dalla rimozione dell'arco $(s_i, s_i+1)$
+    \end{itemize}
+    \item il criterio di selezione:
+    $$k^* = arg\;\underset{k\in N\setminus N_x}{\varphi_A(k,x)}= \mu_2 d(x,k)-\mu_3 d(x,k)+(1-\mu_2-\mu_3)\gamma_{i^*_k,k}$$
+    dove $\mu_2,\mu_3\in[0;1]$ regola la relativa forze (ed il segno):
+    \begin{itemize}
+        \item della distanza del nodo $k$ aggiunto rispetto al ciclo corrente $x$.
+        \item dell'incremento in costo dato dall'aggiunta del nodo $k$.
+    \end{itemize}
+\end{itemize}
+per ottenere CI per $\mu={1/2,0,0}$, NI per $\mu={1/2,1,0}$, FI per $\mu=(1/2,0,1)$
+
+\subsubsection{Principali metaeuristiche costruttive}
+\begin{enumerate}
+    \item \textbf{Tecnica della ricerca adattiva} (\textit{Adaptive Research Technique}, ART o Tabu Greedy):
+    vieta alcune mosse in base alle soluzioni delle precedenti iterazioni
+    $$\underset{i:x\cup\{i\}\in\mathcal{F}^{[I]}}{min}\varphi_A(i,x)$$
+    con $\mathcal{F}^{[I]}=\mathcal{F}^{[I]}\left(x_A^{[1]},\dots, x_A^{[I-1]}\right)\subseteq\mathcal{F}$
+    \\(\textit{molto meno popolare degli altri due}).
+    \item \textbf{semigreedy} e \textbf{GRASP}: utilizzano un criterio di selezione randomizzato
+    $$\underset{i:x\cup\{i\}\in\mathcal{F}^{[I]}}{min}\varphi_A\left(i,x,\omega^{[I]}\right)$$
+
+    \item \textbf{Ant System} (AS): utilizzando un criterio di selezione randomizzato che dipende
+    dalle soluzioni delle precedenti iterazioni
+    $$\underset{i:x\cup\{i\}\in\mathcal{F}^{[I]}}{min}\varphi_A\left(i,x,\omega^{[I]},x_A^{[1]},\dots,x_A^{I-1}\right)$$
+
+\end{enumerate}
+le nuove informazioni su gli archi del grafo di costruzione guidano la ricerca. L'ART utilizza la memoria,
+il GRASP utilizza la randomizzazione, l'AS utilizza entrambi.
+
+\subsubsection{Adaptive Research Techinique}
+L'ART fu proposto da Patterson nel 1998 per il CMSTP. Quando nei primi passi sono introdotti
+elementi ingannevolmente buoni (falsi positivi), la soluzione finale può essere molto brutta.
+Per evitare questo:
+\begin{itemize}
+    \item l'approccio roll-out effettua un look-ahead su ogni possibile elemento
+    (ma un singolo passo piò essere insufficiente per individuare diversi elementi ingannevoli).
+    \item l'ART nega alcuni elementi di guidare il sottoinsieme $x$ sul giusto percorso nello
+    spazio di ricerca.
+\end{itemize}
+\textit{Come identificare gli elementi ingannevoli?} L'obiettivo è la diversificazione: vietare
+elementi delle soluzioni precedenti garantisce di ottenere soluzioni diverse. Le proibizioni
+sono temporanee, con un tempo di scadenza di $L$ iterazioni; altrimenti, costruire soluzioni
+fattibili diventerebbe impossibile.
+
+\paragraph{Algoritmo}\mbox{}\\
+Sia definita una euristica costruttiva base $A$. Sia $T_i$ l'iterazione di proibizione per ogni
+elemento $i\in B$ e $x^*$ sia la soluzione migliore. Impostare $T_i=-\infty\;\forall i \in B$ per
+indicare che nessuno elemento è vietato.
+Ad ogni iterazione $I\in\{1,\dots,l\}$
+\begin{enumerate}
+    \item applicare l'euristica $A$ vietando tutti gli elementi $i$ tali che $I\leq T_i+L$
+    (tutte le proibizioni pià vecchie di $L$ scaderanno automaticamente); lasciamo che $x^{[I]}$
+    sia la soluzione risultante.
+    \item se $x^{[I]}$ è migliore di $x^*$, impostiamo $x^*:=x^{[I]}$ e salva
+    $T_i-I\;\forall i\in B$
+    \item decidere quale elemento vietare ed impostare $T_i=I$ per loro: ogni elemento
+    è vietato con una probabilità $\pi$
+    \item fare minori aggiustamenti ad $L,\pi$ o $T_i$.
+\end{enumerate}
+al termine, restituire $x^*$.
+\paragraph{Esempio, ART per SCP}\mbox{}\\
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/ART_SCP.png}
+\end{figure}
+
+\begin{itemize}
+    \item l'euristica base trova la soluzione $x^{[1]}=\{2,3,5,4\}$ di costo $f\left(x^{[1]}\right)=50$;
+    vietiamo (casualmente) la colonna 2.
+    \item l'euristica base trova la soluzione $x^{[2]}=\{3,1\}$ di costo $f\left(x^{[2]}\right)=33$;
+    vietiamo (casualmente) la colonna 3.
+    \item l'euristica base trova la soluzione $x^{[3]}=\{1\}$ di coso $f\left(x^{[2]}\right)=25$,
+    la quale è una soluzione ottima.
+\end{itemize}
+\textit{Nel caso di un esecuzione sfortunata al secondo step si potrebbe vietare la colonna 1.}
+
+\paragraph{Intensificazione}\mbox{}\\
+L'ART ha tre parametri base:
+\begin{itemize}
+    \item il numero totale di iterazioni $\ell$.
+    \item la lunghezza $L$ della \textit{proibizione}.
+    \item la probabilità $\pi$ della \textit{proibizione}.
+\end{itemize}
+Un eccessiva diversificazione può nascondere la scoperta dell'ottimo, l'\textbf{intensificazione}
+mira a concentrare la ricerca sui sottoinsiemi più promettenti. La diversificazione e intensificazione
+giocano ruoli complementari.
+L'intensificazione può essere ottenuta regolando i parametri in base:
+\begin{itemize}
+    \item i dati del problema: assegnando a gli elementi pià promettenti (quelli che costano meno)
+    \begin{itemize}
+        \item una probabilità $\pi$ più piccola di essere evitato.
+        \item un tempo di scadenza $L_i$ pià corto della proibizione.
+    \end{itemize}
+    \item memoria: per gli elementi promettenti (quelli che appaiono nelle soluzione meglio conosciute)
+    \begin{itemize}
+        \item riducendo $L_i$ (se $L_i=0$, $i$ non è mai vietato).
+        \item periodicamente riavviare l'algoritmo con i valori $T_i -I$ associati con la migliore
+        soluzione nota, anziché $T_i=-\infty$.
+    \end{itemize}
+\end{itemize}
+
+\textit{Come assegnare dei valori efficaci ai parametri?} Il confronto sperimentale di valori diversi
+è necessario ma complesso.
+\begin{enumerate}
+    \item richiede lunghe campagne di sperimentazione, perché il numero di configurazioni
+    cresce combinatoriamente con il numero di parametri ed il numero di valori testati per ogni
+    parametro.
+    \item si rischia il \textit{sovradattamento} (\textit{overfitting}), che consiste ell'etichettare
+    come valori assolutamente "buoni" dei valori che sono buoni effettivamente solo su istanze del benchmark.
+\end{enumerate}
+
+Questo eccesso di parametri è un aspetto indesiderabile, e spesso si rivela uno studio insufficiente del
+problema e dell'algoritmo.
+
+\subsubsection{Semi-greedy heuristics}
+Un algoritmo costruttivo non esatto ha almeno un passo $t$ che costruisce un sottoinsieme
+$x^{(t)}$ non incluso in alcuna soluzione ottimale. Visto che l'elemento selezionato è il migliore
+in accordo con il criterio di selezione
+$$i^*=arg\;\underset{i\in\Delta_A^+(x)}{min}\;\varphi_A(i,x)$$
+necessariamente $\varphi_A(i,x)$ è incorretto, ma probabilmente non completamente sbagliato.
+L'algoritmo semi-greedy (Hart e Shogan, 1987) assume che gli elementi che portano all'ottimo sono molto
+buoni per $\varphi_A(i,x)$, anche se non strettamente i migliori.
+
+Se non è possibile ridefinire $\varphi_A(i,x)$:
+\begin{itemize}
+    \item definire una probabilità di distribuzione adatta su $\Delta_A^+(x)$ che favorisce
+    gli elementi con i migliori valori di $\varphi_A(i,x)$
+    \item selezionare $i^*(\omega)$ in accordo alla funzione di distribuzione.
+\end{itemize}
+Visto che l'insieme di possibili alternative è finito, questo significa assegnare:
+\begin{itemize}
+    \item una probabilità $\pi_A(i,x)$ all'arco $(x,x\cup\{i\})$ del grafo di costruzione (con una
+    somma uguale ad 1 per gli archi uscenti da ogni nodo)
+    $$\sum_{i\in\Delta_A^+(x)}\pi_A(i,x)=1\;\forall x\in\mathcal{F}_A:\Delta_A^+(x)\neq\emptyset$$
+    \item alte probabilità agli elementi migliori per il criterio di selezione
+    $$\varphi_A(i,x)\leq\varphi_A(j,x)\Leftrightarrow\pi_A(i,x)\geq\pi_A(j,x)$$
+    per ogni $i,j\in\Delta_A^+(x),x\in\mathcal{F}_A$
+\end{itemize}
+
+Questo approccio euristico ha delle proprietà importanti:
+\begin{itemize}
+    \item può raggiungere una soluzione ottima se è presente un cammino da $\emptyset$ a $X^*$
+    \item può essere riapplicato diverse volte ottenendo delle soluzioni differenti e la probabilità
+    di raggiungere la soluzione ottima cresce gradualmente.
+
+\end{itemize}
+\paragraph{Convergenza verso l'ottimo}\mbox{}\\
+La probabilità di:
+\begin{itemize}
+    \item seguire il cammino $\gamma$ è il prodotto delle probabilità su gli archi
+    $$\prod_{(y,y\cup\{i\}\in\gamma)}\pi_A(i,y)$$
+    \item ottenere una soluzione $x$ corrisponde alla sommatoria dei cammini $\Gamma_x$ che raggiungono
+    $x$
+    $$\sum_{gamma\in\Gamma_x}\prod_{(y,y\cup\{i\}\in\gamma)}\pi_A(i,y)$$
+\end{itemize}
+Questo implica che la probabilità di raggiungere l'ottimo:
+\begin{enumerate}
+    \item non è zero se e solo se esiste un percorso con una probabilità non zero da $\emptyset$ a $X^*$.
+    \item incrementa per $\ell\rightarrow +\infty$ (la probabilità di non raggiungerlo decrementa
+    gradualmente).
+\end{enumerate}
+\paragraph{Convergenze all'ottimo}
+
+\subsubsection{Semi-greedy e GRASP}
+\subsubsection{Algoritmo semi-greedy reattivo}
+\subsubsection{Metodi di perturbazione dei costi}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
