@@ -2832,1366 +2832,1366 @@ in due casi la differenza è $0$$W^+-W^-=(1+2)-3=3-(1+2)=0$.
 
     Lo spazio di ricerca è definito come la collezione di tutti i sottoinsiemi $x\subseteq B$ accettabili
     per l'algoritmo $A$.
-    $$\mathcal{F}_A\subseteq 2^B$$
-    Ogni \textit{nodo} è un sottoinsieme ed alcuni saranno le soluzioni mentre altri no. Siamo interessati nei
-    sottoinsiemi che sono accettabili ed utili. Gli \textit{archi} connettono coppie di nodi,
-    l'arco in se è la collezione di tutte le coppie $(x,x\cup\{i\})$ tali che
+$$\mathcal{F}_A\subseteq 2^B$$
+Ogni \textit{nodo} è un sottoinsieme ed alcuni saranno le soluzioni mentre altri no. Siamo interessati nei
+sottoinsiemi che sono accettabili ed utili. Gli \textit{archi} connettono coppie di nodi,
+l'arco in se è la collezione di tutte le coppie $(x,x\cup\{i\})$ tali che
 $x\in \mathcal{F}_A ,i\in B\setminus x$ e $x\cup\{i\}\in \mathcal{F}_A$. Quindi, gli archi connettono
-    un sottoinsieme della soluzione ad un sottoinsieme leggermente più grande che rappresenta l'estensione
-    di un sottoinsieme ancora accettabile che include un nuovo elemento.
-    \begin{figure}[H]
-        \centering
-        \includegraphics[scale=0.6]{images/cons_graph.png}
-        \caption{Il grafo di costruzione visita una sequenza di sotto insiemi che porta alla soluzione ottima}
-    \end{figure}
-    Questo grafo è un \textbf{DAG} (\textit{Directed Acyclic Graph}). Ogni possibile esecuzione di
+un sottoinsieme della soluzione ad un sottoinsieme leggermente più grande che rappresenta l'estensione
+di un sottoinsieme ancora accettabile che include un nuovo elemento.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.6]{images/cons_graph.png}
+    \caption{Il grafo di costruzione visita una sequenza di sotto insiemi che porta alla soluzione ottima}
+\end{figure}
+Questo grafo è un \textbf{DAG} (\textit{Directed Acyclic Graph}). Ogni possibile esecuzione di
 $A$ è un \textbf{percorso massimo} del grafo di costruzione (contando sia il sottoinsieme
-    vuoto che un sottoinsieme la cui estensione non può essere accettata).
+vuoto che un sottoinsieme la cui estensione non può essere accettata).
 
-    Il rettangolo del grafo di costruzione rappresenta le $2^B$, ovvero tutti i possibili
-    sottoinsiemi del ground set $B$. Questa collezione di sottoinsiemi
-    è partizione in classi che dipendono dalla loro cardinalità, quindi la prima classe (quella
-    più a sinistra) contiene solamente un possibile sottoinsieme, ovvero quello contenente l'insieme
-    vuoto $\emptyset$ (contenente tutti i sottoinsiemi di $0$ elementi). Nella seconda classe
-    dei sottoinsiemi possibili si trovano gli elementi singoli, poi le coppie, ecc. Sono
-    presenti $n+1$ classi che vanno da cardinalità $0$ fino a $n$. All'interno dell'insieme
-    potenza (o dei sottoinsiemi possibili), è presente lo spazio di ricerca degli algoritmi $\mathcal{F}_A$,
-    il quale contiene alcuni sottoinsiemi che sono considerati \textit{"utili"} per l'algoritmo: in
-    particolare contiene l'insieme vuoto (l'algoritmo parte da quello), e altri insiemi che ha senso
-    tenere conto.
+Il rettangolo del grafo di costruzione rappresenta le $2^B$, ovvero tutti i possibili
+sottoinsiemi del ground set $B$. Questa collezione di sottoinsiemi
+è partizione in classi che dipendono dalla loro cardinalità, quindi la prima classe (quella
+più a sinistra) contiene solamente un possibile sottoinsieme, ovvero quello contenente l'insieme
+vuoto $\emptyset$ (contenente tutti i sottoinsiemi di $0$ elementi). Nella seconda classe
+dei sottoinsiemi possibili si trovano gli elementi singoli, poi le coppie, ecc. Sono
+presenti $n+1$ classi che vanno da cardinalità $0$ fino a $n$. All'interno dell'insieme
+potenza (o dei sottoinsiemi possibili), è presente lo spazio di ricerca degli algoritmi $\mathcal{F}_A$,
+il quale contiene alcuni sottoinsiemi che sono considerati \textit{"utili"} per l'algoritmo: in
+particolare contiene l'insieme vuoto (l'algoritmo parte da quello), e altri insiemi che ha senso
+tenere conto.
 
-    Solitamente sottoinsiemi che sono al di fuori dello spazio di ricerca sono quelli che non hanno senso di
-    essere fissati, visto che non sono fattibili o perché non sono particolarmente "interessanti" ed
-    ogni altro sottoinsieme che non può essere raggiunto da $\mathcal{F}_A$ non è rilevante. Come prima
-    l'insieme delle soluzioni fattibili viene denotato con $X$, e l'insieme delle soluzioni ottime $X^*$.
+Solitamente sottoinsiemi che sono al di fuori dello spazio di ricerca sono quelli che non hanno senso di
+essere fissati, visto che non sono fattibili o perché non sono particolarmente "interessanti" ed
+ogni altro sottoinsieme che non può essere raggiunto da $\mathcal{F}_A$ non è rilevante. Come prima
+l'insieme delle soluzioni fattibili viene denotato con $X$, e l'insieme delle soluzioni ottime $X^*$.
 
-    Nell spazio di ricerca è presente un insieme di archi che connettono coppie di nodi, il secondo nodo
-    della coppia corrisponde al primo sottoinsieme della coppia più un certo elemento.
+Nell spazio di ricerca è presente un insieme di archi che connettono coppie di nodi, il secondo nodo
+della coppia corrisponde al primo sottoinsieme della coppia più un certo elemento.
 
-    Come è possibile vedere dalle figure partire dal sottoinsieme vuoto è una soluzione accettabile,
-    le soluzioni non \textit{accettabili} si trovano al di fuori dello spazio di ricerca, e di fatti
-    non sono presenti archi che vanno al di fuori di questo. Quindi, ogni esecuzione di un algoritmo è un
-    percorso massimo all'interno del grafo di costruzione, che parte dal sottoinsieme vuoto e raggiunge
-    una soluzione, la quale idealmente dovrebbe essere ottimale o almeno fattibile. Nel caso ottimale,
-    il percorso termina quando incontra una soluzione ottima, questo è il caso degli
-    algoritmi di Dijkstra, Prim, Kruskal.
-    \begin{figure}[H]
-        \centering
-        \includegraphics[scale=0.8]{images/cons_graph_1.png}
-        \caption{Il grafo di costruzione visita una sequenza di sotto insiemi che porta ad una soluzione
-            fattibile ma non ottimale}
-    \end{figure}
+Come è possibile vedere dalle figure partire dal sottoinsieme vuoto è una soluzione accettabile,
+le soluzioni non \textit{accettabili} si trovano al di fuori dello spazio di ricerca, e di fatti
+non sono presenti archi che vanno al di fuori di questo. Quindi, ogni esecuzione di un algoritmo è un
+percorso massimo all'interno del grafo di costruzione, che parte dal sottoinsieme vuoto e raggiunge
+una soluzione, la quale idealmente dovrebbe essere ottimale o almeno fattibile. Nel caso ottimale,
+il percorso termina quando incontra una soluzione ottima, questo è il caso degli
+algoritmi di Dijkstra, Prim, Kruskal.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.8]{images/cons_graph_1.png}
+    \caption{Il grafo di costruzione visita una sequenza di sotto insiemi che porta ad una soluzione
+        fattibile ma non ottimale}
+\end{figure}
 
-    Negli altri casi, come nella figura sovrastante, il percorso potrebbe non terminare in una soluzione
-    ottima ma fattibile $x\in X$, questo è il caso degli algoritmi euristici come quelli usati per
-    KP e MDP.
-    \begin{figure}[H]
-        \centering
-        \includegraphics[scale=0.8]{images/cons_graph_2.png}
-        \caption{Il grafo di costruzione visita una sequenza di sotto insiemi che porta ad una soluzione non fattibile}
-    \end{figure}
-    Il percorso potrebbe terminare in una soluzione non fattibile $x\notin X$ (ma accettabile poiché presente
-    nello spazio di ricerca), come per esempio il TSP su un grafo non completo.
+Negli altri casi, come nella figura sovrastante, il percorso potrebbe non terminare in una soluzione
+ottima ma fattibile $x\in X$, questo è il caso degli algoritmi euristici come quelli usati per
+KP e MDP.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.8]{images/cons_graph_2.png}
+    \caption{Il grafo di costruzione visita una sequenza di sotto insiemi che porta ad una soluzione non fattibile}
+\end{figure}
+Il percorso potrebbe terminare in una soluzione non fattibile $x\notin X$ (ma accettabile poiché presente
+nello spazio di ricerca), come per esempio il TSP su un grafo non completo.
 
-    \paragraph{Esempio di costruzione di grafi}\mbox{}\\
-    Un esempio di grafo di costruzione è quello per il TSP per trovare il Nearest-Neighbour in
-    un grafo completo. L'idea è quella di iniziare con un insieme di archi vuoto, quindi $x^{(0)}=\emptyset$,
-    e sono presenti $n-1$ archi uscenti.
+\paragraph{Esempio di costruzione di grafi}\mbox{}\\
+Un esempio di grafo di costruzione è quello per il TSP per trovare il Nearest-Neighbour in
+un grafo completo. L'idea è quella di iniziare con un insieme di archi vuoto, quindi $x^{(0)}=\emptyset$,
+e sono presenti $n-1$ archi uscenti.
 
-    La costruzione del grafo sarà un albero con $n-1$ archi e $n$ nodi; il numero di percorsi dall'insieme
-    vuoto alle foglie sarà esattamente $(n-1)!$, questo è il numero delle possibili esecuzioni
-    dell'algoritmo.
+La costruzione del grafo sarà un albero con $n-1$ archi e $n$ nodi; il numero di percorsi dall'insieme
+vuoto alle foglie sarà esattamente $(n-1)!$, questo è il numero delle possibili esecuzioni
+dell'algoritmo.
 
-    \paragraph{Proprietà dello spazio di ricerca}\mbox{}\\
-    \begin{itemize}
-        \item Include l'insieme vuoto $\emptyset\in\mathcal{F}_A$, visto che ogni algoritmo generalmente
-              inizia da quello.
+\paragraph{Proprietà dello spazio di ricerca}\mbox{}\\
+\begin{itemize}
+    \item Include l'insieme vuoto $\emptyset\in\mathcal{F}_A$, visto che ogni algoritmo generalmente
+          inizia da quello.
 
-        \item In generale include l'insieme delle soluzioni fattibili $X\subseteq\mathcal{F}_A$, a volte
-              alcune soluzioni possono essere rimosse da esso nel caso in cui risultino ovviamente non ottimali:
-              per esempio l'SCP dove inizia con un insieme vuoto di colonne ogni colonna è a aggiunta, in un
-              dato punto la soluzione fattibile viene raggiunta ma non ha senso aggiungere
-              altre colonne perché i nuovi sottoinsiemi saranno fattibili ma anche più costosi.
+    \item In generale include l'insieme delle soluzioni fattibili $X\subseteq\mathcal{F}_A$, a volte
+          alcune soluzioni possono essere rimosse da esso nel caso in cui risultino ovviamente non ottimali:
+          per esempio l'SCP dove inizia con un insieme vuoto di colonne ogni colonna è a aggiunta, in un
+          dato punto la soluzione fattibile viene raggiunta ma non ha senso aggiungere
+          altre colonne perché i nuovi sottoinsiemi saranno fattibili ma anche più costosi.
 
-        \item I sottoinsiemi di $\mathcal{F}_A$ devono essere raggiungibili dal punto di partenza,
-              altrimenti non avrebbe senso aggiungere una soluzione che non è raggiungibile dall'inizio. Un
-              insieme candidato è la collezione delle \textbf{soluzioni parziali}, che sono le soluzioni
-              generalmente non fattibili ma sono sottoinsiemi di soluzioni fattibili. Seguire una soluzione
-              parziale fornisce almeno un percorso per una soluzione fattibile $\in X$.
+    \item I sottoinsiemi di $\mathcal{F}_A$ devono essere raggiungibili dal punto di partenza,
+          altrimenti non avrebbe senso aggiungere una soluzione che non è raggiungibile dall'inizio. Un
+          insieme candidato è la collezione delle \textbf{soluzioni parziali}, che sono le soluzioni
+          generalmente non fattibili ma sono sottoinsiemi di soluzioni fattibili. Seguire una soluzione
+          parziale fornisce almeno un percorso per una soluzione fattibile $\in X$.
 
-    \end{itemize}
-    \paragraph{Esempi di spazi di ricerca}\mbox{}\\
-    Lo spazio di ricerca potrebbe include tutte le soluzioni fattibili tali che:
-    $$\mathcal{F}_A\equiv X$$
-    come nel KP; potrebbe includere tutte le soluzioni parziali e tutte le soluzioni fattibili, tale che:
-    $$\mathcal{F}_A\equiv \bigcup_{x\in X} 2^x$$
-    per esempio nel MDP, nel quale non solo i sottoinsiemi dei $k$ punti sono considerati ma anche
-    quelli più piccoli o nell'algoritmo di Kruskal; lo spazio di ricerca potrebbe includere solo
-    alcune soluzioni parziali:
-    $$\mathcal{F}_A\subset \bigcup_{x\in X} 2^x$$
-    un esempio di questo è l'algoritmo di PRim per MSP, il quale non consider tutte le soluzioni
-    parziali ma considera un albero che è in aumento rimanendo connesso finché non diventa ricoprente.
-    Le soluzioni possono essere definite come uno speciale sottoinsieme non sufficiente per garantire
-    la fattibilità:
-    $$ U_{x\in X}2^x \mathcal{F}_A$$
-    un esempio di questo è il TSP, dove $\mathcal{F}_a$ può essere definito su tutti i
-    sottoinsiemi di archi che non includono diramazioni o sotto percorsi, non può
-    essere definito come "tutti i sottoinsiemi che fanno parte delle soluzioni fattibili"
-    visto che è un problema di decisione NP-completo.
+\end{itemize}
+\paragraph{Esempi di spazi di ricerca}\mbox{}\\
+Lo spazio di ricerca potrebbe include tutte le soluzioni fattibili tali che:
+$$\mathcal{F}_A\equiv X$$
+come nel KP; potrebbe includere tutte le soluzioni parziali e tutte le soluzioni fattibili, tale che:
+$$\mathcal{F}_A\equiv \bigcup_{x\in X} 2^x$$
+per esempio nel MDP, nel quale non solo i sottoinsiemi dei $k$ punti sono considerati ma anche
+quelli più piccoli o nell'algoritmo di Kruskal; lo spazio di ricerca potrebbe includere solo
+alcune soluzioni parziali:
+$$\mathcal{F}_A\subset \bigcup_{x\in X} 2^x$$
+un esempio di questo è l'algoritmo di PRim per MSP, il quale non consider tutte le soluzioni
+parziali ma considera un albero che è in aumento rimanendo connesso finché non diventa ricoprente.
+Le soluzioni possono essere definite come uno speciale sottoinsieme non sufficiente per garantire
+la fattibilità:
+$$ U_{x\in X}2^x \mathcal{F}_A$$
+un esempio di questo è il TSP, dove $\mathcal{F}_a$ può essere definito su tutti i
+sottoinsiemi di archi che non includono diramazioni o sotto percorsi, non può
+essere definito come "tutti i sottoinsiemi che fanno parte delle soluzioni fattibili"
+visto che è un problema di decisione NP-completo.
 
-    \subsection{Condizione di terminazione}
-    Un euristica costruttiva $A$ termina in due casi. Quando il sottoinsieme corrente $x^{t}$
-    non può essere esteso senza che lasci lo spazio di ricerca $\mathcal{F}_A$ :
-    $$x^{(t)}\cup\{i\}\notin\mathcal{F}_A\text{   }\forall i\in B\setminus x^{(t)}$$
-    o in maniera pressoché equivalente, non ha un arco uscente:
-    $$\Delta_A^+(x^{(t)})=\{i\in B\setminus x^{(t)}:x^{(t)}\cup\{i\}\in\mathcal{F}_A\}$$
+\subsection{Condizione di terminazione}
+Un euristica costruttiva $A$ termina in due casi. Quando il sottoinsieme corrente $x^{t}$
+non può essere esteso senza che lasci lo spazio di ricerca $\mathcal{F}_A$ :
+$$x^{(t)}\cup\{i\}\notin\mathcal{F}_A\text{   }\forall i\in B\setminus x^{(t)}$$
+o in maniera pressoché equivalente, non ha un arco uscente:
+$$\Delta_A^+(x^{(t)})=\{i\in B\setminus x^{(t)}:x^{(t)}\cup\{i\}\in\mathcal{F}_A\}$$
 
-    Sono possibili differenti comportamenti:
-    \begin{itemize}
-        \item Talvolta tutti i sottoinsiemi visitati sono fattibili (es. KP).
-        \item Di solito l'ultimo sottoinsieme è l'unica soluzione fattibile.
-        \item $x^{(t)}$ potrebbe muoversi dentro e fuori $X$ (o $X^*$), seppur improbabile.
-    \end{itemize}
+Sono possibili differenti comportamenti:
+\begin{itemize}
+    \item Talvolta tutti i sottoinsiemi visitati sono fattibili (es. KP).
+    \item Di solito l'ultimo sottoinsieme è l'unica soluzione fattibile.
+    \item $x^{(t)}$ potrebbe muoversi dentro e fuori $X$ (o $X^*$), seppur improbabile.
+\end{itemize}
 
-    \subsection{Struttura di algoritmi euristici costruttivi}
-    \begin{algorithm}[H]
-        \caption{Pseudo codice - Euristica Costruttiva}
-        \label{alg:cons_heu}
-        \begin{algorithmic}
-            \State $x:=\emptyset$
-            \State $x^*:=\emptyset$
+\subsection{Struttura di algoritmi euristici costruttivi}
+\begin{algorithm}[H]
+    \caption{Pseudo codice - Euristica Costruttiva}
+    \label{alg:cons_heu}
+    \begin{algorithmic}
+        \State $x:=\emptyset$
+        \State $x^*:=\emptyset$
 
-            \If{$x\in X$}
-            \State $f^*:=f(x);$
-            \Else
-            \State{$f^*:=+\infty;$}
-            \EndIf
+        \If{$x\in X$}
+        \State $f^*:=f(x);$
+        \Else
+        \State{$f^*:=+\infty;$}
+        \EndIf
 
-            \While{$\Delta_A^+(x)\neq\emptyset$}
-            \State $i:=arg\underset{i\in\Delta_A^+(x)}{min}\varphi(i,x);$
-            \State $x:x\cup\{i\};$
-            \If{$x\in X$ and $f(x)<f^*$}
-            \State $x^* := x;$
-            \State $f^* := f(x);$
-            \EndIf
-            \EndWhile
-            \State $Return(x^*.f^*);$
-        \end{algorithmic}
-    \end{algorithm}
+        \While{$\Delta_A^+(x)\neq\emptyset$}
+        \State $i:=arg\underset{i\in\Delta_A^+(x)}{min}\varphi(i,x);$
+        \State $x:x\cup\{i\};$
+        \If{$x\in X$ and $f(x)<f^*$}
+        \State $x^* := x;$
+        \State $f^* := f(x);$
+        \EndIf
+        \EndWhile
+        \State $Return(x^*.f^*);$
+    \end{algorithmic}
+\end{algorithm}
 
-    Il percorso (la sequenza di sottoinsiemi) visitato dall'algoritmo è determinato
-    da:
-    \begin{itemize}
-        \item l'insieme $\Delta_A^+(x)\subseteq B\setminus x$, il quale è derivato
-              dal grafo di costruzione.
-        \item il criterio di selezione $\varPhi_A:B\times \mathcal{F}_A\implies\mathbb{R}$ utilizzato
-              per selezionare l'elemento $i$ da aggiungere al sottoinsieme corrente $x^{(t)}$ per generare
-              $x^{(t+1)}$, che può essere visto come una funzione peso su gli archi $(x,x\cup {i})$.
-    \end{itemize}
-    La soluzione restituita è quella migliore visitata durante l'esecuzione (solitamente è l'ultima).
+Il percorso (la sequenza di sottoinsiemi) visitato dall'algoritmo è determinato
+da:
+\begin{itemize}
+    \item l'insieme $\Delta_A^+(x)\subseteq B\setminus x$, il quale è derivato
+          dal grafo di costruzione.
+    \item il criterio di selezione $\varPhi_A:B\times \mathcal{F}_A\implies\mathbb{R}$ utilizzato
+          per selezionare l'elemento $i$ da aggiungere al sottoinsieme corrente $x^{(t)}$ per generare
+          $x^{(t+1)}$, che può essere visto come una funzione peso su gli archi $(x,x\cup {i})$.
+\end{itemize}
+La soluzione restituita è quella migliore visitata durante l'esecuzione (solitamente è l'ultima).
 
-    \subsection{Definizione del grafo di costruzione}
-    Idealmente, lo spazio di ricerca $\mathcal{F}_A$ dovrebbe includere:
-    \begin{itemize}
-        \item Il sotto insieme vuoto $\empty \in \mathcal{F}_A$
-        \item Tutte le soluzioni possibili $X\subseteq\mathcal{F}_A$ (questo escludendo
-              le soluzioni non ottime).
-        \item solo sottoinsiemi raggiungibili da $\emptyset$ (i sottoinsiemi non raggiungibili sono inutili).
-    \end{itemize}
-    I candidati naturali sono le soluzioni parziali (sottoinsiemi delle soluzioni fattibili), ma questi
-    richiedono un test di inclusione veloce per rispondere alla domanda:
-    \textit{il sottoinsieme $x^{(t)}$ è una soluzione parziale?} o meglio $\exists x \in X : x^{(t)}\subseteq x?$
-    o almeno dare un fast update test: sia $x^{(t)}$, allora $x^{(t)} \cup \{i\}\in\mathcal{F}_A?$
-    Sfortunatamente, questo problema generalizza la fattibilità del problema: \textit{è qui presente qualsiasi soluzione fattibile?}.
-    Questo potrebbe essere un problema NP-completo, in questo caso si ha necessità di rilassare lo spazio di ricerca.
+\subsection{Definizione del grafo di costruzione}
+Idealmente, lo spazio di ricerca $\mathcal{F}_A$ dovrebbe includere:
+\begin{itemize}
+    \item Il sotto insieme vuoto $\empty \in \mathcal{F}_A$
+    \item Tutte le soluzioni possibili $X\subseteq\mathcal{F}_A$ (questo escludendo
+          le soluzioni non ottime).
+    \item solo sottoinsiemi raggiungibili da $\emptyset$ (i sottoinsiemi non raggiungibili sono inutili).
+\end{itemize}
+I candidati naturali sono le soluzioni parziali (sottoinsiemi delle soluzioni fattibili), ma questi
+richiedono un test di inclusione veloce per rispondere alla domanda:
+\textit{il sottoinsieme $x^{(t)}$ è una soluzione parziale?} o meglio $\exists x \in X : x^{(t)}\subseteq x?$
+o almeno dare un fast update test: sia $x^{(t)}$, allora $x^{(t)} \cup \{i\}\in\mathcal{F}_A?$
+Sfortunatamente, questo problema generalizza la fattibilità del problema: \textit{è qui presente qualsiasi soluzione fattibile?}.
+Questo potrebbe essere un problema NP-completo, in questo caso si ha necessità di rilassare lo spazio di ricerca.
 
-    Se la funzione obiettivo potesse essere estesa da $X$ a $\mathcal{F}_A$, allora sembrerebbe naturale
-    utilizzare la funzione obiettivo come \textbf{criterio di selezione}.
-    $$\varphi(i,x)=f(x\cup\{i\})$$
-    \begin{algorithm}[H]
-        \caption{Pseudo codice - Euristica Costruttiva (funzione obiettivo)}
-        \label{alg:cons_heu_fx}
-        \begin{algorithmic}
-            \State $x:=\emptyset$
-            \State $x^*:=\emptyset$
+Se la funzione obiettivo potesse essere estesa da $X$ a $\mathcal{F}_A$, allora sembrerebbe naturale
+utilizzare la funzione obiettivo come \textbf{criterio di selezione}.
+$$\varphi(i,x)=f(x\cup\{i\})$$
+\begin{algorithm}[H]
+    \caption{Pseudo codice - Euristica Costruttiva (funzione obiettivo)}
+    \label{alg:cons_heu_fx}
+    \begin{algorithmic}
+        \State $x:=\emptyset$
+        \State $x^*:=\emptyset$
 
-            \If{$x\in X$}
-            \State $f^*:=f(x);$
-            \Else
-            \State{$f^*:=+\infty;$}
-            \EndIf
+        \If{$x\in X$}
+        \State $f^*:=f(x);$
+        \Else
+        \State{$f^*:=+\infty;$}
+        \EndIf
 
-            \While{$\Delta_A^+(x)\neq\emptyset$}
-            \State $i:=arg\underset{i\in\Delta_A^+(x)}{min}f(x\cup\{i\});$
-            \State $x:x\cup\{i\};$
-            \If{$x\in X$ and $f(x)<f^*$}
-            \State $x^* := x;$
-            \State $f^* := f(x);$
-            \EndIf
-            \EndWhile
-            \State $Return(x^*.f^*);$
-        \end{algorithmic}
-    \end{algorithm}
+        \While{$\Delta_A^+(x)\neq\emptyset$}
+        \State $i:=arg\underset{i\in\Delta_A^+(x)}{min}f(x\cup\{i\});$
+        \State $x:x\cup\{i\};$
+        \If{$x\in X$ and $f(x)<f^*$}
+        \State $x^* := x;$
+        \State $f^* := f(x);$
+        \EndIf
+        \EndWhile
+        \State $Return(x^*.f^*);$
+    \end{algorithmic}
+\end{algorithm}
 
-    \subsection{Il problema dello zaino frazionario (FKP)}
-    Selezionando da un insieme di oggetti di volume identico un sottoinsieme di
-    valore massimo tale che possa essere contenuto all'interno dello zaino, il quale dispone di una
-    capacità massima limitata.
+\subsection{Il problema dello zaino frazionario (FKP)}
+Selezionando da un insieme di oggetti di volume identico un sottoinsieme di
+valore massimo tale che possa essere contenuto all'interno dello zaino, il quale dispone di una
+capacità massima limitata.
 
-    In questo problema la capacità impone un vincolo sulla cardinalità delle possibili soluzioni,
-    esse sono $|x|\leq\lfloor \frac{V}{v}\rfloor$.
-    $$\varphi(i,x)=f(x\cup\{i\})$$
-    \begin{algorithm}[H]
-        \caption{Pseudo codice - GreedyFKP}
-        \begin{algorithmic}
-            \State $x:=\emptyset$
-            \State $x^*:=\emptyset$
+In questo problema la capacità impone un vincolo sulla cardinalità delle possibili soluzioni,
+esse sono $|x|\leq\lfloor \frac{V}{v}\rfloor$.
+$$\varphi(i,x)=f(x\cup\{i\})$$
+\begin{algorithm}[H]
+    \caption{Pseudo codice - GreedyFKP}
+    \begin{algorithmic}
+        \State $x:=\emptyset$
+        \State $x^*:=\emptyset$
 
-            \If{$x\in X$}
-            \State $f^*:=f(x);$
-            \Else
-            \State{$f^*:=+\infty;$}
-            \EndIf
+        \If{$x\in X$}
+        \State $f^*:=f(x);$
+        \Else
+        \State{$f^*:=+\infty;$}
+        \EndIf
 
-            \While{$|x|<\lfloor\frac{V}{v}\rfloor$}
-            \State $i:=arg\underset{i\in B\setminus x}{max}\phi_i;$
-            \State $x:x\cup\{i\};$
-            \If{$x\in X$ and $f(x)<f^*$}
-            \State $x^* := x;$
-            \State $f^* := f(x);$
-            \EndIf
-            \EndWhile
-            \State $Return(x^*.f^*);$
-        \end{algorithmic}
-    \end{algorithm}
-    Definiamo $\mathcal{F}_A = X$, dove il sottoinsieme $x$ può essere esteso finché $|x|<\lfloor\frac{V}{v}\rfloor$.
-    Un qualsiasi elemento di $B\setminus x$ estende $x$. La funzione obiettivo è additiva, e quindi:
-    $$f(x\cup\{i\})=f(x)+\phi_i\implies arg\underset{i\in B\setminus x }{max} f(x\cup\{i\}) = arg\underset{i\in B\setminus x }{max}\phi_i$$
-    L'ultimo sottoinsieme visitato è la migliore soluzione trovata.
-    Consideriamo il seguente esempio:
-    \[
-        \begin{tabular}{c | c c c c c c c}
-            B      & a & b & c & d & e & f \\
-            \midrule
-            $\phi$ & 7 & 2 & 4 & 5 & 4 & 1 \\
-        \end{tabular}
-    \]
-    $$v_i=1\text{ }\forall i\in B$$
-    $$V=4$$
-    L'algoritmo eseguirà i seguenti step:
-    \begin{itemize}
-        \item $x:=\emptyset;$
-        \item Dato che $|x|=0<4$ allora calcola $i:=a$ ed aggiorna $x:=\{a\};$
-        \item Dato che $|x|=1<4$ allora calcola $i:=d$ ed aggiorna $x:=\{a,d\};$
-        \item Dato che $|x|=2<4$ allora calcola $i:=c$ ed aggiorna $x:=\{a,c,d\};$
-        \item Dato che $|x|=3<4$ allora calcola $i:=e$ ed aggiorna $x:=\{a,c,d,e\};$
-        \item Dato che $|x|\nless 4$, allora termina.
-    \end{itemize}
-    Questo algoritmo trova sempre la soluzione ottima.
-    \subsection{Il problema dello zaino (KP)}
-    Select from a set of object od different volume a maximum value subset which could be contained
-    on knapsack of limited capacity.
-    \begin{algorithm}[H]
-        \caption{Pseudo codice - Greedy KP}
-        \begin{algorithmic}
-            \State $x:=\emptyset$
-            \State $x^*:=\emptyset$
-            \State $f*=0$
+        \While{$|x|<\lfloor\frac{V}{v}\rfloor$}
+        \State $i:=arg\underset{i\in B\setminus x}{max}\phi_i;$
+        \State $x:x\cup\{i\};$
+        \If{$x\in X$ and $f(x)<f^*$}
+        \State $x^* := x;$
+        \State $f^* := f(x);$
+        \EndIf
+        \EndWhile
+        \State $Return(x^*.f^*);$
+    \end{algorithmic}
+\end{algorithm}
+Definiamo $\mathcal{F}_A = X$, dove il sottoinsieme $x$ può essere esteso finché $|x|<\lfloor\frac{V}{v}\rfloor$.
+Un qualsiasi elemento di $B\setminus x$ estende $x$. La funzione obiettivo è additiva, e quindi:
+$$f(x\cup\{i\})=f(x)+\phi_i\implies arg\underset{i\in B\setminus x }{max} f(x\cup\{i\}) = arg\underset{i\in B\setminus x }{max}\phi_i$$
+L'ultimo sottoinsieme visitato è la migliore soluzione trovata.
+Consideriamo il seguente esempio:
+\[
+    \begin{tabular}{c | c c c c c c c}
+        B      & a & b & c & d & e & f \\
+        \midrule
+        $\phi$ & 7 & 2 & 4 & 5 & 4 & 1 \\
+    \end{tabular}
+\]
+$$v_i=1\text{ }\forall i\in B$$
+$$V=4$$
+L'algoritmo eseguirà i seguenti step:
+\begin{itemize}
+    \item $x:=\emptyset;$
+    \item Dato che $|x|=0<4$ allora calcola $i:=a$ ed aggiorna $x:=\{a\};$
+    \item Dato che $|x|=1<4$ allora calcola $i:=d$ ed aggiorna $x:=\{a,d\};$
+    \item Dato che $|x|=2<4$ allora calcola $i:=c$ ed aggiorna $x:=\{a,c,d\};$
+    \item Dato che $|x|=3<4$ allora calcola $i:=e$ ed aggiorna $x:=\{a,c,d,e\};$
+    \item Dato che $|x|\nless 4$, allora termina.
+\end{itemize}
+Questo algoritmo trova sempre la soluzione ottima.
+\subsection{Il problema dello zaino (KP)}
+Select from a set of object od different volume a maximum value subset which could be contained
+on knapsack of limited capacity.
+\begin{algorithm}[H]
+    \caption{Pseudo codice - Greedy KP}
+    \begin{algorithmic}
+        \State $x:=\emptyset$
+        \State $x^*:=\emptyset$
+        \State $f*=0$
 
-            \While{$\exists i \in B\setminus x :v_i\leq V-\sum_{j\in x}v_j$}
-            \State $i:=arg\underset{\exists i \in B\setminus x :v_i\leq V-\sum_{j\in x}v_j}{max}\phi_i;$
-            \State $x:x\cup\{i\};$
-            \EndWhile
-            \State $Return(x,f(x));$
-        \end{algorithmic}
-    \end{algorithm}
-    Definire $\mathcal{F}_A = X$, solo alcuni elementi di $B\setminus x$ estendono la fattibilità di $c$
-    $$\Delta_A^+(x)=\{i\in B\setminus x:\sum_{j\in x}v_j+v : i \leq V\}$$
+        \While{$\exists i \in B\setminus x :v_i\leq V-\sum_{j\in x}v_j$}
+        \State $i:=arg\underset{\exists i \in B\setminus x :v_i\leq V-\sum_{j\in x}v_j}{max}\phi_i;$
+        \State $x:x\cup\{i\};$
+        \EndWhile
+        \State $Return(x,f(x));$
+    \end{algorithmic}
+\end{algorithm}
+Definire $\mathcal{F}_A = X$, solo alcuni elementi di $B\setminus x$ estendono la fattibilità di $c$
+$$\Delta_A^+(x)=\{i\in B\setminus x:\sum_{j\in x}v_j+v : i \leq V\}$$
 
-    La funzione obiettivo è additiva e quindi
-    $$f(x\cup{i})=f(x)+\phi_i\implies arg\underset{i\in\Delta_A^+(x)}{max}f(x\cup\{i\})=arg\underset{i\in\Delta_A^+(x)}{\phi_i}$$
-    L'ultimo sottoinsieme visitato è la migliore soluzione trovata.
-    \[
-        \begin{tabular}{c | c c c c c c c}
-            B      & a & b & c & d & e & f \\
-            \midrule
-            $\phi$ & 7 & 2 & 4 & 5 & 4 & 1 \\
-            v      & 5 & 3 & 2 & 3 & 1 & 1 \\
-        \end{tabular}
-    \]
-    L'algoritmo esegue i seguenti step:
-    \begin{itemize}
-        \item $x:=\emptyset;$
-        \item Dato che $\Delta_A^+\neq\emptyset$ selezionare $i:=\{a\};$ ed aggiornare $x:=\{a\};$
-        \item Dato che $\Delta_A^+\neq\emptyset$ selezionare $i:=\{d\};$ ed aggiornare $x:=\{a,d\};$
-        \item Dato che $\Delta_A^+ = \emptyset$, terminare.
-    \end{itemize}
-    Questo algoritmo non trova una soluzione ottima
-    \subsection{Maximum Diversity Problem}
-    Selezionare da un insieme di punti un sottoinsieme di $k$ tale che la somma delle distanza
-    fra le coppie di questo insieme sia massima.
-    \begin{algorithm}[H]
-        \caption{Pseudo Codice - GreedyMDP}
-        \begin{algorithmic}
-            \State $x:=\emptyset$
-            \While{$|x|<k$}
-            \State $i:=arg\underset{i \in B\setminus x}{max}\sum_{j\in x}d_{ij};$
-            \State $x:x\cup\{i\};$
-            \EndWhile
-            \State $Return(x,f(x));$
-        \end{algorithmic}
-    \end{algorithm}
+La funzione obiettivo è additiva e quindi
+$$f(x\cup{i})=f(x)+\phi_i\implies arg\underset{i\in\Delta_A^+(x)}{max}f(x\cup\{i\})=arg\underset{i\in\Delta_A^+(x)}{\phi_i}$$
+L'ultimo sottoinsieme visitato è la migliore soluzione trovata.
+\[
+    \begin{tabular}{c | c c c c c c c}
+        B      & a & b & c & d & e & f \\
+        \midrule
+        $\phi$ & 7 & 2 & 4 & 5 & 4 & 1 \\
+        v      & 5 & 3 & 2 & 3 & 1 & 1 \\
+    \end{tabular}
+\]
+L'algoritmo esegue i seguenti step:
+\begin{itemize}
+    \item $x:=\emptyset;$
+    \item Dato che $\Delta_A^+\neq\emptyset$ selezionare $i:=\{a\};$ ed aggiornare $x:=\{a\};$
+    \item Dato che $\Delta_A^+\neq\emptyset$ selezionare $i:=\{d\};$ ed aggiornare $x:=\{a,d\};$
+    \item Dato che $\Delta_A^+ = \emptyset$, terminare.
+\end{itemize}
+Questo algoritmo non trova una soluzione ottima
+\subsection{Maximum Diversity Problem}
+Selezionare da un insieme di punti un sottoinsieme di $k$ tale che la somma delle distanza
+fra le coppie di questo insieme sia massima.
+\begin{algorithm}[H]
+    \caption{Pseudo Codice - GreedyMDP}
+    \begin{algorithmic}
+        \State $x:=\emptyset$
+        \While{$|x|<k$}
+        \State $i:=arg\underset{i \in B\setminus x}{max}\sum_{j\in x}d_{ij};$
+        \State $x:x\cup\{i\};$
+        \EndWhile
+        \State $Return(x,f(x));$
+    \end{algorithmic}
+\end{algorithm}
 
-    Definire lo spazio di ricerca $\mathcal{F}_A$ come l'insieme di tutte le soluzioni parziali. Il
-    sottoinsieme $x$ può essere esteso finché viene soddisfatta la condizione del problema $|x|<k$.
-    Un qualsiasi elemento di $B$ estende $x$ in una maniera fattibile. La funzione obiettivo è quadratica:
-    $$f(x\cup\{i\})=f(x)+2\sum_{j\in x}d_{ij}+d_{ii}\implies arg\underset{i\in B\setminus x}{max}f(x\cup \{i\})=arg\underset{i\in B\setminus x}{max}\sum_{j\in x} d_{ij}$$
-    L'ultimo sotto insieme visitato è la soluzione migliore (è l'unica fattibile) trovata.
+Definire lo spazio di ricerca $\mathcal{F}_A$ come l'insieme di tutte le soluzioni parziali. Il
+sottoinsieme $x$ può essere esteso finché viene soddisfatta la condizione del problema $|x|<k$.
+Un qualsiasi elemento di $B$ estende $x$ in una maniera fattibile. La funzione obiettivo è quadratica:
+$$f(x\cup\{i\})=f(x)+2\sum_{j\in x}d_{ij}+d_{ii}\implies arg\underset{i\in B\setminus x}{max}f(x\cup \{i\})=arg\underset{i\in B\setminus x}{max}\sum_{j\in x} d_{ij}$$
+L'ultimo sotto insieme visitato è la soluzione migliore (è l'unica fattibile) trovata.
 
-    \begin{figure}[H]
-        \centering
-        \includegraphics[scale=0.5]{images/MDP_construct.png}
-        \caption{Maximum Diversity Problem}
-    \end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/MDP_construct.png}
+    \caption{Maximum Diversity Problem}
+\end{figure}
 
-    L'algoritmo ha due grossi svantaggi:
-    \begin{itemize}
-        \item Al primo passo, tutti i punti sono equivalenti.
-        \item Il risultato finale non è ottimale anche se: il primo passo seleziona la coppia di
-              punti più distanti o l'algoritmo viene ripetuto selezionando ogni punto come il primo.
-    \end{itemize}
+L'algoritmo ha due grossi svantaggi:
+\begin{itemize}
+    \item Al primo passo, tutti i punti sono equivalenti.
+    \item Il risultato finale non è ottimale anche se: il primo passo seleziona la coppia di
+          punti più distanti o l'algoritmo viene ripetuto selezionando ogni punto come il primo.
+\end{itemize}
 
-    \subsubsection{Travelling Salesman Problem}
-    Dato un grafo diretto ed una funzione di costo definita su gli archi, trovare il ciclo di costo
-    minimo che sia in grado di visitare tutti i nodi del grafo.
+\subsubsection{Travelling Salesman Problem}
+Dato un grafo diretto ed una funzione di costo definita su gli archi, trovare il ciclo di costo
+minimo che sia in grado di visitare tutti i nodi del grafo.
 
-    Lo spazio di ricerca $\mathcal{F}_A$ è definito come la collezione di tutti i sottoinsiemi di archi che
-    formano un particolare sotto percorso e mantengono il grado dei nodi $\leq 1$, per tutti i nodi (è
-    un sovra insieme di tutte le soluzioni parziali).
-    Il criterio di selezione è la funzione obiettivo, essendo additiva.
+Lo spazio di ricerca $\mathcal{F}_A$ è definito come la collezione di tutti i sottoinsiemi di archi che
+formano un particolare sotto percorso e mantengono il grado dei nodi $\leq 1$, per tutti i nodi (è
+un sovra insieme di tutte le soluzioni parziali).
+Il criterio di selezione è la funzione obiettivo, essendo additiva.
 
-    \begin{algorithm}[H]
-        \caption{Pseudo Codice - GreedyTSP}
-        \begin{algorithmic}
-            \State $x:=\emptyset$
-            \State $x*:=\emptyset$
-            \State $f*:=\infty$
-            \While{$\Delta_A^+(x)\neq \emptyset$}
-            \State $i:=arg\underset{i \in \Delta_A^+(x)}{min}\;$
-            \State $x:x\cup\{i\};$
-            \EndWhile
-            \If {$x\in X$}
-            \State $x^*:=x;$
-            \State $f^*:=f(x);$
-            \EndIf
-            \State $Return(x*,f^*);$
-        \end{algorithmic}
-    \end{algorithm}
-    Solo l'ultimo insieme visitato può essere fattibile (se trovato!).
-    Per semplicità consideriamo un grafo simmetrico.
-    \begin{figure}[H]
-        \centering
-        \includegraphics[scale=0.5]{images/TSP_simm.png}
-        \caption{TSP grafo simmetrico}
-    \end{figure}
-    L'algoritmo eseguirà i seguenti passi:
-    \begin{itemize}
-        \item $x:=\emptyset;$
-        \item Visto che $\Delta_A^+(x)\neq\emptyset$ selezioniamo $i:=(3,5)$ ed aggiorniamo $x;$
-        \item Visto che $\Delta_A^+(x)\neq\emptyset$ selezioniamo $i:=(2,4)$ ed aggiorniamo $x((5,3)\notin\Delta_A^+(x));$
-        \item Visto che $\Delta_A^+(x)\neq\emptyset$ selezioniamo $i:=(5,2)$ ed aggiorniamo $x((4,2)\notin\Delta_A^+(x));$
-        \item Visto che $\Delta_A^+(x)\neq\emptyset$ selezioniamo $i:=(4,1)$ ed aggiorniamo $x:$
-              notare che $(2,5),(4,5),(5,4),(3,4)$ e $(4,3)\notin \Delta_A^+(x)$
-        \item Visto che $\Delta_A^+(x)=\emptyset$, terminiamo.
-    \end{itemize}
-    L'algoritmo non trova una soluzione fattibile, ma una soluzione fattibile esiste: aggiungendo
-    l'arco $(1,3)$ (quello tratteggiato in figura) permette di trovare una soluzione fattibile anche
-    nel caso in cui costi $100$ (seppur non ottima).
-    \subsection{Riassumendo}
-    Un'euristica costruttiva $A$ trova:
-    \begin{itemize}
-        \item Una soluzione ottimale quando $\Delta_A^+(x^{(t)})$ e $\varphi_A(i,x)$ garantiscono
-              che il sotto insieme corrente $x^{(t)}$ sia sempre incluso almeno in una soluzione ottima.
-        \item Una soluzione fattibile quando $\Delta_A^+(x^{(t)})$ garantisce che il sottoinsieme
-              corrente $x^{(t)}$ sia sempre incluso in almeno una soluzione fattibile.
-        \item Un soto insieme generale quando queste proprietà sono perse ad un passo $t$.
-    \end{itemize}
-    Un algoritmo costruttivo ideale mantiene sempre una "via" aperta verso la soluzione
-    ottima. In pratica, alcune di queste proprietà vengono perse durante qualche
-    step dell'algoritmo (solitamente).
-    \paragraph{Caratteristiche rilevanti}\mbox{}\\
-    \textit{Quali caratteristiche permettono un algoritmo costruttivo, di trovare l'ottimo?}
-    \begin{itemize}
-        \item Uno spazio di ricerca uguale alla regione di fattibilità? No, perché questo viene tenuto
-        \item Un problema vincolato dalla cardinalità? Questo spiegherebbe il fallimento del KP,
-              ma non basta per il MDP e TSP.
-        \item La presenza di una funzione obiettivo additiva?
-    \end{itemize}
-    Non esiste una caratterizzazione generale dei problemi risolti in maniera ottimale dagli algoritmi
-    costruttivi. Sono però presenti caratterizzazioni per classi più grandi di problemi.
+\begin{algorithm}[H]
+    \caption{Pseudo Codice - GreedyTSP}
+    \begin{algorithmic}
+        \State $x:=\emptyset$
+        \State $x*:=\emptyset$
+        \State $f*:=\infty$
+        \While{$\Delta_A^+(x)\neq \emptyset$}
+        \State $i:=arg\underset{i \in \Delta_A^+(x)}{min}\;$
+        \State $x:x\cup\{i\};$
+        \EndWhile
+        \If {$x\in X$}
+        \State $x^*:=x;$
+        \State $f^*:=f(x);$
+        \EndIf
+        \State $Return(x*,f^*);$
+    \end{algorithmic}
+\end{algorithm}
+Solo l'ultimo insieme visitato può essere fattibile (se trovato!).
+Per semplicità consideriamo un grafo simmetrico.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/TSP_simm.png}
+    \caption{TSP grafo simmetrico}
+\end{figure}
+L'algoritmo eseguirà i seguenti passi:
+\begin{itemize}
+    \item $x:=\emptyset;$
+    \item Visto che $\Delta_A^+(x)\neq\emptyset$ selezioniamo $i:=(3,5)$ ed aggiorniamo $x;$
+    \item Visto che $\Delta_A^+(x)\neq\emptyset$ selezioniamo $i:=(2,4)$ ed aggiorniamo $x((5,3)\notin\Delta_A^+(x));$
+    \item Visto che $\Delta_A^+(x)\neq\emptyset$ selezioniamo $i:=(5,2)$ ed aggiorniamo $x((4,2)\notin\Delta_A^+(x));$
+    \item Visto che $\Delta_A^+(x)\neq\emptyset$ selezioniamo $i:=(4,1)$ ed aggiorniamo $x:$
+          notare che $(2,5),(4,5),(5,4),(3,4)$ e $(4,3)\notin \Delta_A^+(x)$
+    \item Visto che $\Delta_A^+(x)=\emptyset$, terminiamo.
+\end{itemize}
+L'algoritmo non trova una soluzione fattibile, ma una soluzione fattibile esiste: aggiungendo
+l'arco $(1,3)$ (quello tratteggiato in figura) permette di trovare una soluzione fattibile anche
+nel caso in cui costi $100$ (seppur non ottima).
+\subsection{Riassumendo}
+Un'euristica costruttiva $A$ trova:
+\begin{itemize}
+    \item Una soluzione ottimale quando $\Delta_A^+(x^{(t)})$ e $\varphi_A(i,x)$ garantiscono
+          che il sotto insieme corrente $x^{(t)}$ sia sempre incluso almeno in una soluzione ottima.
+    \item Una soluzione fattibile quando $\Delta_A^+(x^{(t)})$ garantisce che il sottoinsieme
+          corrente $x^{(t)}$ sia sempre incluso in almeno una soluzione fattibile.
+    \item Un soto insieme generale quando queste proprietà sono perse ad un passo $t$.
+\end{itemize}
+Un algoritmo costruttivo ideale mantiene sempre una "via" aperta verso la soluzione
+ottima. In pratica, alcune di queste proprietà vengono perse durante qualche
+step dell'algoritmo (solitamente).
+\paragraph{Caratteristiche rilevanti}\mbox{}\\
+\textit{Quali caratteristiche permettono un algoritmo costruttivo, di trovare l'ottimo?}
+\begin{itemize}
+    \item Uno spazio di ricerca uguale alla regione di fattibilità? No, perché questo viene tenuto
+    \item Un problema vincolato dalla cardinalità? Questo spiegherebbe il fallimento del KP,
+          ma non basta per il MDP e TSP.
+    \item La presenza di una funzione obiettivo additiva?
+\end{itemize}
+Non esiste una caratterizzazione generale dei problemi risolti in maniera ottimale dagli algoritmi
+costruttivi. Sono però presenti caratterizzazioni per classi più grandi di problemi.
 
-    \subsection{Una caratterizzazione nel caso additivo}
-    Assumendo che:
-    \begin{itemize}
-        \item la funzione sia additiva:
-              $$\exists\phi : B\rightarrow\mathbb{N}:f(x)=\sum_{i\in x}\phi_i$$
-        \item le soluzioni siano la \textbf{basi} (sottoinsiemi massimi) dello spazio di ricerca:
-              $$X=\mathcal{B}_\mathcal{F}=\{Y\in\mathcal{F}:\nexists Y'\in\mathcal{F}:Y\subset Y'\}$$
-    \end{itemize}
-    Questa è una situazione molto frequente come nel caso di KP, MAX-SAT, TSP ma non di MDP, SCP.
-    In questo caso, l'algoritmo costruttivo trova sempre la soluzione ottima se e solo se $(B,\mathcal{F})$
-    è un \textit{matroid embedding}. Visto che la definizione di tale insieme è molto complessa,
-    concentriamoci sulla definizione di alcune strutture importanti (il concetto non verrà
-    affrontato durante questo corso):
-    \begin{itemize}
-        \item \textbf{Greedoidi}
-        \item \textbf{Matroidi}
-    \end{itemize}
+\subsection{Una caratterizzazione nel caso additivo}
+Assumendo che:
+\begin{itemize}
+    \item la funzione sia additiva:
+          $$\exists\phi : B\rightarrow\mathbb{N}:f(x)=\sum_{i\in x}\phi_i$$
+    \item le soluzioni siano la \textbf{basi} (sottoinsiemi massimi) dello spazio di ricerca:
+          $$X=\mathcal{B}_\mathcal{F}=\{Y\in\mathcal{F}:\nexists Y'\in\mathcal{F}:Y\subset Y'\}$$
+\end{itemize}
+Questa è una situazione molto frequente come nel caso di KP, MAX-SAT, TSP ma non di MDP, SCP.
+In questo caso, l'algoritmo costruttivo trova sempre la soluzione ottima se e solo se $(B,\mathcal{F})$
+è un \textit{matroid embedding}. Visto che la definizione di tale insieme è molto complessa,
+concentriamoci sulla definizione di alcune strutture importanti (il concetto non verrà
+affrontato durante questo corso):
+\begin{itemize}
+    \item \textbf{Greedoidi}
+    \item \textbf{Matroidi}
+\end{itemize}
 
-    \subsection{Greedoidi}
-    Un greedoide è una coppia di oggetti $(B,\mathcal{F})$ con
+\subsection{Greedoidi}
+Un greedoide è una coppia di oggetti $(B,\mathcal{F})$ con
 $\mathcal{F}\subseteq 2^B$ è una coppia tale che soddisfi i seguenti assiomi:
-    \begin{itemize}
-        \item L'assioma \textbf{banale}: $\emptyset\in\mathcal{F}$
-        \item L'assioma di \textbf{accessibilità}: se $x\in\mathcal{F}$ e $x\neq\emptyset$ allora
-              $\exists i\in x:x\setminus\{i\}\in\mathcal{F}$. Un qualsiasi sottoinsieme accettabile può
-              essere costruito aggiungendo elementi in un ordine adatto. Quindi deve essere possibile
-              rimuovere $1$ elemento tale che si rimanga ancora nello spazio di ricerca.
-        \item L'assioma di \textbf{scambio}: se $x,y\in\mathcal{F}$ con $|x|=|y|+1$. allora $\exists i\in x\setminus y$
-              tale che $y\cup\{i\}\in\mathcal{F}$. Ovvero. un qualsiasi sottoinsieme accettabile può
-              essere esteso con un elemento adatto (per forza visto che rispettano entrambi il vincolo)
-              di un qualsiasi altro sotto insieme di cardinalità più grande.
-    \end{itemize}
-    L'assioma di scambio implica che tutte le \textbf{basi} (ovvero i sottoinsiemi massimi)
-    abbiano la stessa cardinalità. Tutte queste condizioni vengono mantenute nel caso FKP, e MST (
-    sia Kruskal che Prim), mentre non vengono mantenute per il problema generale del KP e TSP.
-    Vengono mantenute anche nel MDP, ma in quel caso la funzione obiettivo non è additiva. In generale
-    gli algoritmi costruttivi non sono esatti sui greedoidi.
+\begin{itemize}
+    \item L'assioma \textbf{banale}: $\emptyset\in\mathcal{F}$
+    \item L'assioma di \textbf{accessibilità}: se $x\in\mathcal{F}$ e $x\neq\emptyset$ allora
+          $\exists i\in x:x\setminus\{i\}\in\mathcal{F}$. Un qualsiasi sottoinsieme accettabile può
+          essere costruito aggiungendo elementi in un ordine adatto. Quindi deve essere possibile
+          rimuovere $1$ elemento tale che si rimanga ancora nello spazio di ricerca.
+    \item L'assioma di \textbf{scambio}: se $x,y\in\mathcal{F}$ con $|x|=|y|+1$. allora $\exists i\in x\setminus y$
+          tale che $y\cup\{i\}\in\mathcal{F}$. Ovvero. un qualsiasi sottoinsieme accettabile può
+          essere esteso con un elemento adatto (per forza visto che rispettano entrambi il vincolo)
+          di un qualsiasi altro sotto insieme di cardinalità più grande.
+\end{itemize}
+L'assioma di scambio implica che tutte le \textbf{basi} (ovvero i sottoinsiemi massimi)
+abbiano la stessa cardinalità. Tutte queste condizioni vengono mantenute nel caso FKP, e MST (
+sia Kruskal che Prim), mentre non vengono mantenute per il problema generale del KP e TSP.
+Vengono mantenute anche nel MDP, ma in quel caso la funzione obiettivo non è additiva. In generale
+gli algoritmi costruttivi non sono esatti sui greedoidi.
 
 
-    \subsection{Matroidi}
-    Un matroide è un insieme di sistema $(B,\mathcal{F})$ con $\mathcal{F}\subseteq 2^B$ tale che:
-    \begin{itemize}
-        \item L'assioma \textbf{banale}: $\emptyset\in\mathcal{F}$
-        \item L'assioma di \textbf{eredità}: se $x\in\mathcal{F}$ e $y\subset x$ allora $y\in\mathcal{F}$. Ovvero
-              che un qualsiasi sottoinsieme accettabile può essere costruito aggiungendo i suoi elementi
-              in un qualsiasi ordine.
-        \item L'assioma di \textbf{scambio}: se $x,y\in\mathcal{F}$ con $|x|=|y|+1$. allora $\exists i\in x\setminus y$
-              tale che $y\cup\{i\}\in\mathcal{F}$. Ovvero. un qualsiasi sottoinsieme accettabile può
-              essere esteso con un elemento adatto di un qualsiasi altro sotto insieme di cardinalità
-              più grande.
-    \end{itemize}
+\subsection{Matroidi}
+Un matroide è un insieme di sistema $(B,\mathcal{F})$ con $\mathcal{F}\subseteq 2^B$ tale che:
+\begin{itemize}
+    \item L'assioma \textbf{banale}: $\emptyset\in\mathcal{F}$
+    \item L'assioma di \textbf{eredità}: se $x\in\mathcal{F}$ e $y\subset x$ allora $y\in\mathcal{F}$. Ovvero
+          che un qualsiasi sottoinsieme accettabile può essere costruito aggiungendo i suoi elementi
+          in un qualsiasi ordine.
+    \item L'assioma di \textbf{scambio}: se $x,y\in\mathcal{F}$ con $|x|=|y|+1$. allora $\exists i\in x\setminus y$
+          tale che $y\cup\{i\}\in\mathcal{F}$. Ovvero. un qualsiasi sottoinsieme accettabile può
+          essere esteso con un elemento adatto di un qualsiasi altro sotto insieme di cardinalità
+          più grande.
+\end{itemize}
 
-    L'assioma di eredità è una versione più forte dell'assioma di accessibilità dei
-    greedoidi. Viene mantenuto nello spazio di ricerca dell'algoritmo di Kruskal per il problema
-    del MST. Ma non viene mantenuto nello spazio di ricerca dell'algoritmo di Prim.
+L'assioma di eredità è una versione più forte dell'assioma di accessibilità dei
+greedoidi. Viene mantenuto nello spazio di ricerca dell'algoritmo di Kruskal per il problema
+del MST. Ma non viene mantenuto nello spazio di ricerca dell'algoritmo di Prim.
 
-    $$x=\{(A,D),(D,H),(E,F),(B,F),(C,G)\}$$
-    $$y=\{(A,E),(B,H),(E,F),(E,H)\}$$
-    \begin{figure}[H]
-        \centering
-        \includegraphics[scale=0.5]{images/matr_mst.png}
-        \caption{Dimostrazione dell'assioma di scambio}
-    \end{figure}
+$$x=\{(A,D),(D,H),(E,F),(B,F),(C,G)\}$$
+$$y=\{(A,E),(B,H),(E,F),(E,H)\}$$
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/matr_mst.png}
+    \caption{Dimostrazione dell'assioma di scambio}
+\end{figure}
 
-    \subsubsection{Matroide uniforme per KP/FKP}
-    $$\mathcal{x\subseteq B:|x|\leq\lfloor\frac{V}{v}\rfloor}$$
-    \begin{itemize}
-        \item Assioma banale: l'insieme vuoto rispetta il vincolo di cardinalità.
-        \item Assioma di eredità: se $x$ rispetta il vincolo di cardinalità, tutti
-              i suoi sottoinsiemi lo rispetteranno.
-        \item Assioma di scambio: se $x$ e $y$ rispettano il vincolo di cardinalità e
-              $|x|=|y|+1$, uno può sempre aggiungere un elemento adatto di $x$ ad $y$ senza violare
-              la cardinalità.
-    \end{itemize}
-    Questo per quanto riguarda FKP, per il KP i primi due assiomi vengono mantenuti, mentre l'ultimo
-    no.
-    Consideriamo il seguente esempio:
-    $$V=6$$
-    $$v=[3 3 2 2 1]$$
-    Sia $x=\{3,4,5\}$ che $y=\{1,2\}$ si trovano in $\mathcal{F}$, ma nessun elemento di $x$ può
-    essere aggiunto ad $y$.
+\subsubsection{Matroide uniforme per KP/FKP}
+$$\mathcal{x\subseteq B:|x|\leq\lfloor\frac{V}{v}\rfloor}$$
+\begin{itemize}
+    \item Assioma banale: l'insieme vuoto rispetta il vincolo di cardinalità.
+    \item Assioma di eredità: se $x$ rispetta il vincolo di cardinalità, tutti
+          i suoi sottoinsiemi lo rispetteranno.
+    \item Assioma di scambio: se $x$ e $y$ rispettano il vincolo di cardinalità e
+          $|x|=|y|+1$, uno può sempre aggiungere un elemento adatto di $x$ ad $y$ senza violare
+          la cardinalità.
+\end{itemize}
+Questo per quanto riguarda FKP, per il KP i primi due assiomi vengono mantenuti, mentre l'ultimo
+no.
+Consideriamo il seguente esempio:
+$$V=6$$
+$$v=[3 3 2 2 1]$$
+Sia $x=\{3,4,5\}$ che $y=\{1,2\}$ si trovano in $\mathcal{F}$, ma nessun elemento di $x$ può
+essere aggiunto ad $y$.
 
-    \subsubsection{Matroide grafico MST (Minimum Spanning Tree)}
-    $$\mathcal{F}=\{x\subseteq B:x\text{ non formi cicli }\}$$
-    \begin{itemize}
-        \item Assioma banale: l'insieme vuoto degli archi non forma cicli.
-        \item Assioma di eredità: se $x$ è aciclico, tutti is suoi sotto insiemi sono aciclici.
-        \item Assioma di scambio: se $x$ ed $y$ sono aciclici e $|x|= |y|+1$, allora è sempre
-              possibile aggiungere un arco "adatto" (che rispetta il vincolo) di $x$ ad $y$ senza
-              formare alcun ciclo.
-    \end{itemize}
-    \subsubsection{Matroide per TSP}
-    Nel caso del TSP i primi due assiomi vengono mantenuti:
-    \begin{itemize}
-        \item l'insieme vuoto non ha percorsi ed gradi sono $\leq 1$
-        \item un qualsiasi sottoinsieme proprio di un insieme $\in\mathcal{F}$ appartiene ad $\mathcal{F}$.
-    \end{itemize}
-    Tuttavia il terzo assioma viene violato, consideriamo il seguente esempio: $y=\{(1,2),(2,3)\}$ ed $x=\{(3,1),(1,4),(4,2)\}$.
-    \begin{figure}
-        \centering
-        \includegraphics[scale=0.5]{images/matroid_tsp.png}
-        \caption{Esempio TSP}
-    \end{figure}
+\subsubsection{Matroide grafico MST (Minimum Spanning Tree)}
+$$\mathcal{F}=\{x\subseteq B:x\text{ non formi cicli }\}$$
+\begin{itemize}
+    \item Assioma banale: l'insieme vuoto degli archi non forma cicli.
+    \item Assioma di eredità: se $x$ è aciclico, tutti is suoi sotto insiemi sono aciclici.
+    \item Assioma di scambio: se $x$ ed $y$ sono aciclici e $|x|= |y|+1$, allora è sempre
+          possibile aggiungere un arco "adatto" (che rispetta il vincolo) di $x$ ad $y$ senza
+          formare alcun ciclo.
+\end{itemize}
+\subsubsection{Matroide per TSP}
+Nel caso del TSP i primi due assiomi vengono mantenuti:
+\begin{itemize}
+    \item l'insieme vuoto non ha percorsi ed gradi sono $\leq 1$
+    \item un qualsiasi sottoinsieme proprio di un insieme $\in\mathcal{F}$ appartiene ad $\mathcal{F}$.
+\end{itemize}
+Tuttavia il terzo assioma viene violato, consideriamo il seguente esempio: $y=\{(1,2),(2,3)\}$ ed $x=\{(3,1),(1,4),(4,2)\}$.
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.5]{images/matroid_tsp.png}
+    \caption{Esempio TSP}
+\end{figure}
 
-    L'ottimalità dell'algoritmo Greedy può essere dimostrata utilizzando i greedoidi,
-    se l'assioma di scambio viene rafforzato:
-    \[
-        \begin{cases}
-            x\in\mathcal{F},y\in\mathcal{B}_\mathcal{F}\text{ tale che } x\subseteq y \\
-            i\in B\setminus y\text{ tale che } x\cup\{i\}\in\mathcal{F}
-        \end{cases}
-        \implies
-        \exists j\in y\setminus x :
-        \begin{cases}
-            x\cup\{j\}\in\mathcal{F} \\
-            y\cup\{i\}\setminus\{j\}\in\mathcal{F}
-        \end{cases}
-    \]
-    Data una base ed uno dei suoi sottoinsiemi (dalla quale la base risulta
-    accessibile), se è presente un elemento che "si smarrisce" nel sottoinsieme della base,
-    deve esserci un altro elemento che continua sul percorso giusto e deve essere
-    fattibile scambiare due elementi nella base.
-    \subsubsection{Greedoidi con forti assiomi di scambio : MST}
-    Un esempio classi di greedoide con un forte assioma di scambio è dato da:
-    $$B=\text{ insieme degli archi di un grafo}$$
-    $$\mathcal{F}=\text{ collezione degli alberi che includono un dato vertice } v_1$$
-    Questo porta all'algoritmo di Prim per il problema del minimo albero ricoprente
-    \begin{figure}[H]
-        \centering
-        \includegraphics[scale=0.5]{images/greedoid_mst.png}
-    \end{figure}
-    L'assioma banale e quello di accessibilità rimangono validi mentre (quello
-    di eredità no). Mentre l'assioma di scambio mantiene una forma forte.
+L'ottimalità dell'algoritmo Greedy può essere dimostrata utilizzando i greedoidi,
+se l'assioma di scambio viene rafforzato:
+\[
+    \begin{cases}
+        x\in\mathcal{F},y\in\mathcal{B}_\mathcal{F}\text{ tale che } x\subseteq y \\
+        i\in B\setminus y\text{ tale che } x\cup\{i\}\in\mathcal{F}
+    \end{cases}
+    \implies
+    \exists j\in y\setminus x :
+    \begin{cases}
+        x\cup\{j\}\in\mathcal{F} \\
+        y\cup\{i\}\setminus\{j\}\in\mathcal{F}
+    \end{cases}
+\]
+Data una base ed uno dei suoi sottoinsiemi (dalla quale la base risulta
+accessibile), se è presente un elemento che "si smarrisce" nel sottoinsieme della base,
+deve esserci un altro elemento che continua sul percorso giusto e deve essere
+fattibile scambiare due elementi nella base.
+\subsubsection{Greedoidi con forti assiomi di scambio : MST}
+Un esempio classi di greedoide con un forte assioma di scambio è dato da:
+$$B=\text{ insieme degli archi di un grafo}$$
+$$\mathcal{F}=\text{ collezione degli alberi che includono un dato vertice } v_1$$
+Questo porta all'algoritmo di Prim per il problema del minimo albero ricoprente
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/greedoid_mst.png}
+\end{figure}
+L'assioma banale e quello di accessibilità rimangono validi mentre (quello
+di eredità no). Mentre l'assioma di scambio mantiene una forma forte.
 
-    Notare che l'ottimalità di un algoritmo costruttivo $A$ dipende da:
-    \begin{itemize}
-        \item le proprietà del problema (es. la funzione obiettivo additiva, basi
-              come soluzioni fattibili).
-        \item le proprietà dello spazio di ricerca $\mathcal{F}_A$
-    \end{itemize}
+Notare che l'ottimalità di un algoritmo costruttivo $A$ dipende da:
+\begin{itemize}
+    \item le proprietà del problema (es. la funzione obiettivo additiva, basi
+          come soluzioni fattibili).
+    \item le proprietà dello spazio di ricerca $\mathcal{F}_A$
+\end{itemize}
 
-    \subsection{Algoritmi non esatti}
+\subsection{Algoritmi non esatti}
 
-    Quando le proprietà algebriche di un problema non vengono soddisfastte, tali che l'algoritmo e
-    lo spazio di ricerca non compongano una matroide o un greedoide con un forte assioma di scambio,
-    può essere fatta una cosa, ovvero cercare di guidare il comportamento dell'algoritmo all'interno dello
-    spazio di ricerca utilizzando un \textit{raffinamento} del criterio di selezione. Questo in maniera
-    di forzarlo a dipendere sia su $i$ che su $x$, così da usare $\varphi_A (i,x)$.
+Quando le proprietà algebriche di un problema non vengono soddisfastte, tali che l'algoritmo e
+lo spazio di ricerca non compongano una matroide o un greedoide con un forte assioma di scambio,
+può essere fatta una cosa, ovvero cercare di guidare il comportamento dell'algoritmo all'interno dello
+spazio di ricerca utilizzando un \textit{raffinamento} del criterio di selezione. Questo in maniera
+di forzarlo a dipendere sia su $i$ che su $x$, così da usare $\varphi_A (i,x)$.
 
-    Questo magari non dimostra che l'algoritmo raggiunga la soluzione ottima ma abbastanza spesso otterrà
-    risultati migliori, e magari alcune approssimazione potranno essere provate.
+Questo magari non dimostra che l'algoritmo raggiunga la soluzione ottima ma abbastanza spesso otterrà
+risultati migliori, e magari alcune approssimazione potranno essere provate.
 
-    \paragraph{Algoritmo euristico costruittivo per KP}\mbox{}\\
-    Nel KP i tre assiomi non sono soddisfatti, poiché l'assioma di scambio non è soddisfatto.
-    In particolare, il problema è che l'oggetto non ha lo stesso volume ed una piccola cardinalità.
+\paragraph{Algoritmo euristico costruittivo per KP}\mbox{}\\
+Nel KP i tre assiomi non sono soddisfatti, poiché l'assioma di scambio non è soddisfatto.
+In particolare, il problema è che l'oggetto non ha lo stesso volume ed una piccola cardinalità.
 
-    Se il problema non ammette uno spazio di ricerca con delle proprietà adatte, uno deve mantenere
-    da conto i vincoli del problema adottando:
-    \begin{enumerate}
-        \item non solo una buona definizione di $\mathcal{F}_A$
-        \item ma anche una definizione sofisticata del criterio di selezione $\varphi_A(i,x)$,
-              questo permette risultati efficaci, anche se non probabilmente ottimali.
-    \end{enumerate}
-    Nel KP, l'inconveniente deriva dal volume degli oggetti: premettendo che gli oggetti abbiano
-    un grande volume, ma anche un piccolo volume. Definiamo il criterio di selezione come il
-    valore unitario $\varphi_A(i,x)=\frac{\phi_i}{v_i}$
-    L'algoritmo risultante può avere delle brutte prestazioni, e con una piccola modifica può diventare
+Se il problema non ammette uno spazio di ricerca con delle proprietà adatte, uno deve mantenere
+da conto i vincoli del problema adottando:
+\begin{enumerate}
+    \item non solo una buona definizione di $\mathcal{F}_A$
+    \item ma anche una definizione sofisticata del criterio di selezione $\varphi_A(i,x)$,
+          questo permette risultati efficaci, anche se non probabilmente ottimali.
+\end{enumerate}
+Nel KP, l'inconveniente deriva dal volume degli oggetti: premettendo che gli oggetti abbiano
+un grande volume, ma anche un piccolo volume. Definiamo il criterio di selezione come il
+valore unitario $\varphi_A(i,x)=\frac{\phi_i}{v_i}$
+L'algoritmo risultante può avere delle brutte prestazioni, e con una piccola modifica può diventare
 $2$-approssimato.
 
-    Consideriamo il seguente esempio con uno zaino di volume $V=8$:
-    \begin{center}
-        \begin{tabular}{c | c c c c c c}
-            B             & a   & b    & c & d    & e & f \\
-            \midrule
-            $\varphi$     & 7   & 2    & 4 & 5    & 4 & 1 \\
-            $v$           & 5   & 3    & 2 & 3    & 1 & 1 \\
-            \midrule
-            $\varphi / v$ & 1.4 & 0.67 & 2 & 1.67 & 4 & 1 \\
-        \end{tabular}
-    \end{center}
-    L'algoritmo esegue i seguenti passi:
-    \begin{enumerate}
-        \item $x:=\emptyset, V_r=8$
-        \item $x:=\{e\}, V_r=7$
-        \item $x:=\{c,e\}, V_r=5$
-        \item $x:=\{c,d,e\}, V_r=2$
-        \item $x:=\{c,d,e,f\}, V_r=1$, l'oggetto $a$ non sta nello zaino.
-        \item Visto che $\Delta_A^+(x)=\emptyset$, termina.
-    \end{enumerate}
-    Il valore della soluzione trovata è $14$, mentre la soluzione ottima è $x^*=\{a,c,e\}$ ed
-    il suo valore è $15$ - l'algoritmo non ha delle brutte prestazioni in questo caso. Tuttavia,
-    ci sono dei casi critici, come il seguente zaino con un volume $V=10$. Questo è un algoritmo euristico,
-    è buono? solitamente si, ma sono presenti dei casi patologici dove non lo è:
-    \begin{center}
-        \begin{tabular}{c|c c}
-            B           & a  & b  \\
-            \midrule
-            $\phi$      & 10 & 90 \\
-            $v$         & 1  & 10 \\
-            \midrule
-            $\varphi/v$ & 10 & 9  \\
-        \end{tabular}
-    \end{center}
+Consideriamo il seguente esempio con uno zaino di volume $V=8$:
+\begin{center}
+    \begin{tabular}{c | c c c c c c}
+        B             & a   & b    & c & d    & e & f \\
+        \midrule
+        $\varphi$     & 7   & 2    & 4 & 5    & 4 & 1 \\
+        $v$           & 5   & 3    & 2 & 3    & 1 & 1 \\
+        \midrule
+        $\varphi / v$ & 1.4 & 0.67 & 2 & 1.67 & 4 & 1 \\
+    \end{tabular}
+\end{center}
+L'algoritmo esegue i seguenti passi:
+\begin{enumerate}
+    \item $x:=\emptyset, V_r=8$
+    \item $x:=\{e\}, V_r=7$
+    \item $x:=\{c,e\}, V_r=5$
+    \item $x:=\{c,d,e\}, V_r=2$
+    \item $x:=\{c,d,e,f\}, V_r=1$, l'oggetto $a$ non sta nello zaino.
+    \item Visto che $\Delta_A^+(x)=\emptyset$, termina.
+\end{enumerate}
+Il valore della soluzione trovata è $14$, mentre la soluzione ottima è $x^*=\{a,c,e\}$ ed
+il suo valore è $15$ - l'algoritmo non ha delle brutte prestazioni in questo caso. Tuttavia,
+ci sono dei casi critici, come il seguente zaino con un volume $V=10$. Questo è un algoritmo euristico,
+è buono? solitamente si, ma sono presenti dei casi patologici dove non lo è:
+\begin{center}
+    \begin{tabular}{c|c c}
+        B           & a  & b  \\
+        \midrule
+        $\phi$      & 10 & 90 \\
+        $v$         & 1  & 10 \\
+        \midrule
+        $\varphi/v$ & 10 & 9  \\
+    \end{tabular}
+\end{center}
 
-    L'algoritmo scegli l'oggetto $a$, il quale ha una rapporto pià alto, quindi termina. La soluzione
-    ha un valore 10 (con l'euristica), ma la soluzione ottima è 90. Il motivo di questo errore
-    è dato dal primo oggetto scartato ha si una grande volume ma anche un grande valore. Stiamo
-    perdendo molto in questo caso.\\Vediamo un modo per risolvere questo problema:
+L'algoritmo scegli l'oggetto $a$, il quale ha una rapporto pià alto, quindi termina. La soluzione
+ha un valore 10 (con l'euristica), ma la soluzione ottima è 90. Il motivo di questo errore
+è dato dal primo oggetto scartato ha si una grande volume ma anche un grande valore. Stiamo
+perdendo molto in questo caso.\\Vediamo un modo per risolvere questo problema:
 
-    \paragraph{Esempio di un'algoritmo 2-approssimato per KP}\mbox{}
-    Verrà mostrata una piccola dimostrazione di come questo algoritmo viene approssimato, tuttavia la dimostrazione
-    all'esame non verrà chiesta, ma rimane come requisito sapere l'esistenza di un algoritmo 2-approssimato che può
-    risolvere questo problema.
+\paragraph{Esempio di un'algoritmo 2-approssimato per KP}\mbox{}
+Verrà mostrata una piccola dimostrazione di come questo algoritmo viene approssimato, tuttavia la dimostrazione
+all'esame non verrà chiesta, ma rimane come requisito sapere l'esistenza di un algoritmo 2-approssimato che può
+risolvere questo problema.
 
-    \begin{enumerate}
-        \item Si inizia con un sottoinsieme vuoto $x^{(0)}=\emptyset$
-        \item Trovare l'oggetto $i^{(t)}$ di valore unitario massimo in $B\setminus x^{(t-1)}$
-              $$i^{(t)}:=arg\underset{i\in B\setminus x^{(t-1)}}{max}\frac{\phi_{i^{(t)}}}{v_{i^{(t)}}}$$
-        \item Nel caso in cui rispetti la capacità, aggiungere $i^{(t)}$ a $x^{(t-1)}:x^{(t)}:=x^{(t-1)}\cup\{i^{(t)}\}$
-              e ritorna al passo 2.
-        \item Costruisci una soluzione con il primo oggetto rifiutato $x'=\{i^{(t)}\}$
-        \item Restituire la soluzione migliore tra $x$ e $x':f_A=max[f(x),f(x')]$
+\begin{enumerate}
+    \item Si inizia con un sottoinsieme vuoto $x^{(0)}=\emptyset$
+    \item Trovare l'oggetto $i^{(t)}$ di valore unitario massimo in $B\setminus x^{(t-1)}$
+          $$i^{(t)}:=arg\underset{i\in B\setminus x^{(t-1)}}{max}\frac{\phi_{i^{(t)}}}{v_{i^{(t)}}}$$
+    \item Nel caso in cui rispetti la capacità, aggiungere $i^{(t)}$ a $x^{(t-1)}:x^{(t)}:=x^{(t-1)}\cup\{i^{(t)}\}$
+          e ritorna al passo 2.
+    \item Costruisci una soluzione con il primo oggetto rifiutato $x'=\{i^{(t)}\}$
+    \item Restituire la soluzione migliore tra $x$ e $x':f_A=max[f(x),f(x')]$
 
-    \end{enumerate}
+\end{enumerate}
 
-    Si può dimostrare facilmente che, la somma dei valori delle due soluzioni è una sovrastima
-    della soluzione ottima
-    $$f(x)+f(x')=\sum_{\tau =1}^t \phi_{i(\tau)}\geq f^*$$
-    e che la migliore delle due soluzioni è almeno metà della loro somma
-    $$f_A = max[f(x),f'(x)]\geq\frac{f(x)+f(x')}{2}\geq\frac{1}{2}f^*$$
+Si può dimostrare facilmente che, la somma dei valori delle due soluzioni è una sovrastima
+della soluzione ottima
+$$f(x)+f(x')=\sum_{\tau =1}^t \phi_{i(\tau)}\geq f^*$$
+e che la migliore delle due soluzioni è almeno metà della loro somma
+$$f_A = max[f(x),f'(x)]\geq\frac{f(x)+f(x')}{2}\geq\frac{1}{2}f^*$$
 
-    \paragraph{Euristica Nearest Neighbour per il TSP}\mbox{}\\
-    Consideriamo il problema del TSP su un grafo completo $G=(N,A)$ con il solito spazio di ricerca
-    (sottoinsieme degli archi senza sotto percorsi e con un grado $\leq 1$ su tutti i nodi).
+\paragraph{Euristica Nearest Neighbour per il TSP}\mbox{}\\
+Consideriamo il problema del TSP su un grafo completo $G=(N,A)$ con il solito spazio di ricerca
+(sottoinsieme degli archi senza sotto percorsi e con un grado $\leq 1$ su tutti i nodi).
 
-    L'algoritmo costruttivo trova sempre una soluzione fattibile, però la soluzione può essere
-    infinitamente pessima.
+L'algoritmo costruttivo trova sempre una soluzione fattibile, però la soluzione può essere
+infinitamente pessima.
 
-    Cambiando lo spazio di ricerca $\mathcal{F}_A$, in maniera che includa tutti cammini che iniziano
-    dal nodo 1.
+Cambiando lo spazio di ricerca $\mathcal{F}_A$, in maniera che includa tutti cammini che iniziano
+dal nodo 1.
 
-    Sia $N_x$ l'insieme dei nodi visitati da $x$: le estensioni accettabili di questi nodi sono tutti gli
-    archi uscenti dall'ultimo nodo del cammino $x$ e che non terminano in un sotto-cammino
-    $$\Delta_A^+(x)=\{(h,k)\in A : h=Last(x),k\notin N_x\text{ or } k=1 \text{ and } N_x=N\}$$
-    Quindi un estensione dell'attuale sotto insieme proposto come soluzione consiste in un arco
-    tale che il nodo $k$ non sia un nodo appartenente ad uno dei nodi già visitati a meno che non sia il
-    primo nodo (quando tutti i nodi sono stati visitati $N_x=N$).
+Sia $N_x$ l'insieme dei nodi visitati da $x$: le estensioni accettabili di questi nodi sono tutti gli
+archi uscenti dall'ultimo nodo del cammino $x$ e che non terminano in un sotto-cammino
+$$\Delta_A^+(x)=\{(h,k)\in A : h=Last(x),k\notin N_x\text{ or } k=1 \text{ and } N_x=N\}$$
+Quindi un estensione dell'attuale sotto insieme proposto come soluzione consiste in un arco
+tale che il nodo $k$ non sia un nodo appartenente ad uno dei nodi già visitati a meno che non sia il
+primo nodo (quando tutti i nodi sono stati visitati $N_x=N$).
 
-    Controlliamo gli assiomi:
-    \begin{itemize}
-        \item l'assioma banale è mantenuto.
-        \item l'assioma di accessibilità è mantenuto : poiché rimuovere un arco restituisce un cammino che
-              inizia dal nodo 1 (rimane sempre un arco, ovvero una soluzione appartenente allo spazio di ricerca,
-              secondo gli assiomi dei greedoidi).
-        \item l'assioma di eredità non viene mantenuto: non tutti i sottoinsiemi sono cammini.
-        \item l'assioma di scambio non viene mantenuto.
-    \end{itemize}
+Controlliamo gli assiomi:
+\begin{itemize}
+    \item l'assioma banale è mantenuto.
+    \item l'assioma di accessibilità è mantenuto : poiché rimuovere un arco restituisce un cammino che
+          inizia dal nodo 1 (rimane sempre un arco, ovvero una soluzione appartenente allo spazio di ricerca,
+          secondo gli assiomi dei greedoidi).
+    \item l'assioma di eredità non viene mantenuto: non tutti i sottoinsiemi sono cammini.
+    \item l'assioma di scambio non viene mantenuto.
+\end{itemize}
 
-    L'euristica NN (Nearest Neighbour) adotta la funzione obiettivo come criterio di selezione:
-    \begin{itemize}
-        \item Inizia con l'insieme vuoto degli archi $x^{(0)}=\emptyset$, che
-              rappresenta un percorso degenere che esce dal nodo 1 (la soluzione ottima
-              contiene sicuramente il nodo 1).
-        \item Trovare l'arco di costo minimo uscente dall'ultimo nodo di $x$
-              $$(i,j)= arg\underset{(h,k)\in\Delta_A^+(x)}{min}c_{hk}$$
-        \item Se $j\neq 1$, ritorna al punto 2; altrimenti, termina.
-    \end{itemize}
-    L'algoritmo è molto intuitivo e la sua complessità è $\Theta(n^2)$, non è esatto ma
+L'euristica NN (Nearest Neighbour) adotta la funzione obiettivo come criterio di selezione:
+\begin{itemize}
+    \item Inizia con l'insieme vuoto degli archi $x^{(0)}=\emptyset$, che
+          rappresenta un percorso degenere che esce dal nodo 1 (la soluzione ottima
+          contiene sicuramente il nodo 1).
+    \item Trovare l'arco di costo minimo uscente dall'ultimo nodo di $x$
+          $$(i,j)= arg\underset{(h,k)\in\Delta_A^+(x)}{min}c_{hk}$$
+    \item Se $j\neq 1$, ritorna al punto 2; altrimenti, termina.
+\end{itemize}
+L'algoritmo è molto intuitivo e la sua complessità è $\Theta(n^2)$, non è esatto ma
 $\log n$-approssimato.
 
-    Procediamo con un esempio numerico, consideriamo il seguente grafo completo:
-    \begin{figure}[H]
-        \centering
-        \includegraphics[scale=0.4]{images/nume_exampl-NN-tsp.png}
-        \caption{Grafo completo (gli archi non sono riportati per maggiore chiarezza)}
-    \end{figure}
+Procediamo con un esempio numerico, consideriamo il seguente grafo completo:
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.4]{images/nume_exampl-NN-tsp.png}
+    \caption{Grafo completo (gli archi non sono riportati per maggiore chiarezza)}
+\end{figure}
 
-    \begin{figure}[H]
-        \centering
-        \includegraphics[scale=0.4]{images/nume_exampl-NN-tsp1.png}
-        \caption{Euristica NN partendo dal nodo 1}
-        \label{fig:NN1}
-    \end{figure}
-    Eseguendo l'algoritmo partendo dal nodo 1 otteniamo il percorso sotto-ottimale mostrato in figura
-    \ref{fig:NN1}. Tuttavia avviare l'algoritmo dal nodo 2 restituisce anch'esso un percorso sotto ottimale.
-    \begin{figure}[H]
-        \centering
-        \includegraphics[scale=0.4]{images/nume_exampl-NN-tsp2.png}
-        \caption{Euristica NN partendo dal nodo 2}
-    \end{figure}
-    Più precisamente, avviare l'esecuzione dell'euristica da un qualsiasi nodo restituirà una soluzione
-    sotto ottimale, significa che la soluzione ottima non è restituita da questo algoritmo dato un
-    qualsiasi nodo.
-    \begin{figure}
-        \centering
-        \includegraphics[scale=0.4]{images/nume_exampl-NN-tsp3.png}
-        \caption{Effettiva soluzione ottima}
-    \end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.4]{images/nume_exampl-NN-tsp1.png}
+    \caption{Euristica NN partendo dal nodo 1}
+    \label{fig:NN1}
+\end{figure}
+Eseguendo l'algoritmo partendo dal nodo 1 otteniamo il percorso sotto-ottimale mostrato in figura
+\ref{fig:NN1}. Tuttavia avviare l'algoritmo dal nodo 2 restituisce anch'esso un percorso sotto ottimale.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.4]{images/nume_exampl-NN-tsp2.png}
+    \caption{Euristica NN partendo dal nodo 2}
+\end{figure}
+Più precisamente, avviare l'esecuzione dell'euristica da un qualsiasi nodo restituirà una soluzione
+sotto ottimale, significa che la soluzione ottima non è restituita da questo algoritmo dato un
+qualsiasi nodo.
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.4]{images/nume_exampl-NN-tsp3.png}
+    \caption{Effettiva soluzione ottima}
+\end{figure}
 
-    \subsection{Algoritmi costruttivi puri ed adattivi}
-    Un algoritmo costruttivo $A$ è:
-    \begin{itemize}
-        \item \textbf{puro} se il criterio di selezione $\varphi_A$ dipende solo dal nuovo elemento $i$.
-        \item \textbf{adattivo} se $\varphi_A$ dipende sia da $i$ che dalla soluzione corrente $x$.
-    \end{itemize}
-    Molto criteri $\varphi_A (i,x)$ ammettono forme equivalenti dipendendo solamente da $i$:
-    \begin{itemize}
-        \item nel KP, $\varphi_A(i,x) = f(x\cup\{i\})$ è equivalente a $\phi_i$ (questo perché la funzione obiettivo
-              è additiva, si può concentrarsi quindi solo sul valore $\phi$).
-        \item nel TSP, $\varphi_A((i,j),x)=f(x\cup\{(i,j)\})$ è equivalente a $c_{ij}$
-    \end{itemize}
-    Fin'ora abbiamo solamente visto algoritmi puramente costruttivi. Un criterio di selezione additivo
-    restituisce un algoritmo puramente costruttivo.
+\subsection{Algoritmi costruttivi puri ed adattivi}
+Un algoritmo costruttivo $A$ è:
+\begin{itemize}
+    \item \textbf{puro} se il criterio di selezione $\varphi_A$ dipende solo dal nuovo elemento $i$.
+    \item \textbf{adattivo} se $\varphi_A$ dipende sia da $i$ che dalla soluzione corrente $x$.
+\end{itemize}
+Molto criteri $\varphi_A (i,x)$ ammettono forme equivalenti dipendendo solamente da $i$:
+\begin{itemize}
+    \item nel KP, $\varphi_A(i,x) = f(x\cup\{i\})$ è equivalente a $\phi_i$ (questo perché la funzione obiettivo
+          è additiva, si può concentrarsi quindi solo sul valore $\phi$).
+    \item nel TSP, $\varphi_A((i,j),x)=f(x\cup\{(i,j)\})$ è equivalente a $c_{ij}$
+\end{itemize}
+Fin'ora abbiamo solamente visto algoritmi puramente costruttivi. Un criterio di selezione additivo
+restituisce un algoritmo puramente costruttivo.
 
-    Mentre per dimostrazione la definizione di \textit{adattivo} utilizziamo il problema del Set Covering.
+Mentre per dimostrazione la definizione di \textit{adattivo} utilizziamo il problema del Set Covering.
 
-    \paragraph{Set Covering}\mbox{}\\
-    Data una matrice binaria ed un vettore dei costi associato alle colonne, si vuole trovare un sotto insieme
-    delle colonne di costo minimo tali che coprano tutte le righe.
+\paragraph{Set Covering}\mbox{}\\
+Data una matrice binaria ed un vettore dei costi associato alle colonne, si vuole trovare un sotto insieme
+delle colonne di costo minimo tali che coprano tutte le righe.
 
-    La funzione obiettivo è additiva, ma le soluzioni non sono delle basi, in quanto non sono sotto insiemi massimali,
-    questo perché più piccola la soluzione è meglio risulta. Inoltre, risulta necessario un criterio di selezione
-    adattivo $\varphi_A(i,x)$, poiché uno \textit{puro} $\varphi_A(i)$ potrebbe ripetitivamente scegliere colonne che
-    coprono le stesse righe.\\Le idee più promettenti da seguire sono:
-    \begin{itemize}
-        \item la \textbf{funzione obiettivo} seleziona colonne di costo minimo.
-        \item i vincoli: selezionare colonne che coprono molte righe.
-        \item il corrente sottoinsieme $x$: selezionare colonne che coprono nuove righe.
-    \end{itemize}
-    Ricapitolando:
-    \begin{itemize}
-        \item includere nel passo $\Delta_A^+(x)$ solo colonne che coprono righe addizionali non presenti in $x$.
-        \item applicare il criterio di selezione adattivo $\varphi_A(i,x)=\frac{c_i}{a_i(x)}$ dove
-              $a_i(x)$ è il numero di righe coperte da $i$, ma che non sono presenti in $x$.
-    \end{itemize}
-    Consideriamo il seguente esempio positivo:
-    \begin{figure}[H]
-        \centering
-        \includegraphics[scale=0.5]{images/set_cover.png}
-    \end{figure}
-    L'algoritmo esegue i seguenti passi:
-    \begin{enumerate}
-        \item $x:=\emptyset;$
-        \item selezionare $i:=1$ ed aggiorna $x:=\{1\};$
-        \item selezionare $i:=5$ ed aggiorna $x:=\{1,5\};$
-        \item selezionare $i:=4$ ed aggiorna $x:=\{1,4,5\};$
-        \item selezionare $i:=2$ ed aggiorna $x:=\{1,2,4,5\};$
-        \item tutte le righe sono coperte, quindi $\Delta_A^+(x)=\emptyset$ e termina.
-    \end{enumerate}
-    Il valore trovato è 11 ed è l'ottimo. Ma non è sempre così, guardiamo un controesempio.
-    Consideriamo il seguente esempio negativo:
-    \begin{figure}[H]
-        \centering
-        \includegraphics[scale=0.5]{images/set_cover_neg.png}
-    \end{figure}
-    Passi dell'algoritmo:
-    \begin{enumerate}
-        \item $x:=\emptyset;$
-        \item Visto che $\frac{c_i}{a_i}(x)=[4.16\; 2\;4\; 12\; 12]$ allora selezionare $i:=2,$
-        \item Visto che $\frac{c_i}{a_i}(x)=[8.3 - 8\;12\;12]$ allora selezionare $i:=3,$
-        \item Visto che $\frac{c_i}{a_i}(x)=[12.5 - - 24\;12]$ allora selezionare $i:=5,$
-        \item Visto che $\frac{c_i}{a_i}(x)=[25 - - 24 -]$ allora selezionare $i:=2,$
-        \item tutte le righe sono coperte, $\Delta_A^+(x)=\emptyset$ e termina.
-    \end{enumerate}
+La funzione obiettivo è additiva, ma le soluzioni non sono delle basi, in quanto non sono sotto insiemi massimali,
+questo perché più piccola la soluzione è meglio risulta. Inoltre, risulta necessario un criterio di selezione
+adattivo $\varphi_A(i,x)$, poiché uno \textit{puro} $\varphi_A(i)$ potrebbe ripetitivamente scegliere colonne che
+coprono le stesse righe.\\Le idee più promettenti da seguire sono:
+\begin{itemize}
+    \item la \textbf{funzione obiettivo} seleziona colonne di costo minimo.
+    \item i vincoli: selezionare colonne che coprono molte righe.
+    \item il corrente sottoinsieme $x$: selezionare colonne che coprono nuove righe.
+\end{itemize}
+Ricapitolando:
+\begin{itemize}
+    \item includere nel passo $\Delta_A^+(x)$ solo colonne che coprono righe addizionali non presenti in $x$.
+    \item applicare il criterio di selezione adattivo $\varphi_A(i,x)=\frac{c_i}{a_i(x)}$ dove
+          $a_i(x)$ è il numero di righe coperte da $i$, ma che non sono presenti in $x$.
+\end{itemize}
+Consideriamo il seguente esempio positivo:
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/set_cover.png}
+\end{figure}
+L'algoritmo esegue i seguenti passi:
+\begin{enumerate}
+    \item $x:=\emptyset;$
+    \item selezionare $i:=1$ ed aggiorna $x:=\{1\};$
+    \item selezionare $i:=5$ ed aggiorna $x:=\{1,5\};$
+    \item selezionare $i:=4$ ed aggiorna $x:=\{1,4,5\};$
+    \item selezionare $i:=2$ ed aggiorna $x:=\{1,2,4,5\};$
+    \item tutte le righe sono coperte, quindi $\Delta_A^+(x)=\emptyset$ e termina.
+\end{enumerate}
+Il valore trovato è 11 ed è l'ottimo. Ma non è sempre così, guardiamo un controesempio.
+Consideriamo il seguente esempio negativo:
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/set_cover_neg.png}
+\end{figure}
+Passi dell'algoritmo:
+\begin{enumerate}
+    \item $x:=\emptyset;$
+    \item Visto che $\frac{c_i}{a_i}(x)=[4.16\; 2\;4\; 12\; 12]$ allora selezionare $i:=2,$
+    \item Visto che $\frac{c_i}{a_i}(x)=[8.3 - 8\;12\;12]$ allora selezionare $i:=3,$
+    \item Visto che $\frac{c_i}{a_i}(x)=[12.5 - - 24\;12]$ allora selezionare $i:=5,$
+    \item Visto che $\frac{c_i}{a_i}(x)=[25 - - 24 -]$ allora selezionare $i:=2,$
+    \item tutte le righe sono coperte, $\Delta_A^+(x)=\emptyset$ e termina.
+\end{enumerate}
 
-    La soluzione restituita è $x=\{2,3,4,5\}$ ed il suo valore è $50$, dove la soluzione
-    ottimale $x^*=\{1\}$ ha valore $f^*=25$-
-    \paragraph{Approssimabilità del SCP}\mbox{}\\
-    Questo algoritmo ha un rateo di approssimazione logaritmico e non-costante.
-    \begin{itemize}
-        \item ad ogni passo $t$, ogni colonna $i$ viene valutata con criterio
-              $$\varphi_A(i,x^{(t-1)})=\frac{c_i}{a_i(x^{(t-1)})}$$
-        \item ogni riga $j$ è coperta da una certa colonna $i_j$ ad un dato passo $t_j$
-        \item quando ogni riga $j$ viene coperta, il suo peso viene impostato a:
-              $$\theta_j=\frac{c_{i_j}}{a_{i_j}(x^{(t_j-1)})}$$
-              quindi il peso totale delle righe incrementa di $c_{i_j}$ al passo $t_j$;
-              corrispettivamente, $x$ include la colonna $i_j$ ed il suo costo incrementa
-              di $c_{i_j}$.
-        \item il costo totale di $x$ è sempre uguale al peso totale delle righe
-              $$f_A(x)=\sum_{i\in x}c_i=\sum_{j\in R}\theta_j$$
-              %TODO terminare slide 18 approssimabilità SCP
-    \end{itemize}
+La soluzione restituita è $x=\{2,3,4,5\}$ ed il suo valore è $50$, dove la soluzione
+ottimale $x^*=\{1\}$ ha valore $f^*=25$-
+\paragraph{Approssimabilità del SCP}\mbox{}\\
+Questo algoritmo ha un rateo di approssimazione logaritmico e non-costante.
+\begin{itemize}
+    \item ad ogni passo $t$, ogni colonna $i$ viene valutata con criterio
+          $$\varphi_A(i,x^{(t-1)})=\frac{c_i}{a_i(x^{(t-1)})}$$
+    \item ogni riga $j$ è coperta da una certa colonna $i_j$ ad un dato passo $t_j$
+    \item quando ogni riga $j$ viene coperta, il suo peso viene impostato a:
+          $$\theta_j=\frac{c_{i_j}}{a_{i_j}(x^{(t_j-1)})}$$
+          quindi il peso totale delle righe incrementa di $c_{i_j}$ al passo $t_j$;
+          corrispettivamente, $x$ include la colonna $i_j$ ed il suo costo incrementa
+          di $c_{i_j}$.
+    \item il costo totale di $x$ è sempre uguale al peso totale delle righe
+          $$f_A(x)=\sum_{i\in x}c_i=\sum_{j\in R}\theta_j$$
+          %TODO terminare slide 18 approssimabilità SCP
+\end{itemize}
 
-    \subsection{Euristica First-Fit}
-    \paragraph{Bin Packing Problem}\mbox{}\\
-    Il BPP richiede di dividere un insieme $E$ di oggetti voluminosi in un minimo
-    numero di container di una data capacità presi da un insieme $C$.
-    Il ground set $B=E\times C$ include gli assegnamenti a coppie di oggetti-container $(i,j)$,
-    con esattamente un container per ogni oggetto, con esattamente il volume totale in ogni container che non
-    eccede la capacità.
+\subsection{Euristica First-Fit}
+\paragraph{Bin Packing Problem}\mbox{}\\
+Il BPP richiede di dividere un insieme $E$ di oggetti voluminosi in un minimo
+numero di container di una data capacità presi da un insieme $C$.
+Il ground set $B=E\times C$ include gli assegnamenti a coppie di oggetti-container $(i,j)$,
+con esattamente un container per ogni oggetto, con esattamente il volume totale in ogni container che non
+eccede la capacità.
 
-    Definiamo lo spazio di ricerca $\mathcal{F}_A$ come l'insieme di tutte le soluzioni
-    parziali. La funzione obiettivo è un pessimo criterio di selezione, perché è \textit{piatta}
-    (tutti i sottoinsiemi aumentati hanno lo stesso valore o sono incrementati di 1).
-    \paragraph{First-Fit}
-    \begin{itemize}
-        \item Si inizia con un insieme vuoto $x^{(0)}=\emptyset$
-        \item Seleziona la coppia $(i,j)$ in accordo al seguente criterio:
-              \begin{itemize}
-                  \item $i$ è il primo oggetto non assegnato.
-                  \item $j$ è il primo container utilizzato con abbastanza capacità
-                        residua per $i$, o se nessun container non ha abbastanza capacità residua,
-                        il primo container \textit{inutilizzato}.
-              \end{itemize}
-        \item aggiungere un nuovo assegnamento alla soluzione $x^{(t)}:=x^{(t-1)}\cup\{(i,j)\}$
-    \end{itemize}
-    \begin{figure}[H]
-        \centering
-        \includegraphics[scale=0.5]{images/bpp_first-fit.png}
-    \end{figure}
-    Notare che la scelta $(i,j)$ dipende sia da $i$ che da $x$, mentre non è
-    determinata da $f(x\cup\{(i,j)\})$.
+Definiamo lo spazio di ricerca $\mathcal{F}_A$ come l'insieme di tutte le soluzioni
+parziali. La funzione obiettivo è un pessimo criterio di selezione, perché è \textit{piatta}
+(tutti i sottoinsiemi aumentati hanno lo stesso valore o sono incrementati di 1).
+\paragraph{First-Fit}
+\begin{itemize}
+    \item Si inizia con un insieme vuoto $x^{(0)}=\emptyset$
+    \item Seleziona la coppia $(i,j)$ in accordo al seguente criterio:
+          \begin{itemize}
+              \item $i$ è il primo oggetto non assegnato.
+              \item $j$ è il primo container utilizzato con abbastanza capacità
+                    residua per $i$, o se nessun container non ha abbastanza capacità residua,
+                    il primo container \textit{inutilizzato}.
+          \end{itemize}
+    \item aggiungere un nuovo assegnamento alla soluzione $x^{(t)}:=x^{(t-1)}\cup\{(i,j)\}$
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/bpp_first-fit.png}
+\end{figure}
+Notare che la scelta $(i,j)$ dipende sia da $i$ che da $x$, mentre non è
+determinata da $f(x\cup\{(i,j)\})$.
 
-    La soluzione non è ottima:
+La soluzione non è ottima:
 
-    ma appunto approssimata (dimostrazione, come sempre non sono
-    chieste all'esame):
-    \begin{itemize}
-        \item sono necessari almeno $f^*\geq\sum_{i\in E}\frac{v_i}{V}$ container.
-        \item il volume occupato è $>\frac{V}{3}$ per tutti i container utilizzati,
-              possibilmente eccetto per l'ultimo.
-        \item il volume totale eccede quello di $f_A-1$ container "saturi"
-              $$\sum_{i\in E}v_i > (f_A-1)\frac{V}{2}$$
-              cosa che implica $(f_A-1)\leq 2\frac{\sum_{i\in E}v_i}{V}\leq 2f^*\implies f_A\leq 2f^* +1$
-    \end{itemize}
+ma appunto approssimata (dimostrazione, come sempre non sono
+chieste all'esame):
+\begin{itemize}
+    \item sono necessari almeno $f^*\geq\sum_{i\in E}\frac{v_i}{V}$ container.
+    \item il volume occupato è $>\frac{V}{3}$ per tutti i container utilizzati,
+          possibilmente eccetto per l'ultimo.
+    \item il volume totale eccede quello di $f_A-1$ container "saturi"
+          $$\sum_{i\in E}v_i > (f_A-1)\frac{V}{2}$$
+          cosa che implica $(f_A-1)\leq 2\frac{\sum_{i\in E}v_i}{V}\leq 2f^*\implies f_A\leq 2f^* +1$
+\end{itemize}
 
-    \paragraph{Euristica First-Fit con decremento}\mbox{}\\
-    Il rateo di approssimazione $\alpha =2$ viene mantenuto per qualsiasi permutazione degli
-    oggetti.
+\paragraph{Euristica First-Fit con decremento}\mbox{}\\
+Il rateo di approssimazione $\alpha =2$ viene mantenuto per qualsiasi permutazione degli
+oggetti.
 
-    L'intuizione suggerirebbe di selezionare prima gli oggetti più piccoli, questo per fare in
-    modo di mantenere la funzione obiettivo $f(x\cup\{i\})$ più piccola possibile, ma questo
-    trascura il fatto che tutti gli oggetti debbano essere assegnati (intuizione stupida).
+L'intuizione suggerirebbe di selezionare prima gli oggetti più piccoli, questo per fare in
+modo di mantenere la funzione obiettivo $f(x\cup\{i\})$ più piccola possibile, ma questo
+trascura il fatto che tutti gli oggetti debbano essere assegnati (intuizione stupida).
 
-    Per contrasto, è meglio selezionare l'oggetto più grande prima perché:
-    \begin{itemize}
-        \item ogni oggetto in un container ha un volume strettamente più grande
-              della capacità residua di tutti i container precedenti.
-        \item mantenere gli oggetti più piccoli alla fine garantisce che differenti
-              container abbiano una capacità residua piccola abbastanza per contenerli.
-    \end{itemize}
-    Questo algoritmo ha un rateo ri approssimazione migliore $f_A\leq \frac{11}{9}f^*+1$
+Per contrasto, è meglio selezionare l'oggetto più grande prima perché:
+\begin{itemize}
+    \item ogni oggetto in un container ha un volume strettamente più grande
+          della capacità residua di tutti i container precedenti.
+    \item mantenere gli oggetti più piccoli alla fine garantisce che differenti
+          container abbiano una capacità residua piccola abbastanza per contenerli.
+\end{itemize}
+Questo algoritmo ha un rateo ri approssimazione migliore $f_A\leq \frac{11}{9}f^*+1$
 
-    \subsection{Estensione delle euristiche costruttive}
-    Lo schema base degli algoritmi costruttivi può essere potenziato utilizzando:
-    \begin{enumerate}
-        \item un grafo di costruzione più efficace:
-              \begin{itemize}
-                  \item aggiungi più di un elemento al corrente sottoinsieme $x$.
-                  \item aggiungi elementi ad $x$, ma anche rimuovi gli elementi da $x$.
-              \end{itemize}
+\subsection{Estensione delle euristiche costruttive}
+Lo schema base degli algoritmi costruttivi può essere potenziato utilizzando:
+\begin{enumerate}
+    \item un grafo di costruzione più efficace:
+          \begin{itemize}
+              \item aggiungi più di un elemento al corrente sottoinsieme $x$.
+              \item aggiungi elementi ad $x$, ma anche rimuovi gli elementi da $x$.
+          \end{itemize}
 
-        \item un criterio di selezione più sofisticato, come:
-              \begin{itemize}
-                  \item una funzione \textbf{regret-based} ("basata sul rimpianto"), che
-                        valuta potenziali perdite future associate con l'elemento $i$.
-                  \item una funzione \textbf{look-ahead} che valuta il valore finale dell'obiettivo
-                        ottenuto aggiungendo $i$ ad $x$.
-              \end{itemize}
-    \end{enumerate}
+    \item un criterio di selezione più sofisticato, come:
+          \begin{itemize}
+              \item una funzione \textbf{regret-based} ("basata sul rimpianto"), che
+                    valuta potenziali perdite future associate con l'elemento $i$.
+              \item una funzione \textbf{look-ahead} che valuta il valore finale dell'obiettivo
+                    ottenuto aggiungendo $i$ ad $x$.
+          \end{itemize}
+\end{enumerate}
 
-    L'algoritmo costruttivo aggiunge un elemento alla volta alla soluzione, è possibile
-    generalizzare questo schema con due possibili varianti che ad ogni passo:
-    \begin{enumerate}
-        \item aggiungono più di un elemento: il criterio di selezione $\varphi_A(B^+,x)$
-              il nuovo parametro identifica un sottoinsieme $B^+\subseteq B\setminus x$ da aggiungere, anziché un singolo elemento $i$.
+L'algoritmo costruttivo aggiunge un elemento alla volta alla soluzione, è possibile
+generalizzare questo schema con due possibili varianti che ad ogni passo:
+\begin{enumerate}
+    \item aggiungono più di un elemento: il criterio di selezione $\varphi_A(B^+,x)$
+          il nuovo parametro identifica un sottoinsieme $B^+\subseteq B\setminus x$ da aggiungere, anziché un singolo elemento $i$.
 
-        \item aggiungere elementi, ma anche rimuovere un numero più piccolo di elementi: il
-              criterio di selezione $\varphi_A(B^+,B^-,x)$ identifica un sottoinsieme $B^+\subseteq B\setminus x$
-              da aggiungere ed un sottoinsieme $B^-\subseteq x$ da rimuovere con $|B^+|>|B^-$.
-    \end{enumerate}
+    \item aggiungere elementi, ma anche rimuovere un numero più piccolo di elementi: il
+          criterio di selezione $\varphi_A(B^+,B^-,x)$ identifica un sottoinsieme $B^+\subseteq B\setminus x$
+          da aggiungere ed un sottoinsieme $B^-\subseteq x$ da rimuovere con $|B^+|>|B^-$.
+\end{enumerate}
 
-    Questi algoritmi costruiscono un grafo di costruzione aciclico sullo spazio di ricerca, così
-    che loro non rivisiteranno mai un qualsiasi sottoinsieme.
+Questi algoritmi costruiscono un grafo di costruzione aciclico sullo spazio di ricerca, così
+che loro non rivisiteranno mai un qualsiasi sottoinsieme.
 
-    Il problema fondamentale è che definire famiglie di sottoinsieme tali che ottimizzare il criterio
-    di selezione sia un problema polinomiale.
-    $$\underset{B^+\subseteq B\setminus \{x\}, B^- \subseteq \{x\}}{min}\varphi(B^+, B^-,x)$$
+Il problema fondamentale è che definire famiglie di sottoinsieme tali che ottimizzare il criterio
+di selezione sia un problema polinomiale.
+$$\underset{B^+\subseteq B\setminus \{x\}, B^- \subseteq \{x\}}{min}\varphi(B^+, B^-,x)$$
 
-    \subsubsection{Euristica di distanza per Stainer Tree Problem (STP)}
-    Dato un grafo indiretto $G=(V,E)$ ed una funzione di costo $c:E\rightarrow\mathbb{N}$ definita
-    su gli archi ed un sottoinsieme di vertici speciali $U\subset V$, trovare un albero
-    di costo minimo che sia in grado di connettere tutti i vertici speciali.
+\subsubsection{Euristica di distanza per Stainer Tree Problem (STP)}
+Dato un grafo indiretto $G=(V,E)$ ed una funzione di costo $c:E\rightarrow\mathbb{N}$ definita
+su gli archi ed un sottoinsieme di vertici speciali $U\subset V$, trovare un albero
+di costo minimo che sia in grado di connettere tutti i vertici speciali.
 
-    \begin{figure}[H]
-        \centering
-        \includegraphics[scale=0.5]{images/stp.png}
-        \caption{Albero del problema STP}
-    \end{figure}
-    Il minimo albero ricoprente che copre tutti i vertici speciali non è necessariamente ottimale (
-    e potrebbe non esistere).
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/stp.png}
+    \caption{Albero del problema STP}
+\end{figure}
+Il minimo albero ricoprente che copre tutti i vertici speciali non è necessariamente ottimale (
+e potrebbe non esistere).
 
-    \paragraph{Distance heuristic per il STP}\mbox{}\\
-    Un algoritmo costruttivo basilare potrebbe adottare gli stessi spazi di ricerca dell'algoritmo
-    di Kruskal (insieme di tutte le foreste) o Prim (insieme di tutti gli alberi
-    che includono un vertice speciale) per trovare un MST/MAR.
+\paragraph{Distance heuristic per il STP}\mbox{}\\
+Un algoritmo costruttivo basilare potrebbe adottare gli stessi spazi di ricerca dell'algoritmo
+di Kruskal (insieme di tutte le foreste) o Prim (insieme di tutti gli alberi
+che includono un vertice speciale) per trovare un MST/MAR.
 
-    Questo però aggiungendo un arco alla volta, mi porta nel primo caso a restituire soluzioni
-    con archi ridondanti, e nel secondo algoritmo abbiamo una difficolta nel distinguere gli archi
-    utili da quelli ridondanti.
+Questo però aggiungendo un arco alla volta, mi porta nel primo caso a restituire soluzioni
+con archi ridondanti, e nel secondo algoritmo abbiamo una difficolta nel distinguere gli archi
+utili da quelli ridondanti.
 
-    L'euristica di distanza adotta come spazio di ricerca $\mathcal{F}$ la collezione di tutti gli
-    alberi incluso un dato vertice speciale $v_1$ (come per Prim). Iterativamente aggiunge un percorso
+L'euristica di distanza adotta come spazio di ricerca $\mathcal{F}$ la collezione di tutti gli
+alberi incluso un dato vertice speciale $v_1$ (come per Prim). Iterativamente aggiunge un percorso
 $B^+$ tra $x$ e un vertice speciale anziché un singolo arco, così che:
-    \begin{itemize}
-        \item $x$ rimane un albero
-        \item $x$ copre un nuovo vertice speciale
-        \item il cammino di costo minimo può essere calcolato in maniera efficiente ad ogni passo.
-    \end{itemize}
-    Esso termina quando tutti i vertici speciali sono connessi.
+\begin{itemize}
+    \item $x$ rimane un albero
+    \item $x$ copre un nuovo vertice speciale
+    \item il cammino di costo minimo può essere calcolato in maniera efficiente ad ogni passo.
+\end{itemize}
+Esso termina quando tutti i vertici speciali sono connessi.
 
-    \paragraph{Esempio}\mbox{}\\
-    \begin{figure}[H]
-        \centering
-        \includegraphics[scale=0.5 ]{images/examp0.png}
-        \caption{Passo 1}
-        \label{fig:exam_0_d}
-    \end{figure}
+\paragraph{Esempio}\mbox{}\\
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5 ]{images/examp0.png}
+    \caption{Passo 1}
+    \label{fig:exam_0_d}
+\end{figure}
 
-    \begin{figure}[H]
-        \centering
-        \includegraphics[scale=0.5 ]{images/examp1.png}
-        \caption{Passo 2}
-        \label{fig:exam_1_d}
-    \end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5 ]{images/examp1.png}
+    \caption{Passo 2}
+    \label{fig:exam_1_d}
+\end{figure}
 
-    \begin{figure}[H]
-        \centering
-        \includegraphics[scale=0.5 ]{images/examp2.png}
-        \caption{Passo 3}
-        \label{fig:exam_2_d}
-    \end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5 ]{images/examp2.png}
+    \caption{Passo 3}
+    \label{fig:exam_2_d}
+\end{figure}
 
-    \begin{enumerate}
-        \item Si inizia con un singolo vertice speciale $a$, e il sottoinsieme delle soluzione è
-              un albero degenere $x:=\emptyset$ (figura \ref{fig:exam_0_d}).
-        \item Si aggiunge il vertice speciale più vicino $b$ attraverso il cammino $\langle a,e,d,b\rangle$,
-              $x=\{(a,e),(e,d),(d,b)\}$ (figura \ref{fig:exam_1_d}).
-        \item si aggiunge il vertice speciale più vicino $g$ attraverso il cammino $\langle g,h,d\rangle$,
-              $x=\{(a,e),(e,d),(d,b),(g,h),(h,d)\}$ (figura \ref{fig:exam_2_d}).
-        \item tutti i vertici speciali si trovano nella soluzione, termina.
-    \end{enumerate}
+\begin{enumerate}
+    \item Si inizia con un singolo vertice speciale $a$, e il sottoinsieme delle soluzione è
+          un albero degenere $x:=\emptyset$ (figura \ref{fig:exam_0_d}).
+    \item Si aggiunge il vertice speciale più vicino $b$ attraverso il cammino $\langle a,e,d,b\rangle$,
+          $x=\{(a,e),(e,d),(d,b)\}$ (figura \ref{fig:exam_1_d}).
+    \item si aggiunge il vertice speciale più vicino $g$ attraverso il cammino $\langle g,h,d\rangle$,
+          $x=\{(a,e),(e,d),(d,b),(g,h),(h,d)\}$ (figura \ref{fig:exam_2_d}).
+    \item tutti i vertici speciali si trovano nella soluzione, termina.
+\end{enumerate}
 
-    L'algoritmo della distanza euristica risulta $2$-approssimato, è equivalente a calcolare li minimo albero ricoprente
-    su un grafo con i vertici ridotti ai vertici speciali, e gli archi corrispondenti ai cammini minimi.
-    \paragraph{Controesempio dell'ottimalità}\mbox{}\\
-    Consideriamo un grafo completo $G=(V,E)$ con $U = V\setminus \{1\}$ e costo
-    \[
-        c_{uv}=
-        \begin{cases}
-            (1+\epsilon)M & \text{per } u \text{ o } v=1 \\
-            2M            & \text{per }u,v\in U
-        \end{cases}
-    \]
+L'algoritmo della distanza euristica risulta $2$-approssimato, è equivalente a calcolare li minimo albero ricoprente
+su un grafo con i vertici ridotti ai vertici speciali, e gli archi corrispondenti ai cammini minimi.
+\paragraph{Controesempio dell'ottimalità}\mbox{}\\
+Consideriamo un grafo completo $G=(V,E)$ con $U = V\setminus \{1\}$ e costo
+\[
+    c_{uv}=
+    \begin{cases}
+        (1+\epsilon)M & \text{per } u \text{ o } v=1 \\
+        2M            & \text{per }u,v\in U
+    \end{cases}
+\]
 
-    L'euristica di distanza restituisce una grafo a stella che copre i vertici speciali:
-    $$f_{DH} = (n-2)\cdot 2M$$
-    \begin{figure}[H]
-        \centering
-        \includegraphics[scale=0.5]{images/star0.png}
-    \end{figure}
+L'euristica di distanza restituisce una grafo a stella che copre i vertici speciali:
+$$f_{DH} = (n-2)\cdot 2M$$
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/star0.png}
+\end{figure}
 
-    la soluzione ottimale risulta una stella che è centrata rispetto al nodo 1:
-    $$f^* = (n-1)\cdot(1+\epsilon)M$$
-    \begin{figure}[H]
-        \centering
-        \includegraphics[scale=0.5]{images/star1.png}
-    \end{figure}
-    Il rateo di approssimazione è $\rho DH=\frac{f_{DH}}{f^*}=\frac{n-2}{n-1}\cdot\frac{2}{1+\epsilon}<2$ e converge
-    verso 2 all'aumentare di $n$ ed al decrementare di $\epsilon$.
+la soluzione ottimale risulta una stella che è centrata rispetto al nodo 1:
+$$f^* = (n-1)\cdot(1+\epsilon)M$$
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/star1.png}
+\end{figure}
+Il rateo di approssimazione è $\rho DH=\frac{f_{DH}}{f^*}=\frac{n-2}{n-1}\cdot\frac{2}{1+\epsilon}<2$ e converge
+verso 2 all'aumentare di $n$ ed al decrementare di $\epsilon$.
 
-    \subsubsection{Algoritmi di inserzione per il TSP}
-    Differenti algoritmi euristici per il TSP definiscono lo spazio di ricerca $\mathcal{F}_A$ come
-    l'insieme di tutti i cicli del grafo rispetto ad un dato nodo. Un ciclo non può essere ottenuto
-    da un altro nodo aggiungendo un singolo arco, invece può essere ottenuto aggiungendo due archi
+\subsubsection{Algoritmi di inserzione per il TSP}
+Differenti algoritmi euristici per il TSP definiscono lo spazio di ricerca $\mathcal{F}_A$ come
+l'insieme di tutti i cicli del grafo rispetto ad un dato nodo. Un ciclo non può essere ottenuto
+da un altro nodo aggiungendo un singolo arco, invece può essere ottenuto aggiungendo due archi
 $(i,k),(k,j)$ e rimuovendone uno $(i,j)$.
 
-    \begin{figure}[H]
-        \centering
-        \includegraphics[scale=0.5]{images/looop.png}
-    \end{figure}
-    \begin{enumerate}
-        \item Iniziare con un ciclo sul nodo stesso (ricorsivo) di costo zero: $x^{(0)}=\{(1,1)\}$,
-              possiamo notare che non è molto differente da un insieme vuoto.
-        \item Selezionare un nodo $k$ da aggiungere ed un arco $(i,j)$ da rimuovere.
-        \item Se il ciclo non visita tutti i nodi, allora tornare al punto 2; altrimenti termina.
-    \end{enumerate}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/looop.png}
+\end{figure}
+\begin{enumerate}
+    \item Iniziare con un ciclo sul nodo stesso (ricorsivo) di costo zero: $x^{(0)}=\{(1,1)\}$,
+          possiamo notare che non è molto differente da un insieme vuoto.
+    \item Selezionare un nodo $k$ da aggiungere ed un arco $(i,j)$ da rimuovere.
+    \item Se il ciclo non visita tutti i nodi, allora tornare al punto 2; altrimenti termina.
+\end{enumerate}
 
-    Tale schema non visita mai la stessa soluzione e costruisce una soluzione fattibile in $n-1$ passi,
-    dove ad ogni passo si aggiunge un nuovo nodo.
+Tale schema non visita mai la stessa soluzione e costruisce una soluzione fattibile in $n-1$ passi,
+dove ad ogni passo si aggiunge un nuovo nodo.
 
-    Il criterio di selezione $\varphi_A(B^+,B^-,x)$ deve scegliere un arco ed un nodo;
-    ci sono $(n-|x|)|x|\in O(n^2)$ alternative possibili:
-    \begin{itemize}
-        \item $|x|$ possibili archi $(s_i,s_{i+1})$ da rimuovere.
-        \item $n-|x|$ possibili nodi $k$ da aggiungere attraverso gli archi $(s_i,k)$ e $(k,s_{i+1})$.
-    \end{itemize}
-    L'euristica con \textbf{inserzione economica} (CI, \textit{Cheapest Insertion}) utilizza un criterio di selezione:
-    $$\varphi_A(B^+,B^-,x)=f(x\cup B^+\setminus B^-)$$
+Il criterio di selezione $\varphi_A(B^+,B^-,x)$ deve scegliere un arco ed un nodo;
+ci sono $(n-|x|)|x|\in O(n^2)$ alternative possibili:
+\begin{itemize}
+    \item $|x|$ possibili archi $(s_i,s_{i+1})$ da rimuovere.
+    \item $n-|x|$ possibili nodi $k$ da aggiungere attraverso gli archi $(s_i,k)$ e $(k,s_{i+1})$.
+\end{itemize}
+L'euristica con \textbf{inserzione economica} (CI, \textit{Cheapest Insertion}) utilizza un criterio di selezione:
+$$\varphi_A(B^+,B^-,x)=f(x\cup B^+\setminus B^-)$$
 
-    La funzione obiettivo $f(x)$ è additiva, quindi estensibile all'intero spazio di ricerca $\mathcal{F}_A$,
-    visto che $f(x\cup B^+\setminus B^-)=f(x)+c_{s_i,k}+c_{k,s_{i+1}}-c_{s_i,s_{i+1}}$
+La funzione obiettivo $f(x)$ è additiva, quindi estensibile all'intero spazio di ricerca $\mathcal{F}_A$,
+visto che $f(x\cup B^+\setminus B^-)=f(x)+c_{s_i,k}+c_{k,s_{i+1}}-c_{s_i,s_{i+1}}$
 
-    $$arg\underset{B^+,B^-}{min}\varphi_A(B^+,B^-,x)=arg \underset{i,k}{ min}(c_{s_i,k}+c_{k,s_{i+1}}-c_{s_i,s_{i+1}})$$
-    Il costo computazionale di calcolare $\varphi_A$ decrementa da $\Theta(n)$ a $\Theta(1)$.
-    \begin{figure}[H]
-        \centering
-        \includegraphics[scale=0.5]{images/thtsf.png}
-    \end{figure}
-    \paragraph{Algoritmo Cheapest Insertion}
-    \begin{itemize}
-        \item Inizia con auto-ciclo di costo zero sul nodo 1: $x^{(0)}=\{(1,1)\}$,
-              è come partire con un singolo nodo.
-        \item Selezione dell'arco $(s_i,s_{i+1})\in x$ ed il nodo $k\notin N_x$ tale che
-              $(c_{s_i,k}+c_{k,s_{i+1}}-c_{s_i,s_{i+1}})$ sia il minimo.
-        \item Se il ciclo non visita tutti i nodi, allora torna al punto 2; altrimenti termina.
-    \end{itemize}
-    Non è un algoritmo esatto, però è $2$-approssimato, sotto la disuguaglianza triangolare. Consideriamo
-    il seguente esempio:
+$$arg\underset{B^+,B^-}{min}\varphi_A(B^+,B^-,x)=arg \underset{i,k}{ min}(c_{s_i,k}+c_{k,s_{i+1}}-c_{s_i,s_{i+1}})$$
+Il costo computazionale di calcolare $\varphi_A$ decrementa da $\Theta(n)$ a $\Theta(1)$.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/thtsf.png}
+\end{figure}
+\paragraph{Algoritmo Cheapest Insertion}
+\begin{itemize}
+    \item Inizia con auto-ciclo di costo zero sul nodo 1: $x^{(0)}=\{(1,1)\}$,
+          è come partire con un singolo nodo.
+    \item Selezione dell'arco $(s_i,s_{i+1})\in x$ ed il nodo $k\notin N_x$ tale che
+          $(c_{s_i,k}+c_{k,s_{i+1}}-c_{s_i,s_{i+1}})$ sia il minimo.
+    \item Se il ciclo non visita tutti i nodi, allora torna al punto 2; altrimenti termina.
+\end{itemize}
+Non è un algoritmo esatto, però è $2$-approssimato, sotto la disuguaglianza triangolare. Consideriamo
+il seguente esempio:
 
-    \begin{figure}[H]
-        \centering
-        \includegraphics[scale=0.5]{images/cheap_ins0.png}
-        \caption{Si inizia con un singolo nodo (come nell'euristica NN)}
-    \end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/cheap_ins0.png}
+    \caption{Si inizia con un singolo nodo (come nell'euristica NN)}
+\end{figure}
 
-    \begin{figure}[H]
-        \centering
-        \includegraphics[scale=0.5]{images/cheap_ins1.png}
-        \caption{Si crea un ciclo (anziché un cammino)}
-    \end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/cheap_ins1.png}
+    \caption{Si crea un ciclo (anziché un cammino)}
+\end{figure}
 
-    \begin{figure}[H]
-        \centering
-        \includegraphics[scale=0.5]{images/cheap_ins2.png}
-        \caption{Si aggiunge ad ogni passo il nodo che minimamente incrementa il costo del circuito}
-    \end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/cheap_ins2.png}
+    \caption{Si aggiunge ad ogni passo il nodo che minimamente incrementa il costo del circuito}
+\end{figure}
 
-    \begin{figure}[H]
-        \centering
-        \includegraphics[scale=0.5]{images/cheap_ins3.png}
-        \caption{Si termina quando il circuito visita tutti i nodi}
-    \end{figure}
-    L'algoritmo CI effettua $n-1$ passi, ad ogni passo $t$:
-    \begin{itemize}
-        \item calcola $(n-t)t$ coppie nodo-arco. Ogni valutazione richiede costo costante, e possibilmente
-              aggiornare la mossa migliore.
-        \item esegue la migliore aggiunta/rimozione.
-        \item decide quando terminare.
-    \end{itemize}
-    La complessità totale è $\Theta(n^3)$, può essere risotto a $\Theta(n^2\log n)$ mettendo all'interno di
-    un min-heap il migliore costo di inserzione per ogni nodo esterno, ognuno degli $n$ passi:
-    \begin{itemize}
-        \item seleziona la migliore inserzione in un tempo $O(1)$
-        \item viene eseguito creando due nuove inserzioni per ogni nodo esterno, la migliore delle
-              quali possibilmente migliora il valore salvato nello heap; ognuno dei $O(n)$ miglioramenti
-              impiega $O(\log n)$.
-    \end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/cheap_ins3.png}
+    \caption{Si termina quando il circuito visita tutti i nodi}
+\end{figure}
+L'algoritmo CI effettua $n-1$ passi, ad ogni passo $t$:
+\begin{itemize}
+    \item calcola $(n-t)t$ coppie nodo-arco. Ogni valutazione richiede costo costante, e possibilmente
+          aggiornare la mossa migliore.
+    \item esegue la migliore aggiunta/rimozione.
+    \item decide quando terminare.
+\end{itemize}
+La complessità totale è $\Theta(n^3)$, può essere risotto a $\Theta(n^2\log n)$ mettendo all'interno di
+un min-heap il migliore costo di inserzione per ogni nodo esterno, ognuno degli $n$ passi:
+\begin{itemize}
+    \item seleziona la migliore inserzione in un tempo $O(1)$
+    \item viene eseguito creando due nuove inserzioni per ogni nodo esterno, la migliore delle
+          quali possibilmente migliora il valore salvato nello heap; ognuno dei $O(n)$ miglioramenti
+          impiega $O(\log n)$.
+\end{itemize}
 
-    \paragraph{Euristica Nearest Insertion per il TSP}\mbox{}\\
-    L'algoritmo CI tende a selezionare i nodi chiusi nel circuito $x$: minimizzando
+\paragraph{Euristica Nearest Insertion per il TSP}\mbox{}\\
+L'algoritmo CI tende a selezionare i nodi chiusi nel circuito $x$: minimizzando
 $c_{s_i,k}+c_{k,s_{i+1}}-c_{s_i,s_i+1}$ implica che $c_{s_i,k}$ e $c_{s_i +1},k$ sono piccoli.
-    Per accelerare, uno può decomporre il criterio $\varphi_A$ in due fasi. Algoritmo NI (\textit{Nearest Insertion}):
-    \begin{enumerate}
-        \item Si con un auto-ciclo di costo zero sul nodo 1: $x^{(0)}=\{(1,1)\}$.
+Per accelerare, uno può decomporre il criterio $\varphi_A$ in due fasi. Algoritmo NI (\textit{Nearest Insertion}):
+\begin{enumerate}
+    \item Si con un auto-ciclo di costo zero sul nodo 1: $x^{(0)}=\{(1,1)\}$.
 
-        \item \textbf{Criterio di aggiunta}: selezionare il nodo $k$ più vicino al circuito $x$
-              $$k=arg\;\underset{l \notin N_x}{min} \left( \underset{s_i \in N_x}{min}c_{s_i,l} \right)$$
+    \item \textbf{Criterio di aggiunta}: selezionare il nodo $k$ più vicino al circuito $x$
+          $$k=arg\;\underset{l \notin N_x}{min} \left( \underset{s_i \in N_x}{min}c_{s_i,l} \right)$$
 
-        \item \textbf{Criterio di rimozione}: selezionare l'arco $s_i,s_{i+1}$ che minimizza $f$
-              $$(s_i,s_{i+1})=arg\;\underset{(s_i,s_{i+1})\in x}{min} (c_{s_i,k}+c_{k,s_{i+1}}-c_{s_i,s_{i+1}})$$
+    \item \textbf{Criterio di rimozione}: selezionare l'arco $s_i,s_{i+1}$ che minimizza $f$
+          $$(s_i,s_{i+1})=arg\;\underset{(s_i,s_{i+1})\in x}{min} (c_{s_i,k}+c_{k,s_{i+1}}-c_{s_i,s_{i+1}})$$
 
-        \item Se il ciclo non visita tutti i nodi, allora tornare al punto 2; altrimenti termina.
-    \end{enumerate}
-    Non è un algoritmo esatto ma è 2-approssimato, sotto la disuguaglianza triangolare. Consideriamo
-    il seguente esempio:
+    \item Se il ciclo non visita tutti i nodi, allora tornare al punto 2; altrimenti termina.
+\end{enumerate}
+Non è un algoritmo esatto ma è 2-approssimato, sotto la disuguaglianza triangolare. Consideriamo
+il seguente esempio:
 
-    \begin{figure}[H]
-        \centering
-        \includegraphics[scale=0.5]{images/NI0.png}
-        \caption{Si inizia con un singolo vertice (come per NN e CI)}
-    \end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/NI0.png}
+    \caption{Si inizia con un singolo vertice (come per NN e CI)}
+\end{figure}
 
-    \begin{figure}[H]
-        \centering
-        \includegraphics[scale=0.5]{images/NI1.png}
-        \caption{Si crea un ciclo (come nel CI)}
-    \end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/NI1.png}
+    \caption{Si crea un ciclo (come nel CI)}
+\end{figure}
 
-    \begin{figure}[H]
-        \centering
-        \includegraphics[scale=0.5]{images/NI2.png}
-        \caption{Il ciclo cresce differentemente, si aggiunge sempre il nodo più vicino,
-            anche se questo incrementa il costo del ciclo più che aggiungere un altro nodo}
-    \end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/NI2.png}
+    \caption{Il ciclo cresce differentemente, si aggiunge sempre il nodo più vicino,
+        anche se questo incrementa il costo del ciclo più che aggiungere un altro nodo}
+\end{figure}
 
-    \begin{figure}[H]
-        \centering
-        \includegraphics[scale=0.5]{images/NI3.png}
-        \caption{Si termina quando il ciclo ha visitato tutti i nodi}
-    \end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/NI3.png}
+    \caption{Si termina quando il ciclo ha visitato tutti i nodi}
+\end{figure}
 
-    L'algoritmo NI effettua $n-1$ passi, ad ogni passo $t$:
-    \begin{itemize}
-        \item calcola la distanza da $(n-t)$ nodi dal ciclo, ogni uno in $\Theta(t)$.
-        \item Seleziona il nodo con distanza minima.
-        \item Calcola la rimozione di $t$ archi, ogni uno in tempo $\Theta (1)$
-        \item Effettua la migliore addizione/rimozione
-        \item Decide quando terminare
-    \end{itemize}
-    La complessità totale è $\Theta(n^3)$, può essere ridotta a $\Theta(n^2)$ utilizzando un vettore
-    che contiene per ogni nodo esterno il suo nodo interno più vicino, ognuno dei $n-1$ passi:
-    \begin{itemize}
-        \item seleziona il nodo più vicino in $O(n)$.
-        \item crea due nuove inserzioni per ogni nodo esterno, la migliore delle quali possibilmente migliore il valore
-              salvato nel vettore; ognuno dei $O(n)$ miglioramenti si prende $O(1)$ tempo.
-    \end{itemize}
+L'algoritmo NI effettua $n-1$ passi, ad ogni passo $t$:
+\begin{itemize}
+    \item calcola la distanza da $(n-t)$ nodi dal ciclo, ogni uno in $\Theta(t)$.
+    \item Seleziona il nodo con distanza minima.
+    \item Calcola la rimozione di $t$ archi, ogni uno in tempo $\Theta (1)$
+    \item Effettua la migliore addizione/rimozione
+    \item Decide quando terminare
+\end{itemize}
+La complessità totale è $\Theta(n^3)$, può essere ridotta a $\Theta(n^2)$ utilizzando un vettore
+che contiene per ogni nodo esterno il suo nodo interno più vicino, ognuno dei $n-1$ passi:
+\begin{itemize}
+    \item seleziona il nodo più vicino in $O(n)$.
+    \item crea due nuove inserzioni per ogni nodo esterno, la migliore delle quali possibilmente migliore il valore
+          salvato nel vettore; ognuno dei $O(n)$ miglioramenti si prende $O(1)$ tempo.
+\end{itemize}
 
-    \paragraph{Euristica Farthest Insertion per il TSP}\mbox{}\\
-    La scelta del nodo più vicino al ciclo è naturale, ma ingannevole: visto che tutti i nodi devono essere visitati,
-    è preferibile andare trattare per primi i nodi più problematici (\textit{farthest}).
+\paragraph{Euristica Farthest Insertion per il TSP}\mbox{}\\
+La scelta del nodo più vicino al ciclo è naturale, ma ingannevole: visto che tutti i nodi devono essere visitati,
+è preferibile andare trattare per primi i nodi più problematici (\textit{farthest}).
 
-    \begin{enumerate}
-        \item iniziare con un auto-ciclo a costo zero sul nodo 1: $x^{(0)}=\{(1,1)\}$
-        \item criterio di aggiunta: selezionare il nodo $k$ più lontano dal ciclo $x$
-              $$k=arg\;\underset{l\notin N_x}{max}\left(\underset{s_i\in N_x}{c_{s_i, l}}\right)$$
-        \item criterio di rimozione: selezionare l'arco $(s_i,s_{i+1})$ che minimizza i costi
-              $$(s_i,s_{i+1})=arg\;\underset{(s_i,s_{i+1})\in x}{min}(c_{s_i,k}+c_{k,s_{i+1}}-c_{s_i,s_{i+1}})$$
-        \item se il ciclo non visita tutti i nodi, tornare al punto 2; altrimenti termina.
-    \end{enumerate}
-    questa euristica risulta $\log n$-approssimata sotto la disuguaglianza triangolare, quindi peggiore delle precenti
-    euristiche (caso peggiore).
-    \begin{figure}[H]
-        \centering
-        \includegraphics[scale=0.5]{images/farthest0.png}
-        \caption{si raggiunge subito il primo nodo più lontano da quello iniziale}
-    \end{figure}
+\begin{enumerate}
+    \item iniziare con un auto-ciclo a costo zero sul nodo 1: $x^{(0)}=\{(1,1)\}$
+    \item criterio di aggiunta: selezionare il nodo $k$ più lontano dal ciclo $x$
+          $$k=arg\;\underset{l\notin N_x}{max}\left(\underset{s_i\in N_x}{c_{s_i, l}}\right)$$
+    \item criterio di rimozione: selezionare l'arco $(s_i,s_{i+1})$ che minimizza i costi
+          $$(s_i,s_{i+1})=arg\;\underset{(s_i,s_{i+1})\in x}{min}(c_{s_i,k}+c_{k,s_{i+1}}-c_{s_i,s_{i+1}})$$
+    \item se il ciclo non visita tutti i nodi, tornare al punto 2; altrimenti termina.
+\end{enumerate}
+questa euristica risulta $\log n$-approssimata sotto la disuguaglianza triangolare, quindi peggiore delle precenti
+euristiche (caso peggiore).
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/farthest0.png}
+    \caption{si raggiunge subito il primo nodo più lontano da quello iniziale}
+\end{figure}
 
-    \begin{figure}[H]
-        \centering
-        \includegraphics[scale=0.5]{images/farthest1.png}
-        \caption{si prosegue nella stessa maniera}
-    \end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/farthest1.png}
+    \caption{si prosegue nella stessa maniera}
+\end{figure}
 
-    \begin{figure}[H]
-        \centering
-        \includegraphics[scale=0.5]{images/farthest2.png}
-        \caption{si cerca l'inserimento nella migliore maniera possibile}
-    \end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/farthest2.png}
+    \caption{si cerca l'inserimento nella migliore maniera possibile}
+\end{figure}
 
-    \begin{figure}[H]
-        \centering
-        \includegraphics[scale=0.5]{images/farthest3.png}
-        \caption{il ciclo cresce con più regolarità, senza attraversamenti}
-    \end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/farthest3.png}
+    \caption{il ciclo cresce con più regolarità, senza attraversamenti}
+\end{figure}
 
-    \begin{figure}[H]
-        \centering
-        \includegraphics[scale=0.5]{images/farthest4.png}
-        \caption{termina quando il ciclo visita tutti i nodi}
-    \end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/farthest4.png}
+    \caption{termina quando il ciclo visita tutti i nodi}
+\end{figure}
 
-    L'algoritmo FI esegue in $n-1$ passi, ad ogni passo $t$:
-    \begin{itemize}
-        \item calcola la distanza di $(n-t)$ nodi dal ciclo, ognuno in $\Theta(t)$ tempo.
-        \item seleziona il nodo della distanza massima.
-        \item calcola la rimozione di $t$ archi, ognuno in tempo $\Theta(1)$.
-        \item effettua la migliore rimozione/addizione.
-        \item decide quando terminare.
-    \end{itemize}
-    La complessità generale è di $\Theta(n^3)$, può essere ridotto a $\Theta(n^2)$ come nell'euristica NI.
+L'algoritmo FI esegue in $n-1$ passi, ad ogni passo $t$:
+\begin{itemize}
+    \item calcola la distanza di $(n-t)$ nodi dal ciclo, ognuno in $\Theta(t)$ tempo.
+    \item seleziona il nodo della distanza massima.
+    \item calcola la rimozione di $t$ archi, ognuno in tempo $\Theta(1)$.
+    \item effettua la migliore rimozione/addizione.
+    \item decide quando terminare.
+\end{itemize}
+La complessità generale è di $\Theta(n^3)$, può essere ridotto a $\Theta(n^2)$ come nell'euristica NI.
 
-    \subsubsection{Efficacia ed efficienza}
-    Un algoritmo euristico costruttivo esegue al massimo $n=|B|$ passi che consistono in:
-    \begin{enumerate}
-        \item la costruzione $\Delta_A^+(x)$
-        \item il calcolo di $\varphi_A(i,x)$ per ogni $i\in\Delta_A^+(x)$
-        \item la selezione dell'elemento $i$ che minimizza $\varphi_A(i,x)$
-        \item l'aggiornamento di $x$ (e strutture dati ausiliarie)
-    \end{enumerate}
-    In generale, la complessità è un polinomio di basso ordine dominato dalle prime due componenti citate.
-    $$T_A(n)\in O\left(n(T_{\Delta_A^+(n)+T_{\varphi_A}(n)})\right)$$
+\subsubsection{Efficacia ed efficienza}
+Un algoritmo euristico costruttivo esegue al massimo $n=|B|$ passi che consistono in:
+\begin{enumerate}
+    \item la costruzione $\Delta_A^+(x)$
+    \item il calcolo di $\varphi_A(i,x)$ per ogni $i\in\Delta_A^+(x)$
+    \item la selezione dell'elemento $i$ che minimizza $\varphi_A(i,x)$
+    \item l'aggiornamento di $x$ (e strutture dati ausiliarie)
+\end{enumerate}
+In generale, la complessità è un polinomio di basso ordine dominato dalle prime due componenti citate.
+$$T_A(n)\in O\left(n(T_{\Delta_A^+(n)+T_{\varphi_A}(n)})\right)$$
 
-    \subsubsection{Caratteristiche generali degli algoritmi costruttivi}
-    \begin{itemize}
-        \item sono intuitivi.
-        \item sono semplici da progettare, analizzare ed implementare.
-        \item sono molto efficienti.
-        \item hanno un efficacia fortemente variabile:
-              \begin{itemize}
-                  \item su alcuni problemi garantiscono una soluzione ottimale.
-                  \item su altri problemi forniscono una garanzia di approssimazione.
-                  \item sulla maggior parte dei problemi forniscono soluzioni di qualità estremamente variabile,
-                        solitamente scarsa.
-                  \item su alcuni problemi non possono nemmeno garantire una soluzione fattibile.
-              \end{itemize}
-              Perciò risulta fondamentale studiare il problema prima dell'algoritmo.
-    \end{itemize}
+\subsubsection{Caratteristiche generali degli algoritmi costruttivi}
+\begin{itemize}
+    \item sono intuitivi.
+    \item sono semplici da progettare, analizzare ed implementare.
+    \item sono molto efficienti.
+    \item hanno un efficacia fortemente variabile:
+          \begin{itemize}
+              \item su alcuni problemi garantiscono una soluzione ottimale.
+              \item su altri problemi forniscono una garanzia di approssimazione.
+              \item sulla maggior parte dei problemi forniscono soluzioni di qualità estremamente variabile,
+                    solitamente scarsa.
+              \item su alcuni problemi non possono nemmeno garantire una soluzione fattibile.
+          \end{itemize}
+          Perciò risulta fondamentale studiare il problema prima dell'algoritmo.
+\end{itemize}
 
-    \subsubsection{Quando sono usati gli algoritmi costruttivi}
-    \begin{itemize}
-        \item quando forniscono una soluzione ottimale.
-        \item quando il tempo di esecuzione è molto corto.
-        \item quanto il problema ha una dimensione rilevante o richiede computazioni complesse.
-        \item come componente di altri algoritmi, per esempio come: fase iniziale (algoritmi di scambio),
-              procedura base (algoritmi di ricombinazione).
-    \end{itemize}
+\subsubsection{Quando sono usati gli algoritmi costruttivi}
+\begin{itemize}
+    \item quando forniscono una soluzione ottimale.
+    \item quando il tempo di esecuzione è molto corto.
+    \item quanto il problema ha una dimensione rilevante o richiede computazioni complesse.
+    \item come componente di altri algoritmi, per esempio come: fase iniziale (algoritmi di scambio),
+          procedura base (algoritmi di ricombinazione).
+\end{itemize}
 
-    \subsubsection{Euristiche distruttive}
-    Questo è un approccio esattamente complementare all'euristiche costruttive.
-    \begin{itemize}
-        \item si inizia a partire dall'intero ground set: $x^{(0)}:=B$
-        \item si rimuove un elemento per volta:
-              \begin{itemize}
-                  \item in maniera da rimanere nello spazio di ricerca $\mathcal{F}_A$.
-                        $$\Delta_A^+(x)=\{i\in x:x\setminus\{i\}\in\mathcal{F}_A\}$$
-                  \item massimizzando il criterio di selezione $\varphi_A(i,x)$
-              \end{itemize}
-        \item termina con $\Delta_A^+(x)=\emptyset$ (non è possibile rimanere nello spazio di ricerca $\mathcal{F}_A$).
-    \end{itemize}
-    un euristica distruttiva può essere descritta come:
+\subsubsection{Euristiche distruttive}
+Questo è un approccio esattamente complementare all'euristiche costruttive.
+\begin{itemize}
+    \item si inizia a partire dall'intero ground set: $x^{(0)}:=B$
+    \item si rimuove un elemento per volta:
+          \begin{itemize}
+              \item in maniera da rimanere nello spazio di ricerca $\mathcal{F}_A$.
+                    $$\Delta_A^+(x)=\{i\in x:x\setminus\{i\}\in\mathcal{F}_A\}$$
+              \item massimizzando il criterio di selezione $\varphi_A(i,x)$
+          \end{itemize}
+    \item termina con $\Delta_A^+(x)=\emptyset$ (non è possibile rimanere nello spazio di ricerca $\mathcal{F}_A$).
+\end{itemize}
+un euristica distruttiva può essere descritta come:
 
-    \begin{algorithm}[H]
-        \caption{Euristica distruttiva - $Stingy(I)$}
-        \begin{algorithmic}
-            \State $x:=B$
-            \State $x*:=B$
-            \If {$x\in X$}
-            \State {$f^*:=f(x)$}
-            \Else
-            \State {$f^*:=+\infty$}
-            \EndIf
-            \While{$\Delta_A^+(x)\neq \emptyset$}
-            \State $i:=arg\underset{i \in \Delta_A^+(x)}{max}\varphi_A(i,x);$
-            \State $x:x\setminus\{i\};$
-            \EndWhile
-            \If {$x\in X\text{ and }f(x)<f^*$}
-            \State $x^*:=x;$
-            \State $f^*:=f(x);$
-            \EndIf
-            \State $Return(x^*,f^*);$
-        \end{algorithmic}
-    \end{algorithm}
+\begin{algorithm}[H]
+    \caption{Euristica distruttiva - $Stingy(I)$}
+    \begin{algorithmic}
+        \State $x:=B$
+        \State $x*:=B$
+        \If {$x\in X$}
+        \State {$f^*:=f(x)$}
+        \Else
+        \State {$f^*:=+\infty$}
+        \EndIf
+        \While{$\Delta_A^+(x)\neq \emptyset$}
+        \State $i:=arg\underset{i \in \Delta_A^+(x)}{max}\varphi_A(i,x);$
+        \State $x:x\setminus\{i\};$
+        \EndWhile
+        \If {$x\in X\text{ and }f(x)<f^*$}
+        \State $x^*:=x;$
+        \State $f^*:=f(x);$
+        \EndIf
+        \State $Return(x^*,f^*);$
+    \end{algorithmic}
+\end{algorithm}
 
-    \textit{Perché non sono molto utilizzate?} Quando le soluzioni sono molto più piccole del ground set
+\textit{Perché non sono molto utilizzate?} Quando le soluzioni sono molto più piccole del ground set
 $|x|<<|B|$ un'euristica distruttiva:
-    \begin{itemize}
-        \item richiede un maggior numero di passi.
-        \item è più possibile che effettui una decisione erronea ad uno dei primi step.
-        \item a volte richiede più tempo per calcolare $\Delta_A^+(x)$ e $\varphi_A(i,x)$
-    \end{itemize}
-    Quando una euristica costruttiva restituisce soluzioni ridondanti, è utile accodare una euristica
-    distruttiva al suo termine come fase di post-processing.
+\begin{itemize}
+    \item richiede un maggior numero di passi.
+    \item è più possibile che effettui una decisione erronea ad uno dei primi step.
+    \item a volte richiede più tempo per calcolare $\Delta_A^+(x)$ e $\varphi_A(i,x)$
+\end{itemize}
+Quando una euristica costruttiva restituisce soluzioni ridondanti, è utile accodare una euristica
+distruttiva al suo termine come fase di post-processing.
 
-    L'euristica distruttiva ausiliaria:
-    \begin{itemize}
-        \item inizia da una soluzione $x$ dell'euristica costruttiva, anziché $B$.
-        \item adotta come spazio di ricerca la regione di fattibilità:
-              $$\mathcal{F}_A=X\implies\Delta_A^+{(x)}=\{i\in x:x\setminus\{i\}\in X\}$$
-        \item adotta come criterio di selezione la funzione obiettivo:
-              $$\varphi_A(i,x)=f(x\setminus\{i\})$$
-        \item termina dopo pochi passi.
-    \end{itemize}
+L'euristica distruttiva ausiliaria:
+\begin{itemize}
+    \item inizia da una soluzione $x$ dell'euristica costruttiva, anziché $B$.
+    \item adotta come spazio di ricerca la regione di fattibilità:
+          $$\mathcal{F}_A=X\implies\Delta_A^+{(x)}=\{i\in x:x\setminus\{i\}\in X\}$$
+    \item adotta come criterio di selezione la funzione obiettivo:
+          $$\varphi_A(i,x)=f(x\setminus\{i\})$$
+    \item termina dopo pochi passi.
+\end{itemize}
 
-    \paragraph{Euristica Costruttiva/Distruttiva per il SCP}\mbox{}\\
-    \begin{figure}[H]
-        \centering
-        \includegraphics[scale=0.7]{images/scp_cd.png}
-    \end{figure}
-    \begin{enumerate}
-        \item L'euristica costruttiva selezione, in ordine, le colonne 1,2,4 e 3.
-        \item La soluzione è ridondante: la colonna 2 può essere rimossa
-        \item L'euristica costruttiva ausiliaria rimuove la colonna 2 e fornisce una soluzione ottimale $x^*=\{1,3,4\}$
-    \end{enumerate}
+\paragraph{Euristica Costruttiva/Distruttiva per il SCP}\mbox{}\\
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{images/scp_cd.png}
+\end{figure}
+\begin{enumerate}
+    \item L'euristica costruttiva selezione, in ordine, le colonne 1,2,4 e 3.
+    \item La soluzione è ridondante: la colonna 2 può essere rimossa
+    \item L'euristica costruttiva ausiliaria rimuove la colonna 2 e fornisce una soluzione ottimale $x^*=\{1,3,4\}$
+\end{enumerate}
 
-    \subsubsection{Estensione degli algoritmi costruttivi}
-    Lo schema base degli algoritmi costruttivi può essere potenziato utilizzando:
-    \begin{enumerate}
-        \item un grafo di costruzione più efficace
-              \begin{itemize}
-                  \item aggiungere più di un elemento al corrente sottoinsieme $x$.
-                  \item aggiungere elementi ad $x$, ma anche rimuovere elementi da $x$.
-              \end{itemize}
-        \item utilizzando un criterio di selezione pià sofisticato:
-              \begin{itemize}
-                  \item funzioni \textbf{regret-based}, che stimano le potenziali future perdite associate con
-                        l'elemento $i$.
-                  \item funzioni \textbf{look-ahead}, che stimano il valore finale dell'obiettivo ottenuto
-                        aggiungendo $i$ ad $x$.
-              \end{itemize}
-    \end{enumerate}
+\subsubsection{Estensione degli algoritmi costruttivi}
+Lo schema base degli algoritmi costruttivi può essere potenziato utilizzando:
+\begin{enumerate}
+    \item un grafo di costruzione più efficace
+          \begin{itemize}
+              \item aggiungere più di un elemento al corrente sottoinsieme $x$.
+              \item aggiungere elementi ad $x$, ma anche rimuovere elementi da $x$.
+          \end{itemize}
+    \item utilizzando un criterio di selezione pià sofisticato:
+          \begin{itemize}
+              \item funzioni \textbf{regret-based}, che stimano le potenziali future perdite associate con
+                    l'elemento $i$.
+              \item funzioni \textbf{look-ahead}, che stimano il valore finale dell'obiettivo ottenuto
+                    aggiungendo $i$ ad $x$.
+          \end{itemize}
+\end{enumerate}
 
-    \subsubsection{Euristiche costruttive regret-based}
-    Le decisioni prese nei passi iniziali possono fortemente restringere le scelte fattibili nei passi
-    successivi per via dei vincoli del problema.
-    \begin{itemize}
-        \item BPP: tutti gli oggetti devono essere messi in un container, ma gli assegnamenti
-              iniziali possono rendere non disponibili alcuni container per oggetti successivi.
-        \item TSP: tutti i nodi devono essere visitati, ma le decisioni di esplorazione
-              iniziali possono rendere la visita dei nodi successivi più costosa.
-        \item CMST: tutti i vertici devono essere collegati alla radice attraverso un sotto-albero,
-              ma i collegamenti iniziali potrebbero rendere alcuni sotto-alberi non disponibili per i vertici
-              successivi.
-    \end{itemize}
+\subsubsection{Euristiche costruttive regret-based}
+Le decisioni prese nei passi iniziali possono fortemente restringere le scelte fattibili nei passi
+successivi per via dei vincoli del problema.
+\begin{itemize}
+    \item BPP: tutti gli oggetti devono essere messi in un container, ma gli assegnamenti
+          iniziali possono rendere non disponibili alcuni container per oggetti successivi.
+    \item TSP: tutti i nodi devono essere visitati, ma le decisioni di esplorazione
+          iniziali possono rendere la visita dei nodi successivi più costosa.
+    \item CMST: tutti i vertici devono essere collegati alla radice attraverso un sotto-albero,
+          ma i collegamenti iniziali potrebbero rendere alcuni sotto-alberi non disponibili per i vertici
+          successivi.
+\end{itemize}
 
-    il criterio di selezione può tenerne conto implicitamente:
-    \begin{itemize}
-        \item BPP: l'euristica Decreasing First-Fit assegna gli oggetti più grande per prima.
-        \item TSP: l'euristica Fartest Insertion visita i nodi più lontani per prima.
-    \end{itemize}
-    Alcuni criteri di selezione mirano esplicitamente a lasciare insiemi più ampi di
-    buone scelte. Una tipica euristica regret-based consiste in:
-    \begin{itemize}
-        \item partizionare $\Delta_A^+(x)$ in classi disgiunte di scelte
-        \item calcolare un criterio di scelta base per tutte le scelte.
-        \item calcolare per ogni classe la differenza (\textit{regret}) tra la scelta migliore
-              e la seconda scelta migliore (oppure la media delle altre scelte, possibilmente pesata).
-              Questo stima il danno subito rimandando la scelta migliore.
-        \item scegliere la scelta migliore delle classi per la quale il "rimpianto" (criterio regret) è
-              il massimo.
-    \end{itemize}
-    Per esempio, consideriamo il CMSTP ed il ground set $B=V\times T$, tale che ogni elemento sia composto
-    dalla coppie $\langle vertice, sottoalbero \rangle$. Lasciamo che i pesi siano uniformi, quindi
+il criterio di selezione può tenerne conto implicitamente:
+\begin{itemize}
+    \item BPP: l'euristica Decreasing First-Fit assegna gli oggetti più grande per prima.
+    \item TSP: l'euristica Fartest Insertion visita i nodi più lontani per prima.
+\end{itemize}
+Alcuni criteri di selezione mirano esplicitamente a lasciare insiemi più ampi di
+buone scelte. Una tipica euristica regret-based consiste in:
+\begin{itemize}
+    \item partizionare $\Delta_A^+(x)$ in classi disgiunte di scelte
+    \item calcolare un criterio di scelta base per tutte le scelte.
+    \item calcolare per ogni classe la differenza (\textit{regret}) tra la scelta migliore
+          e la seconda scelta migliore (oppure la media delle altre scelte, possibilmente pesata).
+          Questo stima il danno subito rimandando la scelta migliore.
+    \item scegliere la scelta migliore delle classi per la quale il "rimpianto" (criterio regret) è
+          il massimo.
+\end{itemize}
+Per esempio, consideriamo il CMSTP ed il ground set $B=V\times T$, tale che ogni elemento sia composto
+dalla coppie $\langle vertice, sottoalbero \rangle$. Lasciamo che i pesi siano uniformi, quindi
 $w_v=1 \forall v\in V$ e che la capacità sia $W=2$.
 
-    \begin{figure}[H]
-        \centering
-        \includegraphics[scale=0.7]{images/CMSTP_0.png}
-    \end{figure}
-    Lasciamo che lo spazio di ricerca $\mathcal{F}$ includa tutte le soluzioni parziali. L'algoritmo
-    greedy mette il vertice 2 nel sotto-albero 1, il vertice 3 nel sotto-albero; il vertice 4 nel sotto-albero
-    1 e finalmente il vertice 5 nel sotto-albero 2:
-    $$c(x)=1+1+2+100=104$$
-    L'algoritmo regret mette il vertice 2 nel sotto-albero 1, il vertice 3 nel sotto-albero 2; poi:
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{images/CMSTP_0.png}
+\end{figure}
+Lasciamo che lo spazio di ricerca $\mathcal{F}$ includa tutte le soluzioni parziali. L'algoritmo
+greedy mette il vertice 2 nel sotto-albero 1, il vertice 3 nel sotto-albero; il vertice 4 nel sotto-albero
+1 e finalmente il vertice 5 nel sotto-albero 2:
+$$c(x)=1+1+2+100=104$$
+L'algoritmo regret mette il vertice 2 nel sotto-albero 1, il vertice 3 nel sotto-albero 2; poi:
 
-    \begin{itemize}
-        \item il "rimpianto" del vertice 4 è la differenza $c(4,2)-c(4,1)=4-2=2$
-        \item il "rimpianto" del vertice 5 è la differenza $c(5,2)-c(5,1)=100-3=97$
-    \end{itemize}
-    L'algoritmo mette il vertice 5 nel sotto-albero 1 ed in fine il vertice 4 nel sotto-albero 2:
-    $$c(x)=1+3+1+4=9$$
+\begin{itemize}
+    \item il "rimpianto" del vertice 4 è la differenza $c(4,2)-c(4,1)=4-2=2$
+    \item il "rimpianto" del vertice 5 è la differenza $c(5,2)-c(5,1)=100-3=97$
+\end{itemize}
+L'algoritmo mette il vertice 5 nel sotto-albero 1 ed in fine il vertice 4 nel sotto-albero 2:
+$$c(x)=1+3+1+4=9$$
 
-    \subsubsection{Euristica costruttiva roll-out}
-    Tale euristica costruttiva è anche conosciuta con il nome di \textbf{single-step look-ahead}, e
-    fu proposta da Bertsekas e Tsitsiklis (1997).
+\subsubsection{Euristica costruttiva roll-out}
+Tale euristica costruttiva è anche conosciuta con il nome di \textbf{single-step look-ahead}, e
+fu proposta da Bertsekas e Tsitsiklis (1997).
 
-    Da un'euristica costruttiva base $A$:
-    \begin{itemize}
-        \item si inizia con un insieme vuoto $x^{(0)}=\emptyset$
-        \item ad ogni passo $t$
-              \begin{itemize}
-                  \item si estende il sottoinsieme in una maniera fattibile: $x^{(t-1)}\cup\{i\},\forall i\in\Delta_A^+(x)$
-                  \item applicare l'euristica base ad ogni sottoinsieme esteso e calcolare la soluzione risultante
-                        $x_A(x^{(t-1)}\cup\{i\})$
-                  \item utilizzare il valore della soluzione come criterio di selezione per scegliere $i^{(t)}$
-                        $$\varphi_A(i,x)=f(x_A(x^{(t-1)}\cup\{i\}))$$
-              \end{itemize}
-        \item terminare quando $\Delta_A^+(x)$ è vuoto.
-    \end{itemize}
-    \textit{prova ogni mossa possibile, controlla il risultato (look-ahead), torna indietro e scegli la mossa}.
-    Il risultato dell'euristica di roll-out domina quello dell'euristica base. La complessità
-    rimane polinomiale, ma è molto più grande: nel casto peggiore $T_{roA}=|B|^2 T_A$
+Da un'euristica costruttiva base $A$:
+\begin{itemize}
+    \item si inizia con un insieme vuoto $x^{(0)}=\emptyset$
+    \item ad ogni passo $t$
+          \begin{itemize}
+              \item si estende il sottoinsieme in una maniera fattibile: $x^{(t-1)}\cup\{i\},\forall i\in\Delta_A^+(x)$
+              \item applicare l'euristica base ad ogni sottoinsieme esteso e calcolare la soluzione risultante
+                    $x_A(x^{(t-1)}\cup\{i\})$
+              \item utilizzare il valore della soluzione come criterio di selezione per scegliere $i^{(t)}$
+                    $$\varphi_A(i,x)=f(x_A(x^{(t-1)}\cup\{i\}))$$
+          \end{itemize}
+    \item terminare quando $\Delta_A^+(x)$ è vuoto.
+\end{itemize}
+\textit{prova ogni mossa possibile, controlla il risultato (look-ahead), torna indietro e scegli la mossa}.
+Il risultato dell'euristica di roll-out domina quello dell'euristica base. La complessità
+rimane polinomiale, ma è molto più grande: nel casto peggiore $T_{roA}=|B|^2 T_A$
 
 Consideriamo il seguente esempio:
 \begin{figure}[H]
@@ -4237,7 +4237,7 @@ cambia significativamente:
 
 \subsection{Metaeuristiche costruttive}
 Gli algoritmi costruttivi hanno forti limitazioni su molti problemi, \textit{cosa si può fare senza abbandonare
-lo schema generale?} Si può iterare lo schema generale per generare potenzialmente molte soluzioni
+    lo schema generale?} Si può iterare lo schema generale per generare potenzialmente molte soluzioni
 diverse:
 \begin{itemize}
     \item \textbf{l'efficienza diminuisce}: i tempi computazionali vengono sommati.
@@ -4252,9 +4252,9 @@ Il caso più semplice di metaeuristica che potrebbe anche non essere classificat
 Tuttavia, risulta più flessibile applicare metaeuristiche che sfruttano:
 \begin{itemize}
     \item \textbf{randomizzazione}, ovvero operazioni basate su un seme casuale (pseudo), come nel
-    caso degli algoritmi semi-greedy, \textit{GRASP} e \textit{Ant System}.
+          caso degli algoritmi semi-greedy, \textit{GRASP} e \textit{Ant System}.
     \item \textbf{memoria}, ovvero operazioni basate sulle soluzioni delle precedenti iterazioni,
-    come nel caso del \textit{ART}, \textit{meccanismo di perturbazione dei costi} ed \textit{Ant System}.
+          come nel caso del \textit{ART}, \textit{meccanismo di perturbazione dei costi} ed \textit{Ant System}.
 \end{itemize}
 
 \subsubsection{Condizione di terminazione}
@@ -4263,26 +4263,26 @@ Lo schema iterato può essere considerato idealmente infinito. In, pratica si po
 condizioni di terminazione \textbf{assolute} o \textbf{relative}. Le prime:
 \begin{enumerate}
     \item un dato numero totale di esplorazioni del vicinato o un dato numero di ripetizioni della ricerca
-    locale.
+          locale.
     \item un dato tempo totale di esecuzione.
     \item un dato valore del'obiettivo.
     \item un dato miglioramento dell'obiettivo rispetto alla soluzione di partenza o alla "relativa"
-    condizione di terminazione.
+          condizione di terminazione.
 \end{enumerate}
 Condizione di terminazione relative:
 \begin{enumerate}
     \item un dato numero di esplorazioni del vicinato o di ripetizioni dopo l'ultimo miglioramento di
-    $f^*$.
+          $f^*$.
     \item un dato tempo di esecuzione dopo l'ultimo miglioramento
     \item un dato valore minimo del rapporto tra miglioramento della funzione obiettivo e numero di
-    esplorazioni o tempo d'esecuzione.
+          esplorazioni o tempo d'esecuzione.
 \end{enumerate}
 
 \subsubsection{Multi-start}
 Il multi-start (o \textbf{restart}) è un approccio molto semplice e naturale:
 \begin{itemize}
     \item definisce differenti spazi di ricerca $\mathcal{F}_{A^{[I]}}$ ed il criterio
-    di selezione $\varphi_{A^{[I]}}(i,x)$
+          di selezione $\varphi_{A^{[I]}}(i,x)$
     \item applico ogni algoritmo risultante $A^{{l}}$ per ottenere la relativa soluzione $x^{[I]}$
     \item restituisco la soluzione migliore $x= arg\;\underset{I=1,\dots,l}{min}f\left(x^{[I]}\right)$
 \end{itemize}
@@ -4290,45 +4290,45 @@ un caso tipico è quello di regolare $\varphi_A(i,x)$ con parametri numeri $\mu$
 può modellare questa situazione con:
 \begin{itemize}
     \item includendo tutti i nodi e archi ammessi da almeno un algoritmo $A^{[I]}$
-    $$\mathcal{F}_A=\bigcup_{I=1}^l \mathcal{F}_A^{[l]}$$
+          $$\mathcal{F}_A=\bigcup_{I=1}^l \mathcal{F}_A^{[l]}$$
     \item impostare il peso degli archi dipendendo su $I:\varphi_A(i,x,I)=\varphi_A^{[I]}(i,x)$
     \item impostare un peso infinito sugli archi che sono proibiti in un algoritmo specifico
-    $A^{[I]}:\varphi_A(i,x,I)=+\infty$
+          $A^{[I]}:\varphi_A(i,x,I)=+\infty$
 \end{itemize}
 
 \paragraph{Esempio}\mbox{}\\
 Un intera famiglia di euristiche per il TSP può essere ottenuta impostando:
 \begin{itemize}
     \item il criterio di inserzione:
-    $$i^*_k=arg\;\underset{i\in\{1,\dots,|x|\}}{min}\gamma:{i,k}=\mu_1(c_{s_i,k}+c_{k,s_{i+1}})-(1-\mu_1)c_{s_i,s_{i+1}}$$
-    dove $\mu_1\in[0;1]$ regola la relativa forza:
-    \begin{itemize}
-        \item dell'incremento in costo dato dall'aggiunta del nodo $k$.
-        \item del decremento in costo dato dalla rimozione dell'arco $(s_i, s_i+1)$
-    \end{itemize}
+          $$i^*_k=arg\;\underset{i\in\{1,\dots,|x|\}}{min}\gamma:{i,k}=\mu_1(c_{s_i,k}+c_{k,s_{i+1}})-(1-\mu_1)c_{s_i,s_{i+1}}$$
+          dove $\mu_1\in[0;1]$ regola la relativa forza:
+          \begin{itemize}
+              \item dell'incremento in costo dato dall'aggiunta del nodo $k$.
+              \item del decremento in costo dato dalla rimozione dell'arco $(s_i, s_i+1)$
+          \end{itemize}
     \item il criterio di selezione:
-    $$k^* = arg\;\underset{k\in N\setminus N_x}{\varphi_A(k,x)}= \mu_2 d(x,k)-\mu_3 d(x,k)+(1-\mu_2-\mu_3)\gamma_{i^*_k,k}$$
-    dove $\mu_2,\mu_3\in[0;1]$ regola la relativa forze (ed il segno):
-    \begin{itemize}
-        \item della distanza del nodo $k$ aggiunto rispetto al ciclo corrente $x$.
-        \item dell'incremento in costo dato dall'aggiunta del nodo $k$.
-    \end{itemize}
+          $$k^* = arg\;\underset{k\in N\setminus N_x}{\varphi_A(k,x)}= \mu_2 d(x,k)-\mu_3 d(x,k)+(1-\mu_2-\mu_3)\gamma_{i^*_k,k}$$
+          dove $\mu_2,\mu_3\in[0;1]$ regola la relativa forze (ed il segno):
+          \begin{itemize}
+              \item della distanza del nodo $k$ aggiunto rispetto al ciclo corrente $x$.
+              \item dell'incremento in costo dato dall'aggiunta del nodo $k$.
+          \end{itemize}
 \end{itemize}
 per ottenere CI per $\mu={1/2,0,0}$, NI per $\mu={1/2,1,0}$, FI per $\mu=(1/2,0,1)$
 
 \subsubsection{Principali metaeuristiche costruttive}
 \begin{enumerate}
     \item \textbf{Tecnica della ricerca adattiva} (\textit{Adaptive Research Technique}, ART o Tabu Greedy):
-    vieta alcune mosse in base alle soluzioni delle precedenti iterazioni
-    $$\underset{i:x\cup\{i\}\in\mathcal{F}^{[I]}}{min}\varphi_A(i,x)$$
-    con $\mathcal{F}^{[I]}=\mathcal{F}^{[I]}\left(x_A^{[1]},\dots, x_A^{[I-1]}\right)\subseteq\mathcal{F}$
-    \\(\textit{molto meno popolare degli altri due}).
+          vieta alcune mosse in base alle soluzioni delle precedenti iterazioni
+          $$\underset{i:x\cup\{i\}\in\mathcal{F}^{[I]}}{min}\varphi_A(i,x)$$
+          con $\mathcal{F}^{[I]}=\mathcal{F}^{[I]}\left(x_A^{[1]},\dots, x_A^{[I-1]}\right)\subseteq\mathcal{F}$
+          \\(\textit{molto meno popolare degli altri due}).
     \item \textbf{semigreedy} e \textbf{GRASP}: utilizzano un criterio di selezione randomizzato
-    $$\underset{i:x\cup\{i\}\in\mathcal{F}^{[I]}}{min}\varphi_A\left(i,x,\omega^{[I]}\right)$$
+          $$\underset{i:x\cup\{i\}\in\mathcal{F}^{[I]}}{min}\varphi_A\left(i,x,\omega^{[I]}\right)$$
 
     \item \textbf{Ant System} (AS): utilizzando un criterio di selezione randomizzato che dipende
-    dalle soluzioni delle precedenti iterazioni
-    $$\underset{i:x\cup\{i\}\in\mathcal{F}^{[I]}}{min}\varphi_A\left(i,x,\omega^{[I]},x_A^{[1]},\dots,x_A^{I-1}\right)$$
+          dalle soluzioni delle precedenti iterazioni
+          $$\underset{i:x\cup\{i\}\in\mathcal{F}^{[I]}}{min}\varphi_A\left(i,x,\omega^{[I]},x_A^{[1]},\dots,x_A^{I-1}\right)$$
 
 \end{enumerate}
 le nuove informazioni su gli archi del grafo di costruzione guidano la ricerca. L'ART utilizza la memoria,
@@ -4340,9 +4340,9 @@ elementi ingannevolmente buoni (falsi positivi), la soluzione finale può essere
 Per evitare questo:
 \begin{itemize}
     \item l'approccio roll-out effettua un look-ahead su ogni possibile elemento
-    (ma un singolo passo piò essere insufficiente per individuare diversi elementi ingannevoli).
+          (ma un singolo passo piò essere insufficiente per individuare diversi elementi ingannevoli).
     \item l'ART nega alcuni elementi di guidare il sottoinsieme $x$ sul giusto percorso nello
-    spazio di ricerca.
+          spazio di ricerca.
 \end{itemize}
 \textit{Come identificare gli elementi ingannevoli?} L'obiettivo è la diversificazione: vietare
 elementi delle soluzioni precedenti garantisce di ottenere soluzioni diverse. Le proibizioni
@@ -4356,12 +4356,12 @@ indicare che nessuno elemento è vietato.
 Ad ogni iterazione $I\in\{1,\dots,l\}$
 \begin{enumerate}
     \item applicare l'euristica $A$ vietando tutti gli elementi $i$ tali che $I\leq T_i+L$
-    (tutte le proibizioni pià vecchie di $L$ scaderanno automaticamente); lasciamo che $x^{[I]}$
-    sia la soluzione risultante.
+          (tutte le proibizioni pià vecchie di $L$ scaderanno automaticamente); lasciamo che $x^{[I]}$
+          sia la soluzione risultante.
     \item se $x^{[I]}$ è migliore di $x^*$, impostiamo $x^*:=x^{[I]}$ e salva
-    $T_i-I\;\forall i\in B$
+          $T_i-I\;\forall i\in B$
     \item decidere quale elemento vietare ed impostare $T_i=I$ per loro: ogni elemento
-    è vietato con una probabilità $\pi$
+          è vietato con una probabilità $\pi$
     \item fare minori aggiustamenti ad $L,\pi$ o $T_i$.
 \end{enumerate}
 al termine, restituire $x^*$.
@@ -4374,11 +4374,11 @@ al termine, restituire $x^*$.
 
 \begin{itemize}
     \item l'euristica base trova la soluzione $x^{[1]}=\{2,3,5,4\}$ di costo $f\left(x^{[1]}\right)=50$;
-    vietiamo (casualmente) la colonna 2.
+          vietiamo (casualmente) la colonna 2.
     \item l'euristica base trova la soluzione $x^{[2]}=\{3,1\}$ di costo $f\left(x^{[2]}\right)=33$;
-    vietiamo (casualmente) la colonna 3.
+          vietiamo (casualmente) la colonna 3.
     \item l'euristica base trova la soluzione $x^{[3]}=\{1\}$ di coso $f\left(x^{[2]}\right)=25$,
-    la quale è una soluzione ottima.
+          la quale è una soluzione ottima.
 \end{itemize}
 \textit{Nel caso di un esecuzione sfortunata al secondo step si potrebbe vietare la colonna 1.}
 
@@ -4395,26 +4395,26 @@ giocano ruoli complementari.
 L'intensificazione può essere ottenuta regolando i parametri in base:
 \begin{itemize}
     \item i dati del problema: assegnando a gli elementi pià promettenti (quelli che costano meno)
-    \begin{itemize}
-        \item una probabilità $\pi$ più piccola di essere evitato.
-        \item un tempo di scadenza $L_i$ pià corto della proibizione.
-    \end{itemize}
+          \begin{itemize}
+              \item una probabilità $\pi$ più piccola di essere evitato.
+              \item un tempo di scadenza $L_i$ pià corto della proibizione.
+          \end{itemize}
     \item memoria: per gli elementi promettenti (quelli che appaiono nelle soluzione meglio conosciute)
-    \begin{itemize}
-        \item riducendo $L_i$ (se $L_i=0$, $i$ non è mai vietato).
-        \item periodicamente riavviare l'algoritmo con i valori $T_i -I$ associati con la migliore
-        soluzione nota, anziché $T_i=-\infty$.
-    \end{itemize}
+          \begin{itemize}
+              \item riducendo $L_i$ (se $L_i=0$, $i$ non è mai vietato).
+              \item periodicamente riavviare l'algoritmo con i valori $T_i -I$ associati con la migliore
+                    soluzione nota, anziché $T_i=-\infty$.
+          \end{itemize}
 \end{itemize}
 
 \textit{Come assegnare dei valori efficaci ai parametri?} Il confronto sperimentale di valori diversi
 è necessario ma complesso.
 \begin{enumerate}
     \item richiede lunghe campagne di sperimentazione, perché il numero di configurazioni
-    cresce combinatoriamente con il numero di parametri ed il numero di valori testati per ogni
-    parametro.
+          cresce combinatoriamente con il numero di parametri ed il numero di valori testati per ogni
+          parametro.
     \item si rischia il \textit{sovradattamento} (\textit{overfitting}), che consiste ell'etichettare
-    come valori assolutamente "buoni" dei valori che sono buoni effettivamente solo su istanze del benchmark.
+          come valori assolutamente "buoni" dei valori che sono buoni effettivamente solo su istanze del benchmark.
 \end{enumerate}
 
 Questo eccesso di parametri è un aspetto indesiderabile, e spesso si rivela uno studio insufficiente del
@@ -4432,46 +4432,444 @@ buoni per $\varphi_A(i,x)$, anche se non strettamente i migliori.
 Se non è possibile ridefinire $\varphi_A(i,x)$:
 \begin{itemize}
     \item definire una probabilità di distribuzione adatta su $\Delta_A^+(x)$ che favorisce
-    gli elementi con i migliori valori di $\varphi_A(i,x)$
+          gli elementi con i migliori valori di $\varphi_A(i,x)$
     \item selezionare $i^*(\omega)$ in accordo alla funzione di distribuzione.
 \end{itemize}
 Visto che l'insieme di possibili alternative è finito, questo significa assegnare:
 \begin{itemize}
     \item una probabilità $\pi_A(i,x)$ all'arco $(x,x\cup\{i\})$ del grafo di costruzione (con una
-    somma uguale ad 1 per gli archi uscenti da ogni nodo)
-    $$\sum_{i\in\Delta_A^+(x)}\pi_A(i,x)=1\;\forall x\in\mathcal{F}_A:\Delta_A^+(x)\neq\emptyset$$
+          somma uguale ad 1 per gli archi uscenti da ogni nodo)
+          $$\sum_{i\in\Delta_A^+(x)}\pi_A(i,x)=1\;\forall x\in\mathcal{F}_A:\Delta_A^+(x)\neq\emptyset$$
     \item alte probabilità agli elementi migliori per il criterio di selezione
-    $$\varphi_A(i,x)\leq\varphi_A(j,x)\Leftrightarrow\pi_A(i,x)\geq\pi_A(j,x)$$
-    per ogni $i,j\in\Delta_A^+(x),x\in\mathcal{F}_A$
+          $$\varphi_A(i,x)\leq\varphi_A(j,x)\Leftrightarrow\pi_A(i,x)\geq\pi_A(j,x)$$
+          per ogni $i,j\in\Delta_A^+(x),x\in\mathcal{F}_A$
 \end{itemize}
 
 Questo approccio euristico ha delle proprietà importanti:
 \begin{itemize}
     \item può raggiungere una soluzione ottima se è presente un cammino da $\emptyset$ a $X^*$
     \item può essere riapplicato diverse volte ottenendo delle soluzioni differenti e la probabilità
-    di raggiungere la soluzione ottima cresce gradualmente.
+          di raggiungere la soluzione ottima cresce gradualmente.
 
 \end{itemize}
 \paragraph{Convergenza verso l'ottimo}\mbox{}\\
 La probabilità di:
 \begin{itemize}
     \item seguire il cammino $\gamma$ è il prodotto delle probabilità su gli archi
-    $$\prod_{(y,y\cup\{i\}\in\gamma)}\pi_A(i,y)$$
+          $$\prod_{(y,y\cup\{i\}\in\gamma)}\pi_A(i,y)$$
     \item ottenere una soluzione $x$ corrisponde alla sommatoria dei cammini $\Gamma_x$ che raggiungono
-    $x$
-    $$\sum_{gamma\in\Gamma_x}\prod_{(y,y\cup\{i\}\in\gamma)}\pi_A(i,y)$$
+          $x$
+          $$\sum_{gamma\in\Gamma_x}\prod_{(y,y\cup\{i\}\in\gamma)}\pi_A(i,y)$$
 \end{itemize}
 Questo implica che la probabilità di raggiungere l'ottimo:
 \begin{enumerate}
     \item non è zero se e solo se esiste un percorso con una probabilità non zero da $\emptyset$ a $X^*$.
     \item incrementa per $\ell\rightarrow +\infty$ (la probabilità di non raggiungerlo decrementa
-    gradualmente).
+          gradualmente).
 \end{enumerate}
-\paragraph{Convergenze all'ottimo}
+In questo contesto, una \textit{camminata casuale} è una metaeuristica costruttiva nella quale
+tutti gli archi uscenti rispetto allo stesso nodo hanno uguale probabilità.
+\begin{itemize}
+    \item si trova un cammino verso l'ottimo con probabilità 1 (se esiste).
+    \item il tempo richiesto può essere estremamente lungo (l'algoritmo esaustivo
+          è esatto e richiede tempo finito).
+\end{itemize}
+Un'euristica costruttiva deterministica imposta tutte le probabilità a 0, eccetto per quelle su gli
+archi di un singolo cammino: troverà la soluzione ottima solo se verranno soddisfatte delle proprietà
+specifiche.
+
+Le euristiche randomizzate che favoriscono gli archi promettenti e penalizzano gli altri:
+\begin{itemize}
+    \item accelerano il tempo di convergenza medio.
+    \item decrementano la garanzia di convergenza nel caso peggiore.
+\end{itemize}
+C'è un trade-off tra risultato desiderati e peggiori.
+Gli archi con zero probabilità possono bloccare il cammino verso l'ottimo. Gli archi con probabilità
+di convergere verso zero riducono la probabilità di trovarlo.
 
 \subsubsection{Semi-greedy e GRASP}
-\subsubsection{Algoritmo semi-greedy reattivo}
+\textbf{GRASP}, sta per \textit{Greedy Randomized Adaptive Search Procedure}, è una sofisticata
+variante di euristiche semi-greedy.
+\begin{itemize}
+    \item Greedy: perché utilizza un'euristica costruttiva base.
+    \item Randomized: perché l'euristica base effettua dei passi casuali.
+    \item Adaptive: perché l'euristica utilizza un criterio di selezione adattivo $\varphi_A (i,x)$,
+          che dipende anche da $x$ (non per forza).
+    \item Search: perché alterna l'euristica costruttiva e l'euristica di scambio.
+\end{itemize}
+L'utilizzo dell'euristica ausiliare di scambio permette di ottenere risultati migliori.
+
+\paragraph{Funzione probabilistica}\mbox{}\\
+Diverse funzioni $\pi_A(i,x)$ sono monotone rispetto a $\varphi_A(i,x)$
+$$\varphi_A(i,x)\leq\varphi_A(j,x)\longleftarrow\pi_A(i,x)\geq\pi_A(j,x)$$
+\begin{itemize}
+    \item \textbf{Probabilità uniforme}: ogni arco uscente da $x$ ha la stessa probabilità $\pi_A(i,x)$.
+          L'algoritmo esegue un cammino casuale in $\mathcal{F}_A$ (\textit{random walk}).
+    \item \textbf{HBSS} (\textit{Heuristic-Biased Stochastic Sampling}): si ordinano gli archi uscenti di $x$
+          per valori non-decrescenti di $\varphi_A(i,x)$. Si assegna una probabilità decrescente in base alla posizione
+          in base ad uno schema semplice (lineare, esponenziale, \dots).
+    \item \textbf{RCL} (\textit{Restricted Candidate List}): si ordinano tutti gli archi uscenti di $x$ per valori
+          non decrescenti di $\varphi_A(i,x)$. Si inseriscono gli archi migliori in una lista, e si assegna una probabilità
+          uniforme a gli archi della lista, mentre una probabilità zero a gli altri.
+\end{itemize}
+La strategia più comune è la RCL, anche se gli archi con probabilità zero potrebbero potenzialmente cancellare
+la convergenza globale all'ottimo.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/prob_func.png}
+    \caption{Ipotizziamo che al passo corrente possano essere aggiunti 10 elementi, $|\Delta_A^+(x)|=10$}
+\end{figure}
+Sono presenti due strategie principali per definire l'RCL:
+\begin{itemize}
+    \item \textbf{cardinalità}: l'RCL include i migliori $\mu$ elementi di $\Delta_A^+(x)$, dove
+          $\mu\in\left\{1,\dots,|\Delta_A^+(x)|\right\}$ è un parametro fissato dall'utente.
+          \begin{itemize}
+              \item $\mu=1$ restituisce l'euristica costruttiva base.
+              \item $\mu=|B|$ restituisce una \textit{random walk}.
+          \end{itemize}
+    \item \textbf{valore}: l'RCL include tutti gli elementi di $\Delta_A^+(x)$ il cui valore
+          si trova tra $\varphi_{min}$ e $(1-\mu)\varphi_{min}+\mu\varphi_{max}$ dove:
+          $$\varphi_{min}(x)=\underset{i\in\Delta_A^+(x)}{min}\;\varphi_A(i,x)\;\;\;\varphi_{max}(x)=\underset{i\in\Delta_A^+(x)}{\varphi_A(i,x)}$$
+          e $\mu\in[0;1]$ è un parametro fissato dall'utente:
+          \begin{itemize}
+              \item $\mu=0$ restituisce un'euristica costruttiva base.
+              \item $\mu=1$ restituisce una \textit{random walk}.
+          \end{itemize}
+
+\end{itemize}
+
+\begin{algorithm}[H]
+    \caption{$GRASP(I)$}
+    \begin{algorithmic}
+        \State $x:=B$
+        \State $x*:=+\infty$
+        \For{$I=1\text{ to }\ell$}
+        \State {\textit{Constructive heuristic with random steps}}
+        \State {$x:=\emptyset;$}
+        \While{$\Delta_A^+(x)\neq\emptyset$}
+        \State {$\varphi_i:=\varphi_A(i,x)\text{ for each }i\in\Delta_A^+(x)$}
+        \State {$\pi:=AssignProbabilities(\Delta_A^+(x),\varphi,\mu);$}
+        \State {$i:=RandomExtract(\Delta_A^+(x),\pi);$}
+        \State {$x:=x\cup\{i\};$}
+        \EndWhile
+        \If {$x\in X\text{ and }f(x)<f^*$}
+        \State $x^*:=x;$
+        \State $f^*:=f(x);$
+        \EndIf
+        \EndFor
+        \State $Return(x^*,f^*);$
+    \end{algorithmic}
+\end{algorithm}
+
+\paragraph{Esempio GRASP per SCP}\mbox{}\\
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/SCP-GRASP.png}
+\end{figure}
+
+\begin{enumerate}
+    \item si inizia con un insieme vuoto $x^{(0)}=\emptyset$
+    \item si costruisce un RCL con $\mu=2$ candidati: ovvero le colonne 2 ($\varphi_2=2$) e 3 ($\varphi_3=4$); si seleziona casualmente la 3.
+    \item si costruisce un RCL con $\mu=2$ candidati: ovvero le colonne 2 ($\varphi_2=3$) e 1 ($\varphi_3=6.25$); si seleziona casualmente la 1.
+    \item la soluzione ottenuta è $x=\{3,1\}$ di costo $f(x)=33$
+\end{enumerate}
+Con $\mu=2$, la soluzione ottima non può essere ottenuta; con $\mu=3$ può essere ottenuta, è possibile
+anche con $\mu=2$ se una fase distruttiva viene applicata.
+
+\subsubsection{Algoritmo semi-greedy reattivo}\mbox{}\\
+Ancora una volta sono presenti dei parametri da regolare:
+\begin{itemize}
+    \item il numero di iterazioni $\ell$
+    \item il valore $\mu$ che determina la dimensione del RCL
+\end{itemize}
+Un idea di sfruttare la memoria è quella di \textit{imparare} dai risultati precedenti:
+\begin{enumerate}
+    \item selezionare $m$ configurazioni dei parametri $\mu_1,\dots,\mu_m$ e l'insieme $\ell_r=\ell/m$
+    \item si esegue ogni configurazione $\mu_r$ per $\ell_r$ iterazioni.
+    \item si calcola il significato di $\overline{f}(\mu_r)$ dei risultati ottenuti con $\mu_r$
+    \item si aggiorna il numero di iterazioni $\ell_r$ per ogni $\mu_r$ basato su $\overline{f}(\mu_r)$
+          $$\ell_r=\frac{\frac{1}{\overline{f}(\mu_r)}}{\sum_{s=1}^m \frac{1}{\overline{f}(\mu_s)}}\ell\;\;\;\text{per }r=1,\dots,m$$
+          incrementandole per le configurazioni pià efficaci.
+    \item si ripete l'intero processo, si torna al punto 2, per $R$ volte. Altri schemi utilizzano
+          punti basati sul numero dei risultati migliori conosciuti.
+\end{enumerate}
+
 \subsubsection{Metodi di perturbazione dei costi}
+Anziché evitare/forzare delle scelte, o modificarne la loro probabilità, è possibile modificare
+l'attrazione di quelle disponibili. Dato un'euristica costruttiva $A$, ad ogni passo dell'iterazione
+$I$
+\begin{itemize}
+    \item si regola il criterio di selezione $\varphi_A(i,x)$ con un fattore $\tau_A^{[I]}(i,x)$
+          $$\Psi_A^{[I]}(i,x)=\frac{\varphi_A(i,x)}{\tau_A^{[I]}(i,x)}$$
+    \item si aggiorna $\tau_A^{[I]}(i,x)$ in base alle soluzioni precedenti $x^{{1}},\dots,x^{[I-1]}$
+\end{itemize}
+Gli elementi con una migliore $\varphi_A(i,x)$ tendono ad essere favoriti, ma $\tau_A^{[I]}(i,x)$
+regola questo effetto, promuovendo:
+\begin{itemize}
+    \item \textbf{intensificazione} se $\tau_A^{[I]}(i,x)$ incrementa per gli elementi più frequenti;
+          questo favorisce soluzioni \textit{simili} a quelle precedenti.
+    \item \textbf{diversificazione} se $\tau_A^{[I]}(i,x)$ decrementa per gli elementi più frequenti;
+          questo favorisce soluzioni \textit{differenti} dalle precedenti.
+\end{itemize}
+
+\subsubsection{Ottimizzazione della colonia di formiche}
+Questo approccio è stato ideato da Dorigo, Maniezzo e Colorni nel 1991, prendendo ispirazione
+dal comportamento sociale delle formiche. La \textbf{stigmergia} è la comunicazione indiretta
+attraverso diversi agenti che sono influenzati dai risultati delle azioni (come modifiche
+dell'ambiente) di tutti gli agenti.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/stigmergy.png}
+\end{figure}
+Ogni agente è un applicazione dell'euristica costruttiva base:
+\begin{itemize}
+    \item lascia un sentiero sui dati che dipende dalla soluzione generata.
+    \item esegue delle scelte influenzate dai sentieri lasciati da gli altri agenti.
+\end{itemize}
+Le scelte dell'agente hanno una componente casuale.
+
+\paragraph{Sentiero}\mbox{}\\
+Come nell'euristica semi-greedy:
+\begin{itemize}
+    \item viene fornita un'euristica costruttiva di base $A$
+    \item ogni passo esegue una scelta casualmente parziale
+\end{itemize}
+In maniera differente dalle euristiche semi-greedy:
+\begin{itemize}
+    \item ogni iterazione $I$ esegue $h$ volte l'euristica $A$ (popolazione).
+    \item tutte le scelte di $\Delta_A^+(x)$ sono fattibili (non esiste RCL).
+    \item La probabilità $\pi_A(i,x)$ dipende da:
+          \begin{itemize}
+              \item criterio di selezione $\varphi_A(i,x)$
+              \item informazioni ausiliarie $\tau_A(i,x)$ denotate come un sentiero prodotto dalle
+                    iterazioni precedenti (a volte da altri agenti nella stessa iterazione).
+          \end{itemize}
+\end{itemize}
+Il sentiero è uniforme all'inizio ($\tau_A(i,x)=\tau_0)$, e dopo regolato:
+\begin{itemize}
+    \item incrementando in favore di scelte promettenti.
+    \item decrementando per evitare scelte ripetitive.
+\end{itemize}
+Per semplicità, il sentiero $\tau_A(i,x)$ non è associato ad ogni arco ($x,x\cup\{i\}$), ma è lo
+stesso per i blocchi degli archi.
+
+\paragraph{Scelte casuali}\mbox{}\\
+Anziché selezionare il migliore elemento accordandosi con il criterio $\varphi_A(i,x)$, $i$ è
+estratto da $\Delta_A^+(x)$ con probabilità:
+$$\pi_A(i,x)=\frac{\tau_A(i,x)^{\mu_\tau}\eta_A(i,x)^{\mu_\eta}}{\sum_{j\in\Delta_A^+(x)}\tau_A(j,x)^{\mu_\tau}\eta_A(i,x)^{\mu_\eta}}$$
+dove:
+\begin{itemize}
+    \item il denominatore normalizza la probabilità.
+    \item la \textbf{visibilità} è rappresentata dalla funzione ausiliaria:
+          \[\eta_A(i,x)=
+              \begin{cases}
+                  \varphi_A(i,x)           & \text{per i problemi di massimizzazione} \\
+                  \frac{1}{\varphi_A(i,x)} & \text{per i problemi di minimizzazione}
+              \end{cases}
+          \]
+    \item i parametri $\mu_\tau$ e $\mu_\eta$ regolano i pesi dei due termini
+\end{itemize}
+I parametri $\mu_\eta$ e $\mu_\tau$ regolano il peso dei dati e la memoria:
+\begin{itemize}
+    \item $\mu_\eta\approx 0$ e $\mu_\tau\approx 0$ spingono verso la casualità.
+    \item $\mu_\eta \gg\mu_\tau$ preferisce i dati, il che ha senso quando le
+          le soluzioni conosciute non sono molto significative.
+    \item $\mu_\eta\ll\mu_\tau$ preferisce la memoria,quindi è chiudo rispetto le soluzioni
+          precedenti, il che ha senso quando le soluzioni conosciute sono molto significative.
+\end{itemize}
+Il sistema \textbf{ANT} (\textit{Ant Colony System}) semplifica lo schema impostando $\mu_\eta=\mu_\tau=1$
+$$\pi_A(i,x)=\frac{\tau_A(i,x)\eta_A(i,x)}{\sum_{j\in\Delta_A^+(x)}\tau_A(j,x)\eta_A(i,x)}$$
+e selezionando il nuovo elemento $i^{(t)}$ al passo $t$:
+\begin{itemize}
+    \item casualmente con una probabilità $q$
+    \item ottimizzando $\varphi_A(i,x)$ con probabilità $(1-q)$
+\end{itemize}
+così che:
+\begin{itemize}
+    \item $q\approx 0$ favorisce i dati.
+    \item $q\approx 1$ favorisce la memoria.
+\end{itemize}
+
+\paragraph{Aggiornametno del sentiero}\mbox{}\\
+Ad ogni iterazione $\ell$:
+\begin{enumerate}
+    \item si eseguono $h$ istanze dell'euristica base $A$.
+    \item si selezionano un sotto insieme $\tilde{X}^{[I]}$ di soluzioni ottenute,
+          in ordine di favori gli elementi nelle seguenti iterazioni.
+    \item aggiornare il sentiero utilizzando la formula:
+          $$\tau_A(i,x):=(1-\rho)\tau_A(i,x)+\rho\sum_{y\in\tilde{X}^{[I]}:i\in y}F_A(y)$$
+\end{enumerate}
+dove:
+\begin{itemize}
+    \item $\rho\in[0;1]$ è un \textbf{parametro di oblio}.
+    \item $F_A(y)$ è una funzione \textbf{fitness} che esprime la qualità della soluzione $y$.
+\end{itemize}
+Lo scopo dell'aggiornamento è di:
+\begin{enumerate}
+    \item incrementare il sentiero su gli elementi delle specifiche soluzioni ($y\in\tilde{X}^{[I]}$).
+    \item decrementare il sentiero su gli altri elementi.
+\end{enumerate}
+\paragraph{Il parametro di oblio}\mbox{}\\
+Il parametro di oblio $\rho\in[0;1]$ regola il comportamento dell'algoritmo:
+\begin{itemize}
+    \item \textbf{diversificazione}: un \textbf{oblio alto} ($\rho\approx 1$) cancella
+          il sentiero corrente basato sull'intuizione che: le soluzioni ottenute non sono affidabili, e che
+          differenti soluzioni andrebbero esplorate.
+    \item \textbf{intensificazione}: un \textbf{oblio basso} ($\rho\approx 0$) preserva il sentiero
+          corrente basando sull'intuizione che le soluzioni ottenute siano affidabili, e che le soluzioni simili
+          dovrebbero essere esplorate.
+\end{itemize}
+$\tilde{X}^{[I]}$ colleziona le soluzioni attorno alle quali la ricerca verrà intensificata:
+\begin{itemize}
+    \item il classico Ant System considera tutte le soluzioni di iterazione $I-1$.
+    \item il metodo elitario considera le soluzioni meglio conosciute:
+          \begin{itemize}
+              \item le soluzioni migliori dell'iterazione $I-1$
+              \item le soluzioni migliori di tutte le iterazioni $<I$
+          \end{itemize}
+\end{itemize}
+I metodi elitari:
+\begin{itemize}
+    \item trovano migliori risultati in meno tempo.
+    \item richiedono meccanismi addizionali per evitare convergenze premature.
+\end{itemize}
+
+\subsubsection{Varianti dell'Ant System}
+\begin{itemize}
+    \item $\mathcal{MAX-MIN}\;Ant\;System$: impone che sul sentiero un range di valori
+          $[\tau_{min},\tau_{max}]$, sperimentalmente regolati.
+    \item HyperCube Ant Colony Optimization (HC-ACO): normalizza il sentiero tra 0 e 1.
+    \item \textbf{Ant Colony System}: aggiorna il sentiero su due livelli
+          \begin{itemize}
+              \item \textbf{Aggiornamento globale} (già visto) modifica ad ogni iterazione $\mathcal{l}$.
+                    Lo scopo è quello di intensificare la ricerca.
+              \item \textbf{Aggiornamento locale} aggiorna il sentiero ad ogni applicazione di $\mathcal{g}$
+                    dell'euristica base in modo da scoraggiare le scelte identiche nella seguente maniera
+                    $$\tau_A(i,x):=(1-\rho)\tau_A(i,x)\;\;\forall i\in x_A^{[I,g]}$$
+          \end{itemize}
+\end{itemize}
+
+
+\begin{algorithm}[H]
+    \caption{Algoritmo AntSystem}
+    \label{alg:ant_system}
+    \begin{algorithmic}
+        \State $x^*:=\emptyset$
+        \State $f^*:=+\infty$
+        \For {$I=1$ to $\ell$}
+        \For {$g=1$ to $h$}
+        \State{$x:=A(I,\tau_A)$}
+        \State{$x:=Search(x)$}
+        \If {$f(x)<f^*$}
+        \State{$x^*:=x$}
+        \State{$f^*:=f(x)$}
+        \State{$\tau_A:=LocalUpdate(\tau_A,x)$}
+        \EndIf
+        \EndFor
+        \State{$\tilde{X}^{[I]}:=Update(\tilde{X}^{[I]},x)$}
+        \State{$\tau_A:=GlobalUpdate(\tau_A,\tilde{X}^{[I]})$}
+        \EndFor
+        \State{Return $(x^*,f^*)$}
+    \end{algorithmic}
+\end{algorithm}
+
+
+\paragraph{Convergenza verso la soluzione ottima}\mbox{}\\
+Alcune variante dell'Ant System convergono verso la soluzione ottima con una probabilità
+1 (Gutjahr, 2002). L'analisi è basata sul grafo di costruzione:
+\begin{itemize}
+    \item il sentiero $\tau_A(i,x)$ si adagia su gli archi $(x,x\cup\{i\})$
+    \item nessuna informazione dai dati viene utilizzata, che $\eta A(i,x)\equiv 1$
+          (questa strana assunzione semplifica la computazione, ma non è necessaria).
+    \item $\tau^{[I]}$ è la funzione sentiero all'inizio dell'iterazione $I$.
+    \item $\gamma^{[I]}$ è il miglior percorso sul grafo al termine dell'iterazione $I$.
+    \item $(\tau^{[I]},\gamma^{[I-1]})$ è lo stato di un processo di Markov non omogeneo:
+          la probabilità di ogni stato dipende solo dall'iterazione precedente, il processo
+          non è omogeneo perché la dipendenza varia con $I$.
+\end{itemize}
+
+La dimostrazione conclude che per $\ell\rightarrow +\infty$ con probabilità 1
+\begin{enumerate}
+    \item Almeno una corsa segue il percorso ottimo all'interno dello spazio di ricerca.
+    \item Il sentiero $\tau$ tende ad un massimo lungo uno dei percorsi ottimali, e a zero
+          sugli altri archi.
+\end{enumerate}
+
+\paragraph{Prima variante con convergenza globale}
+Il sentiero è aggiornato con un coefficiente di oblio variabile
+\[
+    \tau^{[I]}(I,x):=
+    \begin{cases}
+        (1-\rho^{[I-1]})\tau^{[I-1]}(i,x)+\rho^{[I-1]}\frac{1}{|\gamma^{[I-1]}|} & \text{if }(x,x\cup \{ i\})\in\gamma^{[I-1]} \\
+        (1-\rho^{[I-1]})\tau^{[I-1]}(i,x)                                        & \text{otherwise}
+    \end{cases}
+\]
+
+dove $\gamma^{[I-1]}$ è il miglior percorso trovato nel grafo all'iterazione $I-1$ con
+$|\gamma^{[I-1]}|$ come numero dei suoi archi. Se la variabile di oblio decrementa
+abbastanza
+$$\rho^{[I]}\leq 1-\frac{\log I}{\log (I+1)}\text{ and }\sum_{I=0}^{+\infty}\rho^{I}=+\infty$$
+con una probabilità 1 lo stato converge in $(\tau^*,\gamma^*)$, dove
+\begin{itemize}
+    \item $\gamma^*$ è un percorso ottimale nel grafo di costruzione.
+    \item $\tau^*(i,x)=\frac{1}{|\gamma^*|}$ per $(x,x\cup\{i\})\in\gamma^*$, altrimenti 0
+\end{itemize}
+
+\paragraph{Seconda variante con convergenza globale}
+Alternativamente, nel caso in cui l'oblio $\rho$ rimanga costante, ma il sentiero viene forzato da
+da una soglia minima che decresce lentamente
+$$\tau(i,x)\geq\frac{c_I}{\log (I+1)}\text{ and }\lim_{I\rightarrow +\infty}c_I\in (0;1)$$
+con una probabilità 1 lo stato converge in $(\tau^*,\gamma^*)$, l'oblio è ristretto
+ad una soglia minima.
+
+In pratica, tutti gli algoritmi proposti fin'ora:
+\begin{itemize}
+    \item associare il sentiero ad un gruppo di archi $(x,x\cup\{i\})$
+    \item utilizzare valori costanti per i parametri $\rho$ e $\tau_{min}$
+\end{itemize}
+
+non garantiscono la convergenza, sia $\tau$ che $\pi$ possono tendere a zero su
+ogni percorso ottimale.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
