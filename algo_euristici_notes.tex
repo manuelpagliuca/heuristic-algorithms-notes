@@ -2832,240 +2832,240 @@ in due casi la differenza è $0$$W^+-W^-=(1+2)-3=3-(1+2)=0$.
 
     Lo spazio di ricerca è definito come la collezione di tutti i sottoinsiemi $x\subseteq B$ accettabili
     per l'algoritmo $A$.
-$$\mathcal{F}_A\subseteq 2^B$$
-Ogni \textit{nodo} è un sottoinsieme ed alcuni saranno le soluzioni mentre altri no. Siamo interessati nei
-sottoinsiemi che sono accettabili ed utili. Gli \textit{archi} connettono coppie di nodi,
-l'arco in se è la collezione di tutte le coppie $(x,x\cup\{i\})$ tali che
+    $$\mathcal{F}_A\subseteq 2^B$$
+    Ogni \textit{nodo} è un sottoinsieme ed alcuni saranno le soluzioni mentre altri no. Siamo interessati nei
+    sottoinsiemi che sono accettabili ed utili. Gli \textit{archi} connettono coppie di nodi,
+    l'arco in se è la collezione di tutte le coppie $(x,x\cup\{i\})$ tali che
 $x\in \mathcal{F}_A ,i\in B\setminus x$ e $x\cup\{i\}\in \mathcal{F}_A$. Quindi, gli archi connettono
-un sottoinsieme della soluzione ad un sottoinsieme leggermente più grande che rappresenta l'estensione
-di un sottoinsieme ancora accettabile che include un nuovo elemento.
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.6]{images/cons_graph.png}
-    \caption{Il grafo di costruzione visita una sequenza di sotto insiemi che porta alla soluzione ottima}
-\end{figure}
-Questo grafo è un \textbf{DAG} (\textit{Directed Acyclic Graph}). Ogni possibile esecuzione di
+    un sottoinsieme della soluzione ad un sottoinsieme leggermente più grande che rappresenta l'estensione
+    di un sottoinsieme ancora accettabile che include un nuovo elemento.
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.6]{images/cons_graph.png}
+        \caption{Il grafo di costruzione visita una sequenza di sotto insiemi che porta alla soluzione ottima}
+    \end{figure}
+    Questo grafo è un \textbf{DAG} (\textit{Directed Acyclic Graph}). Ogni possibile esecuzione di
 $A$ è un \textbf{percorso massimo} del grafo di costruzione (contando sia il sottoinsieme
-vuoto che un sottoinsieme la cui estensione non può essere accettata).
+    vuoto che un sottoinsieme la cui estensione non può essere accettata).
 
-Il rettangolo del grafo di costruzione rappresenta le $2^B$, ovvero tutti i possibili
-sottoinsiemi del ground set $B$. Questa collezione di sottoinsiemi
-è partizione in classi che dipendono dalla loro cardinalità, quindi la prima classe (quella
-più a sinistra) contiene solamente un possibile sottoinsieme, ovvero quello contenente l'insieme
-vuoto $\emptyset$ (contenente tutti i sottoinsiemi di $0$ elementi). Nella seconda classe
-dei sottoinsiemi possibili si trovano gli elementi singoli, poi le coppie, ecc. Sono
-presenti $n+1$ classi che vanno da cardinalità $0$ fino a $n$. All'interno dell'insieme
-potenza (o dei sottoinsiemi possibili), è presente lo spazio di ricerca degli algoritmi $\mathcal{F}_A$,
-il quale contiene alcuni sottoinsiemi che sono considerati \textit{"utili"} per l'algoritmo: in
-particolare contiene l'insieme vuoto (l'algoritmo parte da quello), e altri insiemi che ha senso
-tenere conto.
+    Il rettangolo del grafo di costruzione rappresenta le $2^B$, ovvero tutti i possibili
+    sottoinsiemi del ground set $B$. Questa collezione di sottoinsiemi
+    è partizione in classi che dipendono dalla loro cardinalità, quindi la prima classe (quella
+    più a sinistra) contiene solamente un possibile sottoinsieme, ovvero quello contenente l'insieme
+    vuoto $\emptyset$ (contenente tutti i sottoinsiemi di $0$ elementi). Nella seconda classe
+    dei sottoinsiemi possibili si trovano gli elementi singoli, poi le coppie, ecc. Sono
+    presenti $n+1$ classi che vanno da cardinalità $0$ fino a $n$. All'interno dell'insieme
+    potenza (o dei sottoinsiemi possibili), è presente lo spazio di ricerca degli algoritmi $\mathcal{F}_A$,
+    il quale contiene alcuni sottoinsiemi che sono considerati \textit{"utili"} per l'algoritmo: in
+    particolare contiene l'insieme vuoto (l'algoritmo parte da quello), e altri insiemi che ha senso
+    tenere conto.
 
-Solitamente sottoinsiemi che sono al di fuori dello spazio di ricerca sono quelli che non hanno senso di
-essere fissati, visto che non sono fattibili o perché non sono particolarmente "interessanti" ed
-ogni altro sottoinsieme che non può essere raggiunto da $\mathcal{F}_A$ non è rilevante. Come prima
-l'insieme delle soluzioni fattibili viene denotato con $X$, e l'insieme delle soluzioni ottime $X^*$.
+    Solitamente sottoinsiemi che sono al di fuori dello spazio di ricerca sono quelli che non hanno senso di
+    essere fissati, visto che non sono fattibili o perché non sono particolarmente "interessanti" ed
+    ogni altro sottoinsieme che non può essere raggiunto da $\mathcal{F}_A$ non è rilevante. Come prima
+    l'insieme delle soluzioni fattibili viene denotato con $X$, e l'insieme delle soluzioni ottime $X^*$.
 
-Nell spazio di ricerca è presente un insieme di archi che connettono coppie di nodi, il secondo nodo
-della coppia corrisponde al primo sottoinsieme della coppia più un certo elemento.
+    Nell spazio di ricerca è presente un insieme di archi che connettono coppie di nodi, il secondo nodo
+    della coppia corrisponde al primo sottoinsieme della coppia più un certo elemento.
 
-Come è possibile vedere dalle figure partire dal sottoinsieme vuoto è una soluzione accettabile,
-le soluzioni non \textit{accettabili} si trovano al di fuori dello spazio di ricerca, e di fatti
-non sono presenti archi che vanno al di fuori di questo. Quindi, ogni esecuzione di un algoritmo è un
-percorso massimo all'interno del grafo di costruzione, che parte dal sottoinsieme vuoto e raggiunge
-una soluzione, la quale idealmente dovrebbe essere ottimale o almeno fattibile. Nel caso ottimale,
-il percorso termina quando incontra una soluzione ottima, questo è il caso degli
-algoritmi di Dijkstra, Prim, Kruskal.
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.8]{images/cons_graph_1.png}
-    \caption{Il grafo di costruzione visita una sequenza di sotto insiemi che porta ad una soluzione
-        fattibile ma non ottimale}
-\end{figure}
+    Come è possibile vedere dalle figure partire dal sottoinsieme vuoto è una soluzione accettabile,
+    le soluzioni non \textit{accettabili} si trovano al di fuori dello spazio di ricerca, e di fatti
+    non sono presenti archi che vanno al di fuori di questo. Quindi, ogni esecuzione di un algoritmo è un
+    percorso massimo all'interno del grafo di costruzione, che parte dal sottoinsieme vuoto e raggiunge
+    una soluzione, la quale idealmente dovrebbe essere ottimale o almeno fattibile. Nel caso ottimale,
+    il percorso termina quando incontra una soluzione ottima, questo è il caso degli
+    algoritmi di Dijkstra, Prim, Kruskal.
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.8]{images/cons_graph_1.png}
+        \caption{Il grafo di costruzione visita una sequenza di sotto insiemi che porta ad una soluzione
+            fattibile ma non ottimale}
+    \end{figure}
 
-Negli altri casi, come nella figura sovrastante, il percorso potrebbe non terminare in una soluzione
-ottima ma fattibile $x\in X$, questo è il caso degli algoritmi euristici come quelli usati per
-KP e MDP.
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.8]{images/cons_graph_2.png}
-    \caption{Il grafo di costruzione visita una sequenza di sotto insiemi che porta ad una soluzione non fattibile}
-\end{figure}
-Il percorso potrebbe terminare in una soluzione non fattibile $x\notin X$ (ma accettabile poiché presente
-nello spazio di ricerca), come per esempio il TSP su un grafo non completo.
+    Negli altri casi, come nella figura sovrastante, il percorso potrebbe non terminare in una soluzione
+    ottima ma fattibile $x\in X$, questo è il caso degli algoritmi euristici come quelli usati per
+    KP e MDP.
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.8]{images/cons_graph_2.png}
+        \caption{Il grafo di costruzione visita una sequenza di sotto insiemi che porta ad una soluzione non fattibile}
+    \end{figure}
+    Il percorso potrebbe terminare in una soluzione non fattibile $x\notin X$ (ma accettabile poiché presente
+    nello spazio di ricerca), come per esempio il TSP su un grafo non completo.
 
-\paragraph{Esempio di costruzione di grafi}\mbox{}\\
-Un esempio di grafo di costruzione è quello per il TSP per trovare il Nearest-Neighbour in
-un grafo completo. L'idea è quella di iniziare con un insieme di archi vuoto, quindi $x^{(0)}=\emptyset$,
-e sono presenti $n-1$ archi uscenti.
+    \paragraph{Esempio di costruzione di grafi}\mbox{}\\
+    Un esempio di grafo di costruzione è quello per il TSP per trovare il Nearest-Neighbour in
+    un grafo completo. L'idea è quella di iniziare con un insieme di archi vuoto, quindi $x^{(0)}=\emptyset$,
+    e sono presenti $n-1$ archi uscenti.
 
-La costruzione del grafo sarà un albero con $n-1$ archi e $n$ nodi; il numero di percorsi dall'insieme
-vuoto alle foglie sarà esattamente $(n-1)!$, questo è il numero delle possibili esecuzioni
-dell'algoritmo.
+    La costruzione del grafo sarà un albero con $n-1$ archi e $n$ nodi; il numero di percorsi dall'insieme
+    vuoto alle foglie sarà esattamente $(n-1)!$, questo è il numero delle possibili esecuzioni
+    dell'algoritmo.
 
-\paragraph{Proprietà dello spazio di ricerca}\mbox{}\\
-\begin{itemize}
-    \item Include l'insieme vuoto $\emptyset\in\mathcal{F}_A$, visto che ogni algoritmo generalmente
-          inizia da quello.
+    \paragraph{Proprietà dello spazio di ricerca}\mbox{}\\
+    \begin{itemize}
+        \item Include l'insieme vuoto $\emptyset\in\mathcal{F}_A$, visto che ogni algoritmo generalmente
+              inizia da quello.
 
-    \item In generale include l'insieme delle soluzioni fattibili $X\subseteq\mathcal{F}_A$, a volte
-          alcune soluzioni possono essere rimosse da esso nel caso in cui risultino ovviamente non ottimali:
-          per esempio l'SCP dove inizia con un insieme vuoto di colonne ogni colonna è a aggiunta, in un
-          dato punto la soluzione fattibile viene raggiunta ma non ha senso aggiungere
-          altre colonne perché i nuovi sottoinsiemi saranno fattibili ma anche più costosi.
+        \item In generale include l'insieme delle soluzioni fattibili $X\subseteq\mathcal{F}_A$, a volte
+              alcune soluzioni possono essere rimosse da esso nel caso in cui risultino ovviamente non ottimali:
+              per esempio l'SCP dove inizia con un insieme vuoto di colonne ogni colonna è a aggiunta, in un
+              dato punto la soluzione fattibile viene raggiunta ma non ha senso aggiungere
+              altre colonne perché i nuovi sottoinsiemi saranno fattibili ma anche più costosi.
 
-    \item I sottoinsiemi di $\mathcal{F}_A$ devono essere raggiungibili dal punto di partenza,
-          altrimenti non avrebbe senso aggiungere una soluzione che non è raggiungibile dall'inizio. Un
-          insieme candidato è la collezione delle \textbf{soluzioni parziali}, che sono le soluzioni
-          generalmente non fattibili ma sono sottoinsiemi di soluzioni fattibili. Seguire una soluzione
-          parziale fornisce almeno un percorso per una soluzione fattibile $\in X$.
+        \item I sottoinsiemi di $\mathcal{F}_A$ devono essere raggiungibili dal punto di partenza,
+              altrimenti non avrebbe senso aggiungere una soluzione che non è raggiungibile dall'inizio. Un
+              insieme candidato è la collezione delle \textbf{soluzioni parziali}, che sono le soluzioni
+              generalmente non fattibili ma sono sottoinsiemi di soluzioni fattibili. Seguire una soluzione
+              parziale fornisce almeno un percorso per una soluzione fattibile $\in X$.
 
-\end{itemize}
-\paragraph{Esempi di spazi di ricerca}\mbox{}\\
-Lo spazio di ricerca potrebbe include tutte le soluzioni fattibili tali che:
-$$\mathcal{F}_A\equiv X$$
-come nel KP; potrebbe includere tutte le soluzioni parziali e tutte le soluzioni fattibili, tale che:
-$$\mathcal{F}_A\equiv \bigcup_{x\in X} 2^x$$
-per esempio nel MDP, nel quale non solo i sottoinsiemi dei $k$ punti sono considerati ma anche
-quelli più piccoli o nell'algoritmo di Kruskal; lo spazio di ricerca potrebbe includere solo
-alcune soluzioni parziali:
-$$\mathcal{F}_A\subset \bigcup_{x\in X} 2^x$$
-un esempio di questo è l'algoritmo di PRim per MSP, il quale non consider tutte le soluzioni
-parziali ma considera un albero che è in aumento rimanendo connesso finché non diventa ricoprente.
-Le soluzioni possono essere definite come uno speciale sottoinsieme non sufficiente per garantire
-la fattibilità:
-$$ U_{x\in X}2^x \mathcal{F}_A$$
-un esempio di questo è il TSP, dove $\mathcal{F}_a$ può essere definito su tutti i
-sottoinsiemi di archi che non includono diramazioni o sotto percorsi, non può
-essere definito come "tutti i sottoinsiemi che fanno parte delle soluzioni fattibili"
-visto che è un problema di decisione NP-completo.
+    \end{itemize}
+    \paragraph{Esempi di spazi di ricerca}\mbox{}\\
+    Lo spazio di ricerca potrebbe include tutte le soluzioni fattibili tali che:
+    $$\mathcal{F}_A\equiv X$$
+    come nel KP; potrebbe includere tutte le soluzioni parziali e tutte le soluzioni fattibili, tale che:
+    $$\mathcal{F}_A\equiv \bigcup_{x\in X} 2^x$$
+    per esempio nel MDP, nel quale non solo i sottoinsiemi dei $k$ punti sono considerati ma anche
+    quelli più piccoli o nell'algoritmo di Kruskal; lo spazio di ricerca potrebbe includere solo
+    alcune soluzioni parziali:
+    $$\mathcal{F}_A\subset \bigcup_{x\in X} 2^x$$
+    un esempio di questo è l'algoritmo di PRim per MSP, il quale non consider tutte le soluzioni
+    parziali ma considera un albero che è in aumento rimanendo connesso finché non diventa ricoprente.
+    Le soluzioni possono essere definite come uno speciale sottoinsieme non sufficiente per garantire
+    la fattibilità:
+    $$ U_{x\in X}2^x \mathcal{F}_A$$
+    un esempio di questo è il TSP, dove $\mathcal{F}_a$ può essere definito su tutti i
+    sottoinsiemi di archi che non includono diramazioni o sotto percorsi, non può
+    essere definito come "tutti i sottoinsiemi che fanno parte delle soluzioni fattibili"
+    visto che è un problema di decisione NP-completo.
 
-\subsection{Condizione di terminazione}
-Un euristica costruttiva $A$ termina in due casi. Quando il sottoinsieme corrente $x^{t}$
-non può essere esteso senza che lasci lo spazio di ricerca $\mathcal{F}_A$ :
-$$x^{(t)}\cup\{i\}\notin\mathcal{F}_A\text{   }\forall i\in B\setminus x^{(t)}$$
-o in maniera pressoché equivalente, non ha un arco uscente:
-$$\Delta_A^+(x^{(t)})=\{i\in B\setminus x^{(t)}:x^{(t)}\cup\{i\}\in\mathcal{F}_A\}$$
+    \subsection{Condizione di terminazione}
+    Un euristica costruttiva $A$ termina in due casi. Quando il sottoinsieme corrente $x^{t}$
+    non può essere esteso senza che lasci lo spazio di ricerca $\mathcal{F}_A$ :
+    $$x^{(t)}\cup\{i\}\notin\mathcal{F}_A\text{   }\forall i\in B\setminus x^{(t)}$$
+    o in maniera pressoché equivalente, non ha un arco uscente:
+    $$\Delta_A^+(x^{(t)})=\{i\in B\setminus x^{(t)}:x^{(t)}\cup\{i\}\in\mathcal{F}_A\}$$
 
-Sono possibili differenti comportamenti:
-\begin{itemize}
-    \item Talvolta tutti i sottoinsiemi visitati sono fattibili (es. KP).
-    \item Di solito l'ultimo sottoinsieme è l'unica soluzione fattibile.
-    \item $x^{(t)}$ potrebbe muoversi dentro e fuori $X$ (o $X^*$), seppur improbabile.
-\end{itemize}
+    Sono possibili differenti comportamenti:
+    \begin{itemize}
+        \item Talvolta tutti i sottoinsiemi visitati sono fattibili (es. KP).
+        \item Di solito l'ultimo sottoinsieme è l'unica soluzione fattibile.
+        \item $x^{(t)}$ potrebbe muoversi dentro e fuori $X$ (o $X^*$), seppur improbabile.
+    \end{itemize}
 
-\subsection{Struttura di algoritmi euristici costruttivi}
-\begin{algorithm}[H]
-    \caption{Pseudo codice - Euristica Costruttiva}
-    \label{alg:cons_heu}
-    \begin{algorithmic}
-        \State $x:=\emptyset$
-        \State $x^*:=\emptyset$
+    \subsection{Struttura di algoritmi euristici costruttivi}
+    \begin{algorithm}[H]
+        \caption{Pseudo codice - Euristica Costruttiva}
+        \label{alg:cons_heu}
+        \begin{algorithmic}
+            \State $x:=\emptyset$
+            \State $x^*:=\emptyset$
 
-        \If{$x\in X$}
-        \State $f^*:=f(x);$
-        \Else
-        \State{$f^*:=+\infty;$}
-        \EndIf
+            \If{$x\in X$}
+            \State $f^*:=f(x);$
+            \Else
+            \State{$f^*:=+\infty;$}
+            \EndIf
 
-        \While{$\Delta_A^+(x)\neq\emptyset$}
-        \State $i:=arg\underset{i\in\Delta_A^+(x)}{min}\varphi(i,x);$
-        \State $x:x\cup\{i\};$
-        \If{$x\in X$ and $f(x)<f^*$}
-        \State $x^* := x;$
-        \State $f^* := f(x);$
-        \EndIf
-        \EndWhile
-        \State $Return(x^*.f^*);$
-    \end{algorithmic}
-\end{algorithm}
+            \While{$\Delta_A^+(x)\neq\emptyset$}
+            \State $i:=arg\underset{i\in\Delta_A^+(x)}{min}\varphi(i,x);$
+            \State $x:x\cup\{i\};$
+            \If{$x\in X$ and $f(x)<f^*$}
+            \State $x^* := x;$
+            \State $f^* := f(x);$
+            \EndIf
+            \EndWhile
+            \State $Return(x^*.f^*);$
+        \end{algorithmic}
+    \end{algorithm}
 
-Il percorso (la sequenza di sottoinsiemi) visitato dall'algoritmo è determinato
-da:
-\begin{itemize}
-    \item l'insieme $\Delta_A^+(x)\subseteq B\setminus x$, il quale è derivato
-          dal grafo di costruzione.
-    \item il criterio di selezione $\varPhi_A:B\times \mathcal{F}_A\implies\mathbb{R}$ utilizzato
-          per selezionare l'elemento $i$ da aggiungere al sottoinsieme corrente $x^{(t)}$ per generare
-          $x^{(t+1)}$, che può essere visto come una funzione peso su gli archi $(x,x\cup {i})$.
-\end{itemize}
-La soluzione restituita è quella migliore visitata durante l'esecuzione (solitamente è l'ultima).
+    Il percorso (la sequenza di sottoinsiemi) visitato dall'algoritmo è determinato
+    da:
+    \begin{itemize}
+        \item l'insieme $\Delta_A^+(x)\subseteq B\setminus x$, il quale è derivato
+              dal grafo di costruzione.
+        \item il criterio di selezione $\varPhi_A:B\times \mathcal{F}_A\implies\mathbb{R}$ utilizzato
+              per selezionare l'elemento $i$ da aggiungere al sottoinsieme corrente $x^{(t)}$ per generare
+              $x^{(t+1)}$, che può essere visto come una funzione peso su gli archi $(x,x\cup {i})$.
+    \end{itemize}
+    La soluzione restituita è quella migliore visitata durante l'esecuzione (solitamente è l'ultima).
 
-\subsection{Definizione del grafo di costruzione}
-Idealmente, lo spazio di ricerca $\mathcal{F}_A$ dovrebbe includere:
-\begin{itemize}
-    \item Il sotto insieme vuoto $\empty \in \mathcal{F}_A$
-    \item Tutte le soluzioni possibili $X\subseteq\mathcal{F}_A$ (questo escludendo
-          le soluzioni non ottime).
-    \item solo sottoinsiemi raggiungibili da $\emptyset$ (i sottoinsiemi non raggiungibili sono inutili).
-\end{itemize}
-I candidati naturali sono le soluzioni parziali (sottoinsiemi delle soluzioni fattibili), ma questi
-richiedono un test di inclusione veloce per rispondere alla domanda:
-\textit{il sottoinsieme $x^{(t)}$ è una soluzione parziale?} o meglio $\exists x \in X : x^{(t)}\subseteq x?$
-o almeno dare un fast update test: sia $x^{(t)}$, allora $x^{(t)} \cup \{i\}\in\mathcal{F}_A?$
-Sfortunatamente, questo problema generalizza la fattibilità del problema: \textit{è qui presente qualsiasi soluzione fattibile?}.
-Questo potrebbe essere un problema NP-completo, in questo caso si ha necessità di rilassare lo spazio di ricerca.
+    \subsection{Definizione del grafo di costruzione}
+    Idealmente, lo spazio di ricerca $\mathcal{F}_A$ dovrebbe includere:
+    \begin{itemize}
+        \item Il sotto insieme vuoto $\empty \in \mathcal{F}_A$
+        \item Tutte le soluzioni possibili $X\subseteq\mathcal{F}_A$ (questo escludendo
+              le soluzioni non ottime).
+        \item solo sottoinsiemi raggiungibili da $\emptyset$ (i sottoinsiemi non raggiungibili sono inutili).
+    \end{itemize}
+    I candidati naturali sono le soluzioni parziali (sottoinsiemi delle soluzioni fattibili), ma questi
+    richiedono un test di inclusione veloce per rispondere alla domanda:
+    \textit{il sottoinsieme $x^{(t)}$ è una soluzione parziale?} o meglio $\exists x \in X : x^{(t)}\subseteq x?$
+    o almeno dare un fast update test: sia $x^{(t)}$, allora $x^{(t)} \cup \{i\}\in\mathcal{F}_A?$
+    Sfortunatamente, questo problema generalizza la fattibilità del problema: \textit{è qui presente qualsiasi soluzione fattibile?}.
+    Questo potrebbe essere un problema NP-completo, in questo caso si ha necessità di rilassare lo spazio di ricerca.
 
-Se la funzione obiettivo potesse essere estesa da $X$ a $\mathcal{F}_A$, allora sembrerebbe naturale
-utilizzare la funzione obiettivo come \textbf{criterio di selezione}.
-$$\varphi(i,x)=f(x\cup\{i\})$$
-\begin{algorithm}[H]
-    \caption{Pseudo codice - Euristica Costruttiva (funzione obiettivo)}
-    \label{alg:cons_heu_fx}
-    \begin{algorithmic}
-        \State $x:=\emptyset$
-        \State $x^*:=\emptyset$
+    Se la funzione obiettivo potesse essere estesa da $X$ a $\mathcal{F}_A$, allora sembrerebbe naturale
+    utilizzare la funzione obiettivo come \textbf{criterio di selezione}.
+    $$\varphi(i,x)=f(x\cup\{i\})$$
+    \begin{algorithm}[H]
+        \caption{Pseudo codice - Euristica Costruttiva (funzione obiettivo)}
+        \label{alg:cons_heu_fx}
+        \begin{algorithmic}
+            \State $x:=\emptyset$
+            \State $x^*:=\emptyset$
 
-        \If{$x\in X$}
-        \State $f^*:=f(x);$
-        \Else
-        \State{$f^*:=+\infty;$}
-        \EndIf
+            \If{$x\in X$}
+            \State $f^*:=f(x);$
+            \Else
+            \State{$f^*:=+\infty;$}
+            \EndIf
 
-        \While{$\Delta_A^+(x)\neq\emptyset$}
-        \State $i:=arg\underset{i\in\Delta_A^+(x)}{min}f(x\cup\{i\});$
-        \State $x:x\cup\{i\};$
-        \If{$x\in X$ and $f(x)<f^*$}
-        \State $x^* := x;$
-        \State $f^* := f(x);$
-        \EndIf
-        \EndWhile
-        \State $Return(x^*.f^*);$
-    \end{algorithmic}
-\end{algorithm}
+            \While{$\Delta_A^+(x)\neq\emptyset$}
+            \State $i:=arg\underset{i\in\Delta_A^+(x)}{min}f(x\cup\{i\});$
+            \State $x:x\cup\{i\};$
+            \If{$x\in X$ and $f(x)<f^*$}
+            \State $x^* := x;$
+            \State $f^* := f(x);$
+            \EndIf
+            \EndWhile
+            \State $Return(x^*.f^*);$
+        \end{algorithmic}
+    \end{algorithm}
 
-\subsection{Il problema dello zaino frazionario (FKP)}
-Selezionando da un insieme di oggetti di volume identico un sottoinsieme di
-valore massimo tale che possa essere contenuto all'interno dello zaino, il quale dispone di una
-capacità massima limitata.
+    \subsection{Il problema dello zaino frazionario (FKP)}
+    Selezionando da un insieme di oggetti di volume identico un sottoinsieme di
+    valore massimo tale che possa essere contenuto all'interno dello zaino, il quale dispone di una
+    capacità massima limitata.
 
-In questo problema la capacità impone un vincolo sulla cardinalità delle possibili soluzioni,
-esse sono $|x|\leq\lfloor \frac{V}{v}\rfloor$.
-$$\varphi(i,x)=f(x\cup\{i\})$$
-\begin{algorithm}[H]
-    \caption{Pseudo codice - GreedyFKP}
-    \begin{algorithmic}
-        \State $x:=\emptyset$
-        \State $x^*:=\emptyset$
+    In questo problema la capacità impone un vincolo sulla cardinalità delle possibili soluzioni,
+    esse sono $|x|\leq\lfloor \frac{V}{v}\rfloor$.
+    $$\varphi(i,x)=f(x\cup\{i\})$$
+    \begin{algorithm}[H]
+        \caption{Pseudo codice - GreedyFKP}
+        \begin{algorithmic}
+            \State $x:=\emptyset$
+            \State $x^*:=\emptyset$
 
-        \If{$x\in X$}
-        \State $f^*:=f(x);$
-        \Else
-        \State{$f^*:=+\infty;$}
-        \EndIf
+            \If{$x\in X$}
+            \State $f^*:=f(x);$
+            \Else
+            \State{$f^*:=+\infty;$}
+            \EndIf
 
-        \While{$|x|<\lfloor\frac{V}{v}\rfloor$}
-        \State $i:=arg\underset{i\in B\setminus x}{max}\phi_i;$
-        \State $x:x\cup\{i\};$
-        \If{$x\in X$ and $f(x)<f^*$}
-        \State $x^* := x;$
-        \State $f^* := f(x);$
-        \EndIf
-        \EndWhile
-        \State $Return(x^*.f^*);$
-    \end{algorithmic}
-\end{algorithm}
-Definiamo $\mathcal{F}_A = X$, dove il sottoinsieme $x$ può essere esteso finché $|x|<\lfloor\frac{V}{v}\rfloor$.
-Un qualsiasi elemento di $B\setminus x$ estende $x$. La funzione obiettivo è additiva, e quindi:
+            \While{$|x|<\lfloor\frac{V}{v}\rfloor$}
+            \State $i:=arg\underset{i\in B\setminus x}{max}\phi_i;$
+            \State $x:x\cup\{i\};$
+            \If{$x\in X$ and $f(x)<f^*$}
+            \State $x^* := x;$
+            \State $f^* := f(x);$
+            \EndIf
+            \EndWhile
+            \State $Return(x^*.f^*);$
+        \end{algorithmic}
+    \end{algorithm}
+    Definiamo $\mathcal{F}_A = X$, dove il sottoinsieme $x$ può essere esteso finché $|x|<\lfloor\frac{V}{v}\rfloor$.
+    Un qualsiasi elemento di $B\setminus x$ estende $x$. La funzione obiettivo è additiva, e quindi:
 $$f(x\cup\{i\})=f(x)+\phi_i\implies arg\underset{i\in B\setminus x }{max} f(x\cup\{i\}) = arg\underset{i\in B\setminus x }{max}\phi_i$$
 L'ultimo sottoinsieme visitato è la migliore soluzione trovata.
 Consideriamo il seguente esempio:
@@ -4827,66 +4827,397 @@ In pratica, tutti gli algoritmi proposti fin'ora:
     \item associare il sentiero ad un gruppo di archi $(x,x\cup\{i\})$
     \item utilizzare valori costanti per i parametri $\rho$ e $\tau_{min}$
 \end{itemize}
-
 non garantiscono la convergenza, sia $\tau$ che $\pi$ possono tendere a zero su
 ogni percorso ottimale.
 
+\section{Euristiche di scambio}
+\subsection{Algoritmi di scambio}
+In ottimizzazione combinatoria ogni soluzione $x$ è un sottoinsieme di $B$. Un euristica
+di scambio aggiorna il sottoinsieme corrente $x^{(t)}$ passo per passo.
+\begin{enumerate}
+    \item si inizia da una soluzione fattibile $x^{(0)}\in X$ trovata in qualche modo
+          (solitamente con un euristica costruttiva).
+    \item si genera una \textbf{famiglia di soluzioni fattibili} scambiando gli elementi,
+          in sostanza si aggiungo i sotto insiemi $A$ esterni a $x^{(t)}$ e si eliminano i sotto insiemi $D$
+          interni a $x^{(t)}$.
+          $$x'_{A,D}=x\cup A\setminus D$$ con $A\subseteq B\setminus x$ e $D\subseteq x$
+    \item si utilizza un criterio di selezione $\varphi(x,A,D)$ per scegliere i sottoinsiemi
+          da scambiare
+          $$(A^*,D^*)=ARG\;\underset{(A,D)}{min}\;\varphi(x,A,D)$$
+    \item eseguire la scelta selezionata per generare una nuova soluzione corrente
+          $$x^{(t+1)}:=x^{(t)}\cup A^*\setminus D^*$$
+    \item se una condizione di terminazione viene raggiunta, termina; altrimenti, ritorna al punto 2.
+\end{enumerate}
 
+Un'euristica di scambio è definita da:
+\begin{itemize}
+    \item la coppia di sottoinsiemi scambiabili $(A,D)$ in tutte le soluzioni $x$,
+          sostanzialmente le soluzioni generate da un singolo scambio a partire da $x$.
+    \item il criterio di selezione $\varphi(x,A,D)$.
+\end{itemize}
+La funzione vicinato (in inglese \textit{"neighbourhood"}) $N:X\rightarrow2^X$ è una
+funzione che associa ad ogni possibile soluzione $x\in X$ un sottoinsieme di soluzioni
+fattibili $N(x)\subseteq X$. La situazione può essere formalmente descritta con un grafo
+di ricerca nel quale:
+\begin{itemize}
+    \item i nodi rappresentano le soluzioni fattibili $x\in X$
+    \item gli archi connettono ogni soluzione $x$ a quelle del suo vicino $N(x)$,
+          muovendo gli elementi dentro e fuori $x$ (ci si riferisce con "mosse").
+\end{itemize}
+Ogni esecuzione dell'algoritmo corrisponde ad un cammino nel grafo di ricerca. \textit{Come
+    si definisce un algoritmo che corrisponde ad un cammino in un grafo di ricerca?}
+\subsubsection{Vicinato basato sulla distanza}
+Ogni soluzione $x\in X$ può essere rappresentata da il suo \textbf{vettore di incidenza} (incidence
+vector).
+\[
+    \xi_i(x)=
+    \begin{cases}
+        1 & \text{if }i\in x            \\
+        0 & \text{if }i\in B\setminus x
+    \end{cases}
+\]
+La distanza di Hamming tra due soluzioni $x$ e $x'$ è il numero di elementi nel quale i vettori
+di incidenza differiscono
+$$d_H(x,x')=\sum_{i\in B}|\xi_i(x) -\xi_i(x')|$$
+Riferendosi ai sottoinsiemi, $d_H(x,x')=|x\setminus x'| + |x'\setminus x|$
+Una tipica definizione di vicinato, con un parametro intero $k$, è l'insieme di tutte le soluzioni
+con una distanza di Hamming da $x$ non più grande di $k$.
+$$N_{H_k}(x)=\{x'\in X: d_H(x,x')\leq k\}$$
 
+\paragraph{Esempio con il KP}\mbox{}\\
+Il KP è composto dalla seguente istanza $B=\{1,2,3,4\}$, $v=[5\;4\;3\;2\;]$ e $V=10$, ha 13
+soluzioni possibili su 16 sottoinsiemi.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/kp_algo_instvec.png}
+\end{figure}
+visto che i sottoinsiemi $\{1,2,3,4\}$, $\{1,2,3\}$ e $\{1,2,4\}$ sono infattibili. La soluzione
+$\{1,3,4\}$ (denotata in blu) ha un vicinato $N_{H_2}(x)$ che consiste di 7 elementi (in rosa).
+Il sottoinsieme in nero non appartiene al vicinato, perché la distanza di Hamming da $x$ è $>2$.
 
+\subsubsection{Vicinato basato sulle operazioni}
+Un altra definizione comune di vicinato è ottenuta definendo:
+\begin{itemize}
+    \item una famiglia $\mathcal{O}$ di operazioni sulle soluzioni del problema.
+    \item l'insieme di tutte le soluzioni generate applicando ad $x$ le operazioni $\mathcal{O}$
+          $$N_{\mathcal{O}}=\{x'\in X:\exists o\in\mathcal{O} : o(x)=x'\}$$
+\end{itemize}
 
+Considerando ancora il KP, $\mathcal{O}$ può essere definita come:
+\begin{itemize}
+    \item aggiungere ad $x$ un elemento di $B\setminus x$
+    \item rimuovere da $x$ un elemento.
+    \item scambiare un elemento di $x$ con uno di $B\setminus x$
+\end{itemize}
+Il vicinato risultante $N_\mathcal{O}$ è relativo a quello definito dalla distanza
+di Hamming, ma non coincide con nessuna di queste
+$$N_{H_1}\subset N_\mathcal{O}\subset N_{H_2}$$
+Come nel vicinato basato sulle distanze, i vicini possono essere parametrizzati
+considerando sequenze di $k$ operazioni di $\mathcal{O}$ anziché una singola
+$$N_{\mathcal{O}_k}(x)=\{x'\in X:\exists o_1,\dots,o_k\in\mathcal{O}:o_k(o_{k-1}(\dots o_1(x)))=x'\}$$
 
+\subsubsection{Vicinato basato sulla distanza e sulle operazioni}
+In generale, un vicinato basato sulle operazioni include soluzioni con differenti distanze di
+Hamming da $x$. Per il TSP uno può definire un vicinato $N_{\mathcal{S}_1}$ includendo le
+soluzioni ottenute scambiando due nodi nell'ordine di visita.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/TSP_operationsbased.png}
+\end{figure}
+Il vicinato di soluzione $x=(3,1,4,5,2)$ è:
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.4]{images/N_sol_tsp.png}
+    \caption se due nodi sono adiacenti, gli archi modificati sono 3+3; altrimenti, loro sono 4+4.
+\end{figure}
 
+a volte le due definizioni comportano lo stesso vicinato:
+\begin{itemize}
+    \item per il MDP
+          \begin{itemize}
+              \item il vicinato $N_{H_2}$ (soluzioni con una distanza di Hamming uguale a 2)
+              \item il vicinato $N_{\mathcal{S}_1}$ (scambia un elemento di $x$ con uno di $B\setminus x$)
+          \end{itemize}
+    \item per il BPP
+          \begin{itemize}
+              \item il vicinato $N_{H_2}$
+              \item il vicinato $N_{\mathcal{T}_1}$ (trasferisce un oggetto in un container differente)
+          \end{itemize}
+    \item per il Max-SAT
+          \begin{itemize}
+              \item il vicinato $N_{H_2}$
+              \item il vicinato $N_{\mathcal{F}_1}$ ("flip" di una variabile: inverte l'assegnamento di verità)
+          \end{itemize}
+\end{itemize}
 
+Questo è tipico dei problemi con soluzioni a cardinalità fissa:
+\begin{itemize}
+    \item effettuano una sequenza di $k$ scambi tra i singoli elementi $(|A|=1=|D|=1)$: $k$
+          elementi vanno in $x$ e $k$ elementi secondo da $x$.
+    \item La distanza di Hamming tra due soluzioni estreme è $\leq 2k$
+\end{itemize}
 
+\paragraph{Vicinato differente per lo stesso problema: CMST}\mbox{}\\
+Differenti ground set restituiscono differenti vicinati. Nel CMST è possibile impostare
+$B=E$ o $B=V\times T$.
+\begin{itemize}
+    \item Scambiando gli archi: rimuovo $(i,j)$, aggiungendo $(i,h)$
+          \begin{figure}[H]
+              \centering
+              \includegraphics[scale=0.5]{images/rem_neigh.png}
+          \end{figure}
+    \item Scambiando i vertici: sposto il nodo $h$ dal ramo 2 al ramo 1, e ricalcolo il
+          minimo albero ricoprente.
+          \begin{figure}[H]
+              \centering
+              \includegraphics[scale=0.5]{images/move_h_other_branch.png}
+          \end{figure}
+\end{itemize}
 
+\paragraph{Vicinato differente per lo stesso problema: PMSP}\mbox{}\\
+Per il PMSP è possibile definire:
 
+\begin{itemize}
+    \item Il trasferimento dei vicinato $N_{\mathcal{T}_1}$ (), basato
+          sull'insieme $\mathcal{T}_1$ di tutti i trasferimenti di un task su un altra macchina.
+          \begin{figure}[H]
+              \centering
+              \includegraphics[scale=0.5]{images/pmsp_neigh.png}
+          \end{figure}
+    \item lo scambio del vicinato $N_{\mathcal{S}_1}$, basato sull'insieme $\mathcal{S}_1$
+          di scambi di due task tra due macchine (uno per ogni macchina).
+\end{itemize}
 
+\subsubsection{Connettività del grafo di ricerca}
+Un'euristica di scambio può restituire la soluzione ottima solo se tutte le soluzioni
+fattibili possono raggiungere almeno una soluzione ottimale,significa  che è presente un
+cammino da $x$ a $X^*$ per ogni $x\in X$. Tale grafo di ricerca viene chiamato
+\textbf{debolmente connesso con l'ottimo} (\textit{weakly connected to the
+    optimum}). Visto che $X^*$ è sconosciuto, una condizione più forte viene solitamente utilizzata:
+un grafo di ricerca è \textbf{fortemente connesso} quando ammette la presenza di cammini
+da $x$ a $y$ $\forall x,y\in X$. Un buon vicinato dovrebbe garantire alcune condizioni di
+connettività:
+\begin{itemize}
+    \item Nel MDP, il vicinato $N\mathcal{S}_1$ connette qualsiasi coppia di soluzioni con
+          al massimo $k$ scambi.
+    \item Nel KP e nel SCP, nessun vicinato $N_{\mathcal{S}_k}$ fornisce una garanzia tale (soluzioni
+          fattibili possono avere una qualsiasi cardinalità).
+    \item Il grado di ricerca diventa connesso sia nel KP che nel SCP se le rimozioni e
+          e le aggiunte sono aggiunte a gli scambi.
+\end{itemize}
+Se la fattibilità è definita in una maniera sofisticata, scambiare, aggiungere ed eliminare
+\textbf{singoli} elementi potrebbe essere insufficiente per raggiungere tutte le soluzioni:
+i sottoinsiemi infattibili possono rompere tutti i cammini tra alcune soluzioni fattibili.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.45]{images/unf_subsets.png}
+\end{figure}
+Nel caso in cui $V=4$, solo tre soluzioni sono fattibili, tutte con due sotto alberi:
+$$x=\{(r,a),(a,b),(b,e),(r,d),(c,d),(d,g),(f,g)\}$$
+$$x'=\{(r,a),(a,e),(e,f),(f,g),(r,d),(c,d),(b,c)\}$$
+$$x''=\{(r,a),(a,b),(b,c),(r,d),(d,g),(f,g),(e,f)\}$$
+Le tre soluzioni sono mutuamente raggiungibili solo se si scambiando due archi per volta; scambiando
+un singolo arco questo porta a sottoinsiemi insoddisfabili.
 
+\subsubsection{Euristica Hill-climbing}
+Il criterio di selezione più semplice $\varphi(x,A,D)$ è la funzione obiettivo. Viene utilizzata in quasi
+tutte le euristiche di scambio. Quando $\varphi(x,A,D)=d(x\cup A\setminus D)$, l'euristica si muove da
+$x^{(t)}$ alla migliore soluzione in $N(x^{(t)})$.
+Per evitare comportamenti ciclici, solamente soluzioni che sono rigorosamente migliorative (\textit{improving})
+sono accettate. Conseguentemente, la migliore soluzione conosciuta è l'ultima visitata.
 
+\begin{algorithm}[H]
+    \caption{Algoritmo $SteepestDescent(I,x^{(0)})$}
+    \label{alg:steepest_des}
+    \begin{algorithmic}
+        \State $x:=x^{(0)};$
+        \State $Stop := false;$
+        \While{$Stop == false;$}
+        \State {$\tilde{x}:=arg\underset{x'\in N(x)}{min}f(x');$}
+        \If{$f(\tilde{x})\geq f(x)$}
+        \State {$Stop:=true;$}
+        \Else
+        \State{$x:=\tilde{x};$}
+        \EndIf
+        \EndWhile
+        \State{Return $(x,f(x));$}
+    \end{algorithmic}
+\end{algorithm}
+\paragraph{Ottimalità globale e locale}\mbox{}\\
+Un euristica \textit{steepest descent} termina quando trova una soluzione ottima localmente, la quale è la soluzione
+$\overline{x}\in X$ tale che:
+$$f(\overline{x})\leq f(x)\text{ per ogni }x\in N(x)$$
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/local_opt.png}
+\end{figure}
+Una soluzione globalmente ottima è anche sempre localmente ottima, ma l'opposto non è vero in generale:
+$X^*\subseteq\overline{X}_N\subseteq X$
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/opt_neigh.png}
+\end{figure}
+\paragraph{Vicinato esatto}\mbox{}\\
+Il vicinato esatto è una funzione "vicinato" $N:X\rightarrow 2^X$ tale che qualsiasi ottimo locale è anche un
+ottimo globale.
+$$\overline{X}_N=X^*$$
+Nel caso banale, il vicinato di ogni soluzione coincide con l'intera regione fattibile ($N(x)=X$ per ogni $x\in X$,
+esso è anche un vicinato troppo grande esplorare e quindi inutile).
+I vicinati \textbf{esatti} sono estremamente rari:
+\begin{itemize}
+    \item scambio tra archi per il Minimum Spanning Tree Problem.
+    \item scambio tra variabili base e non bases utilizzato da l'algoritmo simplex per la programmazione lineare.
+\end{itemize}
+In generale, l'euristica \textit{steepest descent} non trova un ottimo globale. La sua efficacia dipende dalla
+proprietà del grafo di ricerca e dell'obiettivo.
 
+\subsubsection{Proprietà del grafo di ricerca}
+Alcune proprietà rilevanti per l'efficacia di un algoritmo sono:
+\begin{itemize}
+    \item la dimensione dello spazio di ricerca $|X|$.
+    \item la connettività del grafo di ricerca (precedentemente discussa).
+    \item il diametro del grafo di ricerca, che è il numero di archi
+          del cammino minimo tra le due soluzioni più distanti: vicinati più grandi producono grafi di diametri più piccoli.
+\end{itemize}
+Considerando il vicinato $N_{\mathcal{S}_1}$ per il TSP simmetrico sui grafi completi:
+\begin{itemize}
+    \item lo spazio di ricerca include $|X|=(n-1)!$ soluzioni.
+    \item $N_{\mathcal{S}_1}$ (scambio di due nodi) include $=\frac{n(n-1)}{2}$ soluzioni.
+    \item il grafo di ricerca è fortemente connesso ed ha un diametro di $\leq n-2$: tutte le
+          soluzioni si trasformano in un altra dopo al massimo $n2$ scambi. Per esempio $x=(1,5,4,2,3)$ diventa
+          $x'=(1,2,3,4,5)$ in 3 passi.
+          $$x=(1,\begingroup \color{red}5\endgroup,4,\begingroup\color{red}2\endgroup,3)\rightarrow(1,2,\begingroup\color{red}4\endgroup,5,\begingroup\color{red}3\endgroup)\rightarrow(1,2,3,\begingroup\color{red}5\endgroup, \begingroup\color{red}4\endgroup)\rightarrow(1,2,3,4,5)=x'$$
+          il primo nodo è sempre 1, l'ultimo è automaticamente in posizione.
+\end{itemize}
+Altre proprietà rilevanti:
+\begin{itemize}
+    \item la densità del ottimo globale (\textit{global optima density}, $\frac{|X^*|}{|X|}$) e dell'ottimo locale ($\frac{|\overline{X}_N|}{|X|}$).
+          Se gli ottimi locali sono numerosi risulta difficile trovare l'ottimo globale.
+    \item la qualità della distribuzione dell'ottimo locale $\delta(\overline{x})$ (diagramma SQD):
+          se gli ottimi locali sono buoni, è meno importante trovare l'ottimo globale.
+    \item la distribuzione delle soluzioni localmente ottime nello spazio di ricerca: se gli ottimi locali
+          sono vicini tra di loro, non è necessario esplorare l'intero spazio.
+\end{itemize}
+Questi indici richiedono un esplorazione esaustiva del grafo di ricerca. In pratica, eseguire un campionamento
+seguito dalle analisi comporta tempi molto lunghi e può essere ingannevole, specialmente se gli ottimi globali
+sono sconosciuti.
+\paragraph{Per esempio il TSP}\mbox{}\\
+Per il TSP su un grafo completo simmetrico con costi Euclidei:
+\begin{itemize}
+    \item la distanza di Hamming tra due ottimi locali è in media $\ll n$; l'ottimo locale si concentra in una piccola regione di $X$.
+    \item la distanza di Hamming tra l'ottimo locale in media eccede quella tra l'ottimo locale e globale: l'ottimo globale tende a concentrare nel
+          mezzo dell'ottimo locale.
+    \item il diagramma FDC (\textit{Fitness-Distance Correlation}) riporta la qualità $\delta(\overline{x})$ contro la distanza
+          dall'ottimo globale $d_H(\overline{x},X^*)$: se sono correlati, migliori ottimi locali sono più vicini a quelli globali.
+\end{itemize}
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.5]{images/global_local_opt.png}
+\end{figure}
 
+Per il QAP (\textit{Quadratic Assignment Problem}), la situazione è differente
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/FDC.png}
+\end{figure}
+Se la qualità e la vicinanza all'ottimo globale sono fortemente correlate:
+\begin{itemize}
+    \item è redditizio costruire delle buone soluzioni di partenza, perché guidano la ricerca vicino
+          ad un buon ottimo locale.
+    \item è meglio intensificare che diversificare.
+\end{itemize}
+Se la correlazione è debole:
+\begin{itemize}
+    \item una buona inizializzazione è meno importante.
+    \item è meglio diversificare che intensificare.
+\end{itemize}
 
+\subsubsection{Il paesaggio}
+Il \textbf{landscape} o paesaggio è la tripla $(X,N,f)$, dove:
+\begin{itemize}
+    \item $X$ è lo spazio di ricerca, o l'insieme di soluzioni fattibili.
+    \item $N:X\rightarrow 2^X$ è la funzione vicinato.
+    \item $f:X\rightarrow\mathbb{N}$ è la funzione obiettivo.
+\end{itemize}
+é il grafo di ricerca con i nodi pesati dati dalla funzione obiettivo.
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/landscape.png}
+\end{figure}
 
+L'efficacia della discesa più ripida (\textit{steepest descent}) dipende dal paesaggio:
+\begin{itemize}
+    \item landscape più lisci restituiscono pochi ottimi locali, possibilmente di buona qualità, e quindi buoni risultati.
+    \item landscape più ruvidi restituiscono molti ottimi locali di qualità diffusa, quindi pessimi risultati.
+\end{itemize}
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/landscape_1.png}
+    \caption{Sono presenti grandi varietà di landscape, molto differenti l'uno dall'altra}
+\end{figure}
 
+\paragraph{Coefficiente di autocorrelazione}\mbox{}\\
+La complessità di un paesaggio può essere empiricamente stimata:
+\begin{enumerate}
+    \item eseguendo una camminata casuale nel grafo si ricerca.
+    \item determinando la sequenza di valori per la funzioni obiettivo $f^{(1)},\dots,f^{(t_{max})}$
+    \item calcolando il campione medio $\overline{f}=\frac{\sum_{t=1}^{t_{max}f^{(t)}}}{t_{max}}$
+    \item calcolando il coefficiente empirico di autocorrelazione:
+          $$r^{(i)}=\frac{\frac{\sum_{t=1}^{t_{max}-i}\left(f^{(t)}-\overline{f}\right)\left(f^{(t+i)}-\overline{f}\right)}{t_{max}-i}}{\frac{\sum_{t=1}^{t_{max}}\left(f^{(t)}-\overline{f}\right)^2}{t_{max}}}$$
+          il quale mette in relazione la differenza dei valori obiettivo delle soluzioni visitate con la distanza tra queste soluzioni lungo il cammino.
+\end{enumerate}
 
+Interpretazioni del valore:
+\begin{itemize}
+    \item $r(0)=1$, abbiamo una correlazione perfetta a distanza 0.
+    \item generalmente $r(i)$ decresce al crescere della distanza $i$.
+    \item se $r(i)\approx 1$ in un grande intervallo di distanze, la landscape è liscia (o \textit{smooth}):
+          \begin{itemize}
+              \item le soluzioni vicine hanno valori vicine a quella corrente.
+              \item ci sono pochi ottimi locali.
+              \item l'euristica \textit{steepest descent} è efficace.
+          \end{itemize}
+    \item se $r(i)$ varia notevolmente, allora il landscape sarà ruvido (o \textit{rugged}):
+          \begin{itemize}
+              \item le soluzioni vicine hanno valori distanti da quello corrente.
+              \item sono presenti molto ottimi locali.
+              \item l'euristica \textit{steepest descent} non è efficace.
+          \end{itemize}
+\end{itemize}
 
+\paragraph{Plateau}\mbox{}\\
+Il grafo di ricerca può essere partizionato in accordo al valore della funzione obiettivo. Il \textbf{plateau}
+del valore di $f$ è ogni sottoinsieme di soluzioni di valore $f$ che sono adiacenti nel grafo di ricerca.
+Sostanzialmente il plateau è un sottoinsieme di soluzioni connesse che hanno lo stesso valore.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/plateau.png}
+\end{figure}
+Per esempio, consideriamo la seguente istanze del PMSP, notiamo che se scambiamo i task tra la macchina 1 e 3
+il risultato della funzione obiettivo non cambia.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/plateau2.png}
+\end{figure}
+Questo significa che non si avrà una buona euristica \textit{steepest descent} (devi pensare a qualcos'altro).
 
+\textbf{Bacini di attrazione}\mbox{}\\
+Alternativamente, il grafo di ricerca può essere partizionato in \textbf{bacini di attrazione} (o
+\textit{attraction basins}) delle soluzioni localmente ottime $\overline{x}$, che sono sottoinsiemi
+delle soluzioni $x^{(0)}\in X$ a partire dalle quali l'euristica \textit{steepest descent} termina in
+$\overline{x}$.
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.3]{images/attr_basins.png}
+\end{figure}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+nel caso in cui si abbia un piccolo numero di \textit{grandi} bacini di attrazione allora probabilmente
+l'euristica \textit{steepest descent} richiederà molti passi ma terminerà in una buona soluzione. Nel
+caso di significa che l'euristica farà pochi passi ma restituirà una brutta soluzione (meglio optare
+per un altro approccio).
 
 
 
