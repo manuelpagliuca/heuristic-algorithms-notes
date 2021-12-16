@@ -5032,7 +5032,7 @@ sono accettate. Conseguentemente, la migliore soluzione conosciuta è l'ultima v
     \begin{algorithmic}
         \State $x:=x^{(0)};$
         \State $Stop := false;$
-        \While{$Stop == false;$}
+        \While{$Stop == false$}
         \State {$\tilde{x}:=arg\underset{x'\in N(x)}{min}f(x');$}
         \If{$f(\tilde{x})\geq f(x)$}
         \State {$Stop:=true;$}
@@ -5218,6 +5218,750 @@ nel caso in cui si abbia un piccolo numero di \textit{grandi} bacini di attrazio
 l'euristica \textit{steepest descent} richiederà molti passi ma terminerà in una buona soluzione. Nel
 caso di significa che l'euristica farà pochi passi ma restituirà una brutta soluzione (meglio optare
 per un altro approccio).
+La \textit{steepest descent} è:
+\begin{itemize}
+    \item Efficace se i bacini di attrazione sono pochi e grandi.
+    \item Inefficace se i bacini di attrazione sono tanti e piccoli.
+\end{itemize}
+
+\subsection{Complessità Steepest Descent}
+\begin{algorithm}[H]
+    \caption{Algoritmo $SteepestDescent(I,x^{(0)})$}
+    \label{alg:steepest_des0}
+    \begin{algorithmic}
+        \State $x:=x^{(0)};$
+        \State $Stop := false;$
+        \While{$Stop == false$}
+        \State {$\tilde{x}:=arg\underset{x'\in N(x)}{min}f(x');$}
+        \If{$f(\tilde{x})\geq f(x)$}
+        \State {$Stop:=true;$}
+        \Else
+        \State{$x:=\tilde{x};$}
+        \EndIf
+        \EndWhile
+        \State{Return $(x,f(x));$}
+    \end{algorithmic}
+\end{algorithm}
+La complessità dell'algoritmo di \textit{steepest descent} dipende da:
+\begin{enumerate}
+    \item Il numero di iterazioni $t_{max}$ partendo da $x^{(0)}$ fino all'ottimo locale trovato,
+    il quale dipende dalla struttura del grafo di ricerca (larghezza dei bacini di attrazione)
+    ed è difficile da stimare \textit{a priori}.
+
+    \item La ricerca della migliore soluzione nel vicinato $\tilde{x}$, la quale dipende da come la
+    ricerca viene eseguita, solitamente richiede solo una stima delle complessità standard.
+\end{enumerate}
+
+\subsubsection{Esplorazione del vicinato}
+Sono presenti due strategie per esplorare il vicinato:
+\begin{enumerate}
+    \item \textbf{ricerca esaustiva} (\textit{exhaustive search}): si calcolano tutte le soluzioni
+    dei vicini; la complessità di un singolo passo è il prodotto del:
+    \begin{itemize}
+        \item numero delle soluzioni dei vicini $|N(x)|$
+        \item calcolo del costo di ogni soluzione $\gamma_f(|B|,x)$
+    \end{itemize}
+    Non è possibile generare solamente soluzioni fattibili:
+    \begin{itemize}
+        \item visita di un sovrainsieme del vicinato, $\tilde{N(x)}\supset N(x)$
+        \item per ogni elemento $x$, si calcola la fattibilità $\gamma_x(|B|,x)$
+        \item per le soluzioni fattibili si calcolano i costi $\gamma_f(|B|,x)$
+    \end{itemize}
+
+    \item \textbf{esplorazione efficiente del vicinato} senza una visita completa: si trova la
+    migliore soluzione vicinato risolvendo un problema ausiliario (\textit{solo dei vicini particolari lo permettono}).
+\end{enumerate}
+
+\paragraph{Visita esaustiva del vicinato}\mbox{}\\
+\begin{algorithm}[H]
+    \caption{Algoritmo $SteepestDescent(I,x^{(0)})$}
+    \label{alg:steepest_des2}
+    \begin{algorithmic}
+        \State $x:=x^{(0)};$
+        \State $Stop := false;$
+        \While{$Stop == false$}
+            \State {$\tilde{x}=x;$}
+            \For{$x'\in\tilde{N}(x)$}
+                \If{$\tilde{x}\in N(x)$}
+                    \If{$f(x')<f(\tilde{x})$}
+                        \State{$\tilde{x}:=x';$}
+                    \EndIf
+                \EndIf
+            \EndFor
+            \If{$f(\tilde{x})\geq f(x)$}
+                \State{$Stop:=true;$}
+            \Else
+                \State{$x:=\tilde{x}$}
+            \EndIf
+        \EndWhile
+        \State{Return $(x,f(x));$}
+    \end{algorithmic}
+\end{algorithm}
+Dove $\tilde{x}=arg\;\underset{x'\in N(x)}{min}f(x')$. La complessità del vicinato combina
+tre termini:
+\begin{enumerate}
+    \item $|\tilde{N}(x)|$: il numero dei sottoinsiemi visitati.
+    \item $\gamma_x$: il tempo di calcolare la fattibilità.
+    \item $\gamma_f$: il temp di calcolare la funzione obiettivo di una soluzione fattibile.
+\end{enumerate}
+
+\subsubsection{Calcolare o aggiornare la funzione obiettivo: caso additivo}
+Il primo modo per accelerare un algoritmo di scambio è quello di minimizzare il tempo di valutazione
+della funzione obiettivo: in particolare è più veloce aggiornare $f(x)$ anziché ricalcolarla.
+
+L'aggiornamento di una funzione obiettivo $f(x)=\sum_{j\in x}\phi_j$ richiede di:
+\begin{itemize}
+    \item sommare $\phi_i$ per ogni elemento di $i\in A$, aggiunto a $x$.
+    \item sottrarre $\phi_j$ per ogni elemento di $j\in D$, rimosso da $x$
+    $$\delta f(x,A,D)=f(x\cup A\setminus D)-f(x)=\sum_{i\in A}\phi_i-\sum_{j\in D}\phi_j$$
+\end{itemize}
+
+Alcuni esempi: scambio di oggetti (KP), colonne (SCP), archi (CMSTP),$\dots$
+Questo aggiornamento ha due proprietà fondamentali:
+\begin{itemize}
+    \item prende tempo costante per un numero costante di elementi $|A|+|D|$
+    \item $\delta f(x,A,D)$ questo non dipende da $x$.
+\end{itemize}
+
+\paragraph{Esempio: il TSP simmetrico}\mbox{}\\
+Per generare il vicinato $N_{\mathcal{R}_2}$ per il TSP si deve:
+\begin{itemize}
+    \item eliminare due archi non consecutivi $(s_i,s_{i+1})$ e $(s_j,s_{j+1})$
+    \item aggiungere due archi $(s_i,s_j)$ e $(s_{i+1},s_{j+1})$
+    \item invertire il percorso $s_{i+1},\dots, s_j$ (modificando $O(n)$ archi!).
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/lez14_0.png}
+\end{figure}
+Se il grafo e la funzione di costo sono simmetriche, la variazione di $f(x)$ è:
+$$\delta f(x,A,D)=c_{s_i,s_j}+c_{s_{i+1},s_{j+1}} - c_{s_i,s_{i+1}}-c_{s_j,s_{j+1}}$$
+ma questo non è vero per il TSP asimmetrico. \textit{Cosa se la funzione obiettivo non è additiva?}
+
+\subsubsection{Calcolare o aggiornare la funzione obiettivo: caso quadratico}
+Il MDP ha una funzione obiettivo quadratica, il costo di computazione è $\Theta(n^2)$. Spostandoci
+da $x$ a $x'=x\setminus \{i\}\cup\{j\}$ (vicinato $N_{\mathcal{S}_1}$), l'aggiornamento è:
+$$\delta f(x,i,j)=f(x\setminus \{i\}\cup\{j\})-f(x)=\sum_{h,k\in x\setminus\{i\}\cup\{j\}} d_{hk} -\sum_{h,k\in x}d_{hk}$$
+che dipende da $O(n)$ termini di distanza relativi ai punti $i$ e $j$. È presente un trucco generale
+per le funzioni simmetriche quadratiche con $d_{ii}=0$
+
+$$\delta f(x,i,j)=\sum_{h\in x\setminus\{i\}\cup\{j\}} \sum_{k\in x\setminus\{i\}\cup\{j\}} d_{hk}-\sum_{h\in x}\sum_{k\in x}d_{hk}\implies$$
+$$\implies\delta f(x,i,j)=2\sum_{k\in x}d_{jk}-2\sum_{k\in x}d_{ik}-2d_{ij}=$$
+$$=2(D_j(x)-D_i(x)-d_{ij})$$
+
+Se $D_\ell (x)=\sum_{k\in x}d_{\ell k}$ è conosciuto per ogni $\ell\in B$, la computazione richiede $O(1)$.
+
+\paragraph{Esempio: il MDP}\mbox{}\\
+%TODO: Inserire spiegazioni con tutte le immagini PaccoSlide 14, 8/26
+Consideriamo $f(x)/2$, calcoliamo lo scambio:
+$$x\rightarrow x'= x\setminus\{i\}\cup\{j\}$$
+con $i\in x$ e $j\in B\setminus x$
+$$f(x')=f(x)-D_i+D_j-d_{ij}$$
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/lez14_1.png}
+\end{figure}
+\begin{itemize}
+    \item le coppie che includono $i$ sono perse.
+    \item le coppie che includono $j$ sono acquisite.
+    \item ma la coppie $(i,j)$ è in eccesso.
+\end{itemize}
+Il costo è calcolato in tempo $O(1)$ per ogni soluzione.
+
+% dopo la slide finale
+Aggiornametnto delle strutture dati:
+$$D_\ell=D_\ell - d_{\ell i}+d_{\ell j},\ell\in B$$
+Per ogni elemento $\ell\in B$:
+\begin{itemize}
+    \item $d_{\ell i}$ sparisce.
+    \item $d_{\ell j}$ compare.
+\end{itemize}
+La struttura dati ausiliare è aggiornata in tempo $O(n)$ per ogni iterazione.
+
+
+\subsubsection{Aggironamento della funzione obiettivo: esempi non lineari}
+Molte funzioni non-lineari possono essere aggiornate con simili trucchi:
+\begin{itemize}
+    \item salva le informazioni aggregate sulla soluzione corrente $x^{(t)}$.
+    \item utilizzale per calcolare $f(x')$ efficientemente per ogni $x'\in N(x^{(t)})$.
+    \item aggiornalo quando quando passi alla seguente soluzione $x^{t+1}$.
+\end{itemize}
+\paragraph{Esempio: PMSP}\mbox{}\\
+Utilizzare il trasferimento ($N_{\mathcal{T}_1}$) e lo scambio ($N_{\mathcal{S}_1}$) del vicinato
+per il PMSP, la funzione obiettivo può essere aggiornata in tempo costante, questo gestendo:
+\begin{itemize}
+    \item il tempo di completamente per ogni macchina.
+    \item gli indici della macchina con il primo e secondo tempo massimo.
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/lez14_2.png}
+\end{figure}
+Considera lo scambio $o=(i,j)$ dei task $i$ e $j$ (rispettivamente $i$ sulla macchina $M_i$,
+$j$ sulla macchina $M_j$).
+\begin{itemize}
+    \item calcolare in tempo costante i nuovi tempi di completamento: uno incrementa,
+    l'altro decrementa (o entrambi rimangono costanti).
+    \item prova (in tempo costante) se uno dei due supera il massimo.
+    \item se il tempo massimo decresce, provare (in tempo costante) quando l'altro
+    tempo o il secondo tempo massimo diventa il massimo.
+\end{itemize}
+
+Una volta che il vicinato è visitato e lo scambio selezionato, aggiorna:
+\begin{itemize}
+    \item i due tempi di completamento modificati (entrambi in tempo costante).
+    \item le loro posizioni in un max-heap (ogni uno in tempo $O(\log |M|)$)
+\end{itemize}
+
+\paragraph{Esempio: TSP asimmetrico}\mbox{}\\
+L'utilizzo dell'informazione ausiliaria utilizzata per il calcolo di $f'(x)$ può essere:
+\begin{itemize}
+    \item \textbf{globale}, il quale si riferisce alla corrente soluzione $x$.
+    \item \textbf{locale}, il quale si riferisce alla soluzione $p_N(x')$ visitata precedentemente
+    nel vicinato $N(x)$ secondo un opportuno ordine.
+\end{itemize}
+Consideriamo il vicinato $N_{\mathcal{R}_2}$ per il TSP asimmetrico:
+\begin{itemize}
+    \item le soluzioni del vicinato differiscono da $x$ per $O(n)$ archi.
+    \item le soluzioni del vicinato generali differiscono una dall'altra per $O(n)$ archi.
+    \item se la coppia di archi $(s_i,s_{i+1})$ e $(s_j,s_{j+1})$ segue l'ordine lessicografico,
+    il cammino inverso cambia solo rispetto ad un arco.
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/lez14_3.png}
+\end{figure}
+La variazione di $f(x)$ tra due soluzioni vicinato generiche è:
+$$\delta f(x,i,j)=c_{s_i,s_j}+c_{s_{i+1},s_{j+1}}-c_{s_i,s_{i+1}}-c_{s_j,s_{j+1}}+c_{s_j\dots s_{i+1}}-c_{s_{i+1}\dots s_j}$$
+ma muoversi dallo scambio $(s_i,s_j)$ allo scambio $(s_i,s_{j+1})$:
+\begin{itemize}
+    \item i primi quattro termini cambiano, ma possono essere controllati in tempo costante.
+    \item gli ultimi due termini possono essere aggiornati in tempo costante
+    \[
+        \begin{cases}
+            c_{s_{j'}\dots s_{i+1}} = c_{s_j\dots s_{i+1}}+c_{s_{j+1},s_j}\\
+            c_{s_{i+1}\dots s_{j'}} = c_{s_{i+1}\dots s_j}+c_{s_j,s_{j+1}}
+        \end{cases}
+    \]
+\end{itemize}
+\textit{Cosa a riguardo della fattibilità?} Definire vicinati con una distanza di Hamming o con operazioni
+può generare anche sottoinsiemi infattibili, i quali devono essere rimossi.
+$$\tilde{N}_H(x)=\{x'\subseteq B: d(x',x)\leq k\}\supseteq N_{\mathcal{O}}(x)=\tilde{N}_H(x)\cap X$$
+$$\tilde{N}_H(x)=\{x'\subseteq B:\exists o \in \mathcal{O}:o(x)=x'\}\supseteq N_{\mathcal{O}}(x)=\tilde{N}_{\mathcal{O}}(x)\cap X$$
+Per esempio: KP, BPP, SCP, CMSTP,$\dots$
+Se non è possibile evitare \textit{a priori} i sottoinsiemi infattibili, si deve:
+\begin{itemize}
+    \item provare/testare la fattibilità di ogni elemento di $\tilde{N}(x)$ per ottenere $N(x)$.
+    \item per gli elementi fattibili, calcolare il costo.
+\end{itemize}
+Il test di fattibilità può essere reso efficiente con delle tecniche simili a quelle utilizzate
+per la valutazione della funzione obiettivo. Un esempio di questo potrebbe essere aggiornare
+in tempo costante il volume totale di un sottoinsieme nel KP.
+
+\paragraph{Esempio: CMSTP}\mbox{}\\
+Consideriamo il vicino di scambio $N_{\mathcal{S}_1}$ (aggiungo un arco e rimuovo un altro).
+\begin{itemize}
+    \item se i due archi sono nello stesso ramo, la soluzione rimane fattibile.
+    \item se loro sono in rami differenti, uno perde peso, l'altro guadagna peso: la variazione
+    è uguale al peso del sotto-albero trasferito.
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.6]{images/lez14_4.png}
+\end{figure}
+Se ogni vertice slava il peso del proprio sotto-albero accodato, nel testare la fattibilità
+si confronta questo peso con la capacità residua del ramo ricevente (il peso accodato
+a $i$ con la capacità residua del ramo sinistro).
+
+Una volta che lo scambio migliore stato effettuato, l'informazione deve essere aggiornata in
+tempo $O(n)$ visitando i predecessori del vertice ricevente $h$.
+
+\subsubsection{Schema generale di esplorazione sofisticata}
+L'utilizzo dell'informazione ausiliaria richiede:
+\begin{enumerate}
+    \item L'inizializzazione di strutture dati adatte
+    \begin{itemize}
+        \item In parte locali, sostanzialmente quelle relative alle soluzioni vicine.
+        \item In parte globali, sostanzialmente quelle relative alle soluzioni correnti.
+    \end{itemize}
+    \item il loro aggiornamento tra le soluzioni e iterazioni successive.
+
+    \begin{algorithm}[H]
+        \caption{Algoritmo $SteepestDescent(I,x^{(0)})$}
+        \label{alg:steepest_des3}
+        \begin{algorithmic}
+            \State $x:=x^{(0)};$
+            \State $GI:=InitializeGI();$
+            \State $Stop := false;$
+            \While{$Stop == false$}
+                \State {$\tilde{x}=0;$}
+                \State {$\tilde{\delta}:=0;$}
+                \State {$LI:=InitializeLI();$}
+                \For{$x'\in\tilde{N}(x)$}
+                    \If{$\tilde{x}\in N(x)$}
+                        \If{$f(x')<f(\tilde{x})$}
+                            \State{$\tilde{x}:=x';$}
+                            \State{$LI:=UpdateLI(LI,x')$}
+                        \EndIf
+                    \EndIf
+                \EndFor
+                \If{$f(\tilde{x})\geq f(x)$}
+                    \State{$Stop:=true;$}
+                \Else
+                    \State{$x:=\tilde{x}$}
+                    \State{$GI:=UpdateGD(GI,\tilde{x})$}
+                \EndIf
+            \EndWhile
+            \State{Return $(x,f(x));$}
+        \end{algorithmic}
+    \end{algorithm}
+\end{enumerate}
+
+\subsubsection{Salvataggio parziale del vicinato}
+Quando si sta eseguendo un operazione $o\in\mathcal{O}$ su una soluzione $x\in X$ la variazione
+$$\delta f_o(x)0f(o(x))-f(x)$$
+a volte dipende solo su una parte di $x$, possibilmente molto piccola.
+Per esempio, consideriamo il vicinato di scambio $N_{\mathcal{S}_1}$ per il CMST:
+\begin{itemize}
+    \item aggiunge un arco $k\in B\setminus x$
+    \item rimuovi un arco $h\in x$
+\end{itemize}
+Due rami sono coinvolti: uno acquisisce un sotto-albero, l'altro lo perde
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.6]{images/lez14_5.png}
+\end{figure}
+L'effetto dello scambio $(i,j)$ dipende solo sui rami inclusi $i$ e $j$: è lo stesso in $x$
+e $x'$ e non è influenzato dallo swap $(h,k)$.
+$$\delta f_{i,j}(x)=\delta f_{i,j}(x')$$
+
+Esiste un sottoinsieme delle operazioni $\tilde{\mathcal{O}}\subset\mathcal{O}$ tale che:
+$$\delta f_o(x')=\delta f_o(x)\text{ per ogni }o\in\tilde{\mathcal{O}}\text{ e per ogni }x'=o(x)$$
+
+Allora risulta vantaggioso:
+\begin{enumerate}
+    \item calcolare e salvare $\delta f_o(x)$ per ogni $o\in\mathcal{O}$, ovvero mantenere
+    l'insieme degli scambi ammissibili e i loro valori associati $\delta f$.
+
+    \item eseguire la migliore operazione $o^*$, e generare una nuova soluzione $x'$.
+    \item ricalcolare e salvare $\delta f_o(x')$ solo per $o\in\mathcal{O}\setminus\tilde{\mathcal{O}}$,
+    ovvero rimuovere gli scambi sui rami modificati, ricalcolare i loro valori e recuperare
+    $\delta f_o(x')$ per tutti $o\in\tilde{\mathcal{O}}$ (i loro valori sono ancora corretti).
+    \item tornare al punto 2.
+\end{enumerate}
+Nel caso in cui i rami siano numerosi, $|\mathcal{O}\setminus\tilde{\mathcal{O}}|\subset|\mathcal{O}|$
+e il risparmio è molto forte. \textit{Questo è tipico dei problemi la cui soluzione è una partizione.}
+
+\subsubsection{Trade-off tra efficienza ed efficacia}
+La complessità di un euristica di scambio dipende da tre fattori:
+\begin{enumerate}
+    \item numero di iterazioni.
+    \item cardinalità del vicinato visitato.
+    \item calcolo della fattibilità e costi per un singolo vicino.
+\end{enumerate}
+I primi due fattori sono chiaramente in conflitto:
+\begin{itemize}
+    \item un piccolo vicinato è veloce da esplorare, ma richiede diversi step prima di
+    raggiungere un ottimo locale.
+    \item un grande vicinato richiede pochi passi, ma è molto lento da esplorare.
+\end{itemize}
+Lo scambio (\textit{trade-off}) ottimale si trova a metà: un vicinato tale che:
+\begin{itemize}
+    \item sia grande abbastanza da includere le buone soluzioni.
+    \item piccolo abbastanza da essere esplorato velocemente.
+\end{itemize}
+ma è difficile da identificare, perché:
+\begin{itemize}
+    \item l'efficienza peggiora in fretta con l'aumentare della dimensione.
+    \item la soluzione risultante cambia con il vicinato (grandi vicinati hanno migliori ottimi locali).
+\end{itemize}
+
+\subsubsection{Ritocchi dei vicinati}
+Risulta possibile definire un vicinato $N$ e regolare la sua dimensione:
+\begin{itemize}
+    \item esplorare solo un promettente sotto-vicinato $N'\subset N$. Per esempio,
+    se la funzione obiettivo è additiva, uno può:
+    \begin{itemize}
+        \item aggiungere solo gli elementi $j\in B\setminus x$ di basso costo $\phi_j$.
+        \item rimuovere solo gli elementi $i\in x$ di alto costo $\phi_i$
+    \end{itemize}
+
+    \item terminare la visita dopo aver trovare una soluzione promettente. Per esempio,
+    la strategia \textit{first-best} che termina l'esplorazione alla prima soluzione migliore
+    rispetto a quella corrente:
+    $$\text{if }f(\tilde{x})<f(x)\text{ then }x:=\tilde{x};\;Stop:=true;$$
+\end{itemize}
+L'efficacia dipende dall'obiettivo:
+\begin{itemize}
+    \item se il costo di alcuni elementi influenza molto l'obiettivo,
+    vale la pena tenerne conto, fissandone il divieto.
+\end{itemize}
+sulla struttura del quartiere:
+\begin{itemize}
+    \item se il paesaggio è tranquillo, la prima soluzione migliorativa si avvicina (approssima) bene
+    alla migliore soluzione del vicinato: è meglio fermarsi.
+
+    \item se il paesaggio è rugoso, la soluzione migliore del vicinato potrebbe essere molto migliore:
+    è meglio proseguire.
+\end{itemize}
+
+\section{Ricerca di vicinato su larga scala}
+Grandi vicinati forniscono, in generale, grandi
+bacini di attrazione, tali per cui:
+\begin{itemize}
+    \item l'euristica \textit{steepest descent} diventa molto efficace.
+    \item i tempi di esplorazione si allungano.
+\end{itemize}
+
+Gli approcci \textit{Very Large Scale Neighbourhood Search} (VLSN Search) hanno:
+\begin{itemize}
+    \item vicinati esponenziali in $|B|$ (o polinomi di ordine più alto).
+    \item esplorazione in tempo polinomiale di basso-ordine.
+\end{itemize}
+Esistono due strategie per limitare il tempo computazionale:
+\begin{enumerate}
+    \item selezionare un vicinato in cui l'obiettivo può essere ottimizzato senza un esplorazione
+    esaustiva.
+    \item esplorare il quartiere in modo euristico e restituire una soluzione vicinato
+    promettente, invece della migliore.
+\end{enumerate}
+\subsection{Visita efficiente di vicinati esponenziali}
+Alcuni metodi sono basati su vicinati la cui soluzione ottimale pul essere trovata risolvendo un problema su una
+matrice ausiliaria o grafo.
+\begin{itemize}
+    \item set packing: \textit{Dynasearch}
+    \item negative cost circuit: \textit{cyclic exchanges}
+    \item shortest path: \textit{ejection chains, order-and-split}
+\end{itemize}
+Tali strumenti sono solitamente definiti come matrici di milgioramento (\textit{improvement matrix})
+o grafi.
+
+\subsubsection{Dynasearch}
+La variazione $\delta f_o(x)$ della funzione obiettivo implicata da un operazione $o\in\mathcal{O}$
+spesso dipende solo da una parte della soluzione $x$. Le operazioni che modificano la stessa parte
+sono generalmente incompatibili.
+Le operazioni che modificano parti differenti hanno effetti indipendenti e l'ordine in cui sono
+eseguite è irrilevante.
+$$f(o'(o(x)))=f(o(o'(x)))$$
+Se $f(\cdot)$ è additiva, i due scambi semplicemente sommano i loro effetti:
+Esempi:
+\begin{itemize}
+    \item gli scambi tra differenti rami per il CMSTP o differenti circuiti per il VRP (altrimenti,
+    lo scambio potrebbe essere infattibile).
+    \item 2-opt scambi per il TSP operanti sui segmenti disgiunti del circuito (altrimenti,
+    §uno dei due archi è rimosso o invertito).
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.5]{images/lez14_6.png}
+    \end{figure}
+
+\end{itemize}
+Un intero insieme di mosse può essere eseguito assieme sommandone i loro effetti.
+Sia una \textbf{mossa composta} un insieme di mosse elementari che hanno
+degli effetti mutuamente indipendenti sulla fattibilità e sull'obiettivo.
+
+La situazione può essere modellata con una matrice di miglioramento $A$ nella quale:
+\begin{itemize}
+    \item le righe rappresentano i componenti della soluzione (es., i rami del
+    CMSTP, circuiti del VRP, segmenti di circuito nel TSP).
+    \item le colonne rappresentano le mosse elementari: ogni colonna ha un valore
+    uguale al miglioramento obiettivo $-\delta f$.
+    \item se la mossa $j$ impatta sul componente $i$, $a_{i}j=1$, altrimenti $a_{ij}=0$.
+\end{itemize}
+Determinare l'impacchettamento ottimale delle colonne, ovvero il sottoinsieme di
+colonne non in conflitto di valore massimo.
+Il \textit{Set Packing Problem} è generalmente un problema $\mathcal{NP}-hard$, ma:
+\begin{itemize}
+    \item su speciali matrici risulta polinomiale (come nella matrice del TSP).
+    \item se ogni mossa modifica al massimo due componenti:
+    \begin{itemize}
+        \item le righe possono essere viste come nodi.
+        \item le colonne possono essere viste come archi.
+        \item ogni raggruppamento delle colonne diventa un matching.
+    \end{itemize}
+    ed il problema del massimo matching è polinomiale.
+\end{itemize}
+
+\subsubsection{Scambi ciclici}
+In molti problemi:
+\begin{itemize}
+    \item ogni soluzione ammissibile (\textit{fattibile}) partiziona gli
+     oggetti in componenti $S^{(\ell)}$: consiste in assegnazioni di oggetti
+     a componenti $(i,S_i)$ (vertici o archi in rami per il CMSTP, nodi o archi
+     nei circuiti per il VRP, oggetti in container nel BPP, $\dots$).
+
+    \item l'ammissibilità è associata ai singoli componenti.
+    \item la funzione obiettivo è additiva rispetto alle componenti.
+    $$f(x)=\sum_{\ell=1}^r f(s^{(\ell)})$$
+\end{itemize}
+Risulta naturale definire per questi problemi l'insieme delle operazioni $\mathcal{}T_k$
+le quali includono i trasferimenti di $k$ elementi dai loro componenti ad altri e derivare
+da $\mathcal{T}_k$ il vicinato $N_{\mathcal{T}_k}$.
+\begin{itemize}
+    \item spesso i vincoli di fattibilità vietano i semplici trasferimenti.
+    \item ma il numero di trasferimenti multipli cresce velocemente con $k$.
+\end{itemize}
+Vogliamo trovare un sottoinsieme di $N_{\mathcal{T}_k}$ grande, ma efficiente da esplorare.
+
+\subsubsection{Grafo di miglioramento}
+Il grafo di miglioramento permette di descrivere sequenze di trasferimenti.
+\begin{itemize}
+    \item un nodo $i$ corrisponde ad un elemento $i$ della soluzione corrente $x$.
+    \item un arco $(i,j)$ corrisponde a:
+    \begin{itemize}
+        \item il trasferimento dell'elemento $i$ dalla sua componente corrente $S_i$
+        alla componente corrente $S_j$ dell'elemento $j$.
+        \item l'eliminazione dell'elemento $j$ dal componente $S_j$.
+    \end{itemize}
+    \item il costo dell'arco $c_{ij}$ corrisponde alla variazione del contributo di $S_j$
+    all'obiettivo:
+    $$c_{ij}=f(S_j\cup\{i\}\setminus\{j\})-f(S_j)$$
+    con $c_{ij}=+\infty$ se è infattibile trasferire $i$ e rimuovere $j$.
+\end{itemize}
+Un circuito in un grafo tale corrisponde ad una sequenza chiusa di trasferimenti. Il
+costo del circuito corrisponde al costo della sequenza, ma solo se ogni nodo appartiene
+ad una componente diversa. Trovare il costo minimo del circuito soddisfa questa condizione.
+
+\paragraph{Esempio: il CMSTP}\mbox{}\\
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.6]{images/miglioramento_grafo.png}
+\end{figure}
+Consideriamo la mossa composta $(4,\begingroup\color{blue}3\endgroup),(3,\begingroup\color{green}11\endgroup),(11,\begingroup\color{brown}8\endgroup),(8,\begingroup\color{red}4\endgroup)$:
+\begin{itemize}
+    \item il vertice 4 si muove nel ramo blu per sostituire il vertice 3.
+    \item il vertice 3 si muove nel ramo verde per sostituire il vertice 11.
+    \item il vertice 11 si muove nel ramo marrone per sostituire il vertice 8.
+    \item il vertice 8 si muove nel ramo rosso per sostituire il vertice 4.
+\end{itemize}
+\begin{itemize}
+\item Il costo della variazione per il sotto-albero $S_j$ restituisce il costo dell'arco $c_{ij}$.
+\item il peso del ramo $S_j$ varia di $w_i-w_j$: se non fattibile, vietare l'arco.
+\end{itemize}
+
+\subsubsection{Ricerca per il circuito di costo minimo}
+Il problema è attualmente $\mathcal{NP}-hard$, ma:
+\begin{itemize}
+    \item il vincolo di visitare una sola volta ogni componente consente un algoritmo di
+    \textit{programmazione dinamica} piuttosto efficiente che fa crescere cammini parziali
+    (\textit{se le componenti sono $r$, il circuito ha al massimo $r$ archi}).
+    \item tutti i cammini parziali di costo $\geq 0$ possono essere negati perché:
+    \begin{itemize}
+        \item la variazione totale della funzione obiettivo somma gli effetti di tutte le
+        singole mosse
+        $$\delta f_{o_1,\dots,o_k}(x)=\sum_{\ell=1}^k \delta f_{o_\ell}(x)$$
+        \item ogni sequenza di numeri con somma negativa ammette una permutazione ciclica le
+        cui somme parziali sono tutte negative.
+        \item quindi, è presente una permutazione ciclica delle mosse $o_1,\dots,o_k$ con $\delta f<0$
+        ad ogni passo
+        $$\delta f_{o_1,\dots,o_k}(x)<0\implies\exists h:\sum_{\ell=1}^\ell \delta f_{o_{h+1},\dots,o_{h+\ell}}(x)<0\;\;\forall\ell=1,\dots,k$$
+    \end{itemize}
+\end{itemize}
+Inoltre:
+\begin{itemize}
+    \item il problema ammette algoritmi euristici polinomiali.
+    \item sono presenti algoritmi polinomiali da calcolare:
+    \begin{itemize}
+        \item un circuito negativo non-minimo (Floyd-Warshall), se esistente.
+        \item il circuito minimo di costo medio (costo totale / numero di archi).
+    \end{itemize}
+    rilassare il vincolo sulle componenti; se tali soluzioni hanno:
+    \begin{itemize}
+        \item costo positivo, dimostrano che non esiste alcun circuito negativo.
+        \item costo negativo, forniscono soluzioni rilassate che possono essere
+        \begin{itemize}
+            \item ottimali (se fattibile per caso).
+            \item potenzialmente modificate per ottenere soluzioni euristiche fattibili.
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Catene di scambio non cicliche}
+È anche possibile creare catene di trasferimento non cicliche, in
+modo che la cardinalità dei componenti possa variare.
+
+Questo è abbastanza per aggiungere al grafo di miglioramento:
+\begin{itemize}
+    \item un nodo sorgente.
+    \item un nodo per ogni componente.
+    \item archi dal nodo sorgente ai nodi associati agli elementi.
+    \item archi dai nodi associati a gli elementi ai nodi associati alle componenti.
+\end{itemize}
+
+Dopo, trovare il \textit{cammino di costo minimo} che:
+\begin{itemize}
+    \item inizia dal nodo sorgente.
+    \item termina in un nodo componente (garantito dalla topologia).
+    \item non visita mai due nodi associati allo stesso componente.
+\end{itemize}
+Questi cammini corrispondono a catene di trasferimento aperte nelle quali:
+\begin{itemize}
+    \item una componente perde un elemento.
+    \item zero o più componenti perdono un elemento e ne acquisiscono un altro.
+    \item un componente acquisisce un elemento.
+\end{itemize}
+\paragraph{Esempio: il CMSTP}\mbox{}\\
+$$\text{Scambi non ciclici: }(s,\begingroup\color{red}4\endgroup),(4,\begingroup\color{blue}3\endgroup),(3,\begingroup\color{green}11\endgroup),(11,\begingroup\color{brown}S_4\endgroup)$$
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.55]{images/CMSTP_ex1.png}
+\end{figure}
+
+\subsubsection{Order-first split-second}
+Il metodo \textit{Order.first split-second} per la partizione dei problemi:
+\begin{itemize}
+    \item inizialmente costruisce una permutazione iniziale degli elementi.
+    \item suddivide gli elementi in componenti in modo ottimale sotto il vincolo addizionale che
+    gli elementi dello stesso componente siano consecutivi nella permutazione di partenza.
+\end{itemize}
+Certamente, la soluzione dipende dalla permutazione iniziale: è ragionevole ripetere la risoluzione
+per le differenti permutazioni, creando un metodo a due livelli:
+\begin{enumerate}
+    \item il livello in alto selezione una permutazione.
+    \item il livello in basso calcola la partizione ottimale per la permutazione.
+\end{enumerate}
+Problema: differenti permutazioni restituiscono la stessa soluzioni (\textit{le permutazioni
+sono più numerose delle soluzioni}).
+
+\subsubsection{Grafo ausiliario}
+Ancora una volta, utilizziamo un grafo ausiliario, data la permutazione $(s_1,\dots,s_n)$
+degli elementi:
+\begin{itemize}
+    \item ogni nodo $s_i$ corrisponde ad un elemento $s_i$ più un nodo fittizio $s_0$.
+    \item ogni arco $(s_i,s_j)$ con $i<j$ corrisponde ad un potenziale componente
+    $S_\ell=(s_{i+1},\dots,s_j)$ formata dagli elementi della permutazione:
+    \begin{itemize}
+        \item da $s_i$ escluso.
+        \item a $s_j$ incluso.
+    \end{itemize}
+    \item il costo $c_{s_i,s_j}$ corrisponde al costo del componente $f(S_\ell)$
+    \item l'arco non esiste se il componente è infattibile.
+\end{itemize}
+Conseguentemente:
+\begin{itemize}
+    \item ogni cammino da $s_0$ a $s_n$ rappresenta una soluzione (partizione di elementi).
+    \item il costo di un cammino coincide con il costo della partizione.
+    \item Il grafo è aciclico: trovare il cammino ottimale costa $O(m)$ dove
+    $m\leq n(n-1)/2$ è il numero di archi.
+\end{itemize}
+
+\paragraph{Esempio: il VRP}\mbox{}\\
+Data un istanza del VRP con 5 nodi e la capacità $W=10$
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.6]{images/VRP_ex1.png}
+\end{figure}
+gli archi corrispondente ai cammini infattibili ($peso > W$) non esistono, il costo degli archi
+sono i costi delle soluzioni TSP per $\{d,s_{i+1},\dots,s_j\}$.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.6]{images/VRP_ex2.png}
+\end{figure}
+
+Il cammino ottimale corrisponde ai tre circuiti: $(d,s_1,s_2,d),(d,s_3,d)$ e $(d,s_4,s_5,d)$.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.6]{images/VRP_ex3.png}
+\end{figure}
+
+\subsubsection{Ricerca in profondità variabile}
+La \textit{Variabile Depth Search} (VDS). I vicinati basati sulle operazioni che possono essere
+facilmente parametrizzate
+$$N_{\mathcal{O}_k}(x)=\{x'\in X:x'=o_k(o_{k-1}(\dots o_1(x)))\}\text{ con }o_1,\dots o_k\in\mathcal{O}\}$$
+sarebbe bello regolare il numero di operazioni $k$ come richiesto. L'idea è quella di definire una mossa
+composta come una sequenza di mosse elementari:
+\begin{itemize}
+    \item considerare ogni soluzione $x'$ nel vicinato di base $N_{\mathcal{O}_1}(x)$.
+    \item da esso, fare una sequenza di mosse ottimizzando ogni passo elementare,
+    ma consentendo mosse peggiori e vietando le mosse all'indietro.
+    \item terminano quando la soluzione corrente $y$ diventa peggiore di $x'$ o
+    tutte le mosse sono proibite (la lunghezza $k$ della sequenza è variabile).
+    \item restituire la soluzione migliore $y^*$ trovata lungo la sequenza.
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.6]{images/VRP pox.png}
+\end{figure}
+
+\paragraph{Schema del VDS}\mbox{}\\
+Dato $x^{(t)}$, per ogni $x'\in N(x^{(t)})$, anziché calcolare solamente $f(x')$:
+\begin{enumerate}
+    \item trovare una soluzione promettente $\tilde{y}$ in un vicinato $\hat{N}(x')\subseteq N(x')$
+    \item finché $\tilde{y}$ migliora $x^{(t)}$, sostituisco $x'$ con $\tilde{y}$ e vado al passo 1.
+    \item restituisco la soluzione migliore $y^*$ trovata durante l'intero processo.
+\end{enumerate}
+
+$$\text{Per ogni }x'\in N(x)$$
+\begin{algorithm}
+    \begin{algorithmic}
+    \caption{$Steepest\;descent$}
+    \State{Compute $f(x')$}
+    \end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+    \caption{$Variable\;Depth\;Search$}
+    \label{alg:vds}
+    \begin{algorithmic}
+        \State $y:=x';$
+        \State $y^*:=x;$
+        \State $Stop:=false;$
+
+        \While{$Stop == false$}
+            \State $\tilde{y}=arg\;\underset{y'\in\hat{N}(y)}{min} f(y');$
+            \If $f(\tilde{y})\geq f(x')$
+                \State $Stop:=true;$
+            \Else
+                \State $y:=\tilde{y};$
+            \EndIf
+
+            \If $f(\tilde{y}) < f(y^*)$
+                \State $y^*:=\tilde{y};$
+            \EndIf
+        \EndWhile
+        \State{Compute $f(y^*);$}
+    \end{algorithmic}
+\end{algorithm}
+
+\paragraph{Differenze rispetto a \textit{steepest descent}}\mbox{}\\
+Rispetto all'esplorazione \textit{steepest descent}:
+\begin{itemize}
+    \item \textit{VDS} trova l'ottimo locale per ogni soluzione del vicinato
+    eseguendo una sorta di "look-ahead" di un passo.
+    \item \textit{VDS} ammette peggioramenti lungo la sequenza delle mosse
+    elementari (ma mai rispetto alla soluzione di partenza).
+    \item \textit{VDS} effettua spostamenti che aumentano la distanza dal
+    punto di partenza per evitare comportamenti ciclici (limitando progressivamente
+    il vicinato).
+\end{itemize}
+Per limitare lo sforzo computazionale:
+\begin{itemize}
+    \item le mosse elementari utilizzano un vicinato ridotto $\hat{}N\subseteq N$.
+    \item $\hat{N}$ (passi elementari) viene esplorato con la strategia \textit{first-best}.
+    \item $N$ (vicinati base) viene esplorato con la strategia \textit{first-best}.
+\end{itemize}
+
+\subsubsection{Algoritmo Lin-Kernighan (TSP simmetrico)}
+Il vicinato $N_{\mathcal{R}_k}$ include le soluzioni ottenute:
+\begin{itemize}
+    \item rimuovendo $k$ archi da $x$.
+    \item aggiungendo altri $k$ archi per ricreare un circuito Hamiltoniano.
+    \item possibilmente invertendo parti del circuito (\textit{lasciando il costo invariato}).
+\end{itemize}
+L'algoritmo di Lin-Kernighan è un VDS con sequenze di 2-opt scambi: uno scambio
+$k$-opt è equivalente ad una sequenza di $(k-1)$ scambi 2-opt, dove ciascuno
+cancella uno dei due archi aggiunto dallo scambio precedente.
+
+Dopo per ogni soluzione $x'\in N_{\mathcal{R}_2}(x)$ ottenuto scambiando $(i,j)$:
+\begin{itemize}
+    \item calcola gli scampi 2-op che rimuovono l'arco aggiunto $(s_i,s_{j+1})$ e
+    ogni arco $x\cap x'$ per trovare lo scambio migliore $(i',j')$.
+    \item se questo migliora su $x$, effettua lo scambio $(i',j')$, ottenendo $x''$.
+    \item calcolare gli scambi che rimuovono $(s_{i'},s_{j'+1})$ e ogni arco
+    di $x\cap x''\dots$
+    \item $\dots$
+    \item se la soluzione migliore tra $x',x'',\dots$ è migliore di $x$, accettala.
+\end{itemize}
 
 
 
