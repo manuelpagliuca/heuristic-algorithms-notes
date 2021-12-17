@@ -6968,13 +6968,230 @@ I cammini esplorati in questa maniera:
     (\textit{se le buone soluzioni sono sperimentalmente lontane l'una con l'altra}).
 \end{itemize}
 
+\subsection{Algoritmi basati su codifiche}
+Molte euristiche di ricombinazione definiscono e manipolando codifiche di soluzioni
+(sostanzialmente delle "rappresentazioni compatte"), anziché soluzioni.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/enc_based_algo.png}
+\end{figure}
+Gli obiettivi di questo approccio sono:
+\begin{itemize}
+    \item \textbf{astrazione}: concettualmente distinguere il metodo dal
+    problema al quale è applicato.
+    \item \textbf{generalità}: costruire operatori efficaci su ogni problema
+    rappresentato con una data famiglia di codifiche.
+\end{itemize}
+In senso stretto, ogni rappresentazione di una soluzione in memoria è una codifica:
+il termine “codifica” tende ad
+essere usato per quelle più compatte e complesse. \textit{La differenza è sfumata.}
 
+\subsection{Algoritmo genetico}
+L'algoritmo genetico, proposto da Holland (1975), è il più famoso. Costruisce e
+codifica una popolazione $X^{(0)}$, e ripetitivamente applica:
+\begin{enumerate}
+    \item \textbf{selection}: genera una nuova popolazione a partire da quella corrente.
+    \item \textbf{crossover}: ricombina i sottoinsiemi in due o più individui.
+    \item \textbf{mutation}: modifica degli individui.
+\end{enumerate}
 
+\begin{algorithm}[H]
+    \caption{$GeneticAlgorithm(I,X^{(0)})$}
+    \label{alg:ga}
+    \begin{algorithmic}
+        \State{$\Xi^{(0)}:=Encode(x^{(0)});$}
+        \State{$x^*:=arg\;\underset{x\in X^{(0)}}{min}f(x);$}
+        \For{$g=1$ a $n_g$}
+            \State $\Xi:=Selection(\Xi);$
+            \State $\Xi:=Crossover(\Xi);$
+            \State $x_c:=arg\;\underset{\xi\in\Xi}{min}f(x(\xi));$
+            \If{$f(x_c)<f(x^*)$}
+                \State{$x^*=x_c;$}
+            \EndIf
+            \State $\Xi:=Mutation(\Xi);$
+            \State $x_m:=arg\;\underset{\xi\in\Xi}{min}f(x(\xi));$
+            \If{$f(x_m)<f(x^*)$}
+                \State{$x^*:=x_m;$}
+            \EndIf
+        \EndFor
+        \State{Return $(x^*,f(x^*));$}
+    \end{algorithmic}
+\end{algorithm}
 
+\subsubsection{Caratteristiche di una buona codifica}
+La performance di un algoritmo genetico dipende dalla sua codifica. Le seguenti
+proprietà dovrebbero essere soddisfatte (sono in ordine decrescente di importanza):
+\begin{enumerate}
+    \item ogni soluzione dovrebbe avere una codifica diversa dalle altre; altrimenti,
+    sarebbero presenti delle soluzioni irraggiungibili.
 
+    \item ogni codifica dovrebbe corrispondere ad una soluzione fattibile; altrimenti,
+    la popolazione includerebbe degli individui inutili.
+    \item ogni soluzione dovrebbe corrispondere allo stesso numero di codifiche;
+    altrimenti, alcune soluzioni sarebbero eccessivamente favorite.
+    \item le operazioni di codifica e decodifica dovrebbero essere efficienti, altrimenti,
+    l'algoritmo sarebbe inefficiente.
+    \item località: piccole modifiche alla codifica dovrebbero indurre piccolo modifiche
+    alla soluzione, altrimenti l'intensificazione sarebbe impossibile.
+\end{enumerate}
+Queste condizioni dipendono molto dai vincoli del problema.
 
+\subsubsection{Codifiche fattibili ed infattibili}
+Le operazioni di \textit{mutation} e \textit{crossover} producono facilmente dei
+sottoinsiemi non fattibili (\textit{unfeasible subsets}), se la proprietà 2
+non è soddisfatta; questo potrebbe implicare la violazione di:
+\begin{enumerate}
+    \item vincoli quantitativi (es., una capacità è superata)
+    \item vincoli strutturali (es., la soluzione non è fatta di circuiti)
+\end{enumerate}
+Il secondo genere di non fattibilità è più difficile da riparare, perché
+riguarda vincoli che interagiscono più fortemente tra loro. Alcune codifiche
+garantiscono la fattibilità strutturale (anche se non quantitativa).
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/quantstruct.png}
+\end{figure}
 
+\subsubsection{Codifiche: il vettore di incidenza}
+La codifica pià diretta per i problemi CO è l'utilizzo di un vettore di incidenza
+binaria (\textit{incidence vector}) $\xi\in\mathbb{B}^{|B|}$
+\[
+    \begin{cases}
+        \xi_i=1 & \text{indica che }i\in x\\
+        \xi_i=0 & \text{indica che }i\notin x
+    \end{cases}
+\]
+Un vettore binario generico corrisponde:
+\begin{itemize}
+    \item nel KP ad un insieme di oggetti: il suo peso potrebbe essere eccessivo.
+    \item nel SCP ad un insieme di colonne: potrebbe lasciare delle righe scoperte.
+    \item nel PMSP and nel BPP un insieme di assegnamenti di attività (oggetti)
+    alle macchine (container): 
+    potrebbe fare zero o più assegnazioni per un elemento; nel BPP,
+    potrebbe violare la capacità di alcuni container;
+    \item nel TSP ad una serie di archi: non potrebbe formare un circuito Hamiltoniano
+    \item nel CMSTP (VRP) ad un set di archi: non potrebbe formare un albero (insieme di cicli),
+    o eccedere la capacità dei sotto alberi (circuiti)
+\end{itemize}
 
+\subsubsection{Codifica: stringhe simboliche}
+Se il ground set è partizionato in componenti (oggetti, tasks, variabili Booleane, vertici, nodi, $\dots$)
+$$B=\bigcup_{c\in C}B_c\text{ con }B_c\cup B_{c'}\forall c\neq c'$$
+e le soluzioni fattibili contengono un elemento per ogni componente
+$$|x\cup B_c|=1\forall c$$
+uno può:
+\begin{itemize}
+    \item definire per ogni $c\in C$ un alfabeto di simboli che descrivono il componente $B_c$
+    \item codificare la soluzione in una stringa di simboli $\xi\in B_1\times\dots B_{|C|}$
+    $$\xi_c=\alpha\text{ indica che }x\cap B_c=\{(c,\alpha)\}$$
+\end{itemize}
+Esempi di codifiche:
+\begin{itemize}
+    \item Max-SAT: una stringa di $n$ valori Booleani, una per ogni variabile logica
+    \item PMSP: una stringa di etichette macchina, una per ogni task/attività
+    \item BPP/CMSTP; una stringa di container/etichette dei sotto alberi, una per ogni oggetto/vertice:
+    \begin{itemize}
+        \item viene imposto il vincolo strutturale sull'assegnazione dell'oggetto
+        \item il vincolo quantitativo sulla capacità è trascurato
+    \end{itemize}
+    \item per il VRP, una stringa di etichette dei veicolo, una per ogni nodo (ma la decodifica
+    del circuito per ogni veicolo è un problema $\mathcal{NP}-completo$)
+    \item le soluzioni del TSP, il KP, il SCP non sono partizioni
+\end{itemize}
+
+\subsubsection{Codifica: permutazioni di un insieme}
+Una comune codifica è dalle permutazioni di un insieme.
+\begin{itemize}
+    \item se le soluzioni sono permutazioni, questa è la codifica naturale
+    (le soluzioni del TSP sono sottoinsiemi di archi, ma anche permutazioni di nodi)
+    \item se le soluzioni sono partizioni e l'obiettivo è additivo sui sottoinsiemi,1
+    il metodo \textit{order-first split-second} trasforma le permutazioni in partizioni
+    (ma soluzioni e codifiche non corrispondono una ad una!).
+    \item se il problema ammette una algoritmo costruttivo che ad ogni step
+    \begin{enumerate}
+        \item scegli un elemento
+        \item sceglie come aggiungerlo alla soluzioni (se esistono molti modi)
+    \end{enumerate}
+    possiamo fornire gli elementi all'algoritmo seguendo la permutazione (se il
+    passaggio 2 non è univoco, alcune soluzioni potrebbero non avere codifica).
+\end{itemize}
+
+\subsubsection{Selection}
+Ad ogni generazione $g$ una nuova popolazione $\Xi^{(g)}$ è costruita estraendo
+$n_p=|\Xi^{(g)}|$ individui dalla popolazione corrente $\Xi^(g-1)$
+$$\Xi^{(g)}:=Selection(\Xi^{(g-1)});$$
+L'estrazione segue i seguenti criteri fondamentali:
+\begin{enumerate}
+    \item un individuo può essere estratto più di una volta
+    \item gli individui migliori vengono estratti con una probabilità più alta
+    $$\varphi(\xi)>\varphi(\xi')\implies\pi_\xi\geq\pi_{\xi'}$$
+    dove la fitness $\varphi(\xi)$ è una misura della qualità dell'individuo $\xi$
+    \begin{itemize}
+        \item per i problemi di massimizzazione, comunemente
+        $$\varphi(\xi)=f(x(\xi))$$
+        \item per i problemi di minimizzazione, comunemente
+        $$\varphi(\xi)=UB-f(x(\xi))$$
+        dove $UV\geq f^*$ è un limite superiore adattato all'ottimo.
+    \end{itemize}
+\end{enumerate}
+
+\subsubsection{Proportional selection}
+Lo schema originale proposto da Holland(1975) assume una probabilità proporzionale
+alla fitness.
+$$\pi_\xi=\frac{\varphi(\xi)}{\sum_{\xi\in\Xi}\varphi(\xi)}$$
+Questa viene chiamata \textit{roulette-wheel selection} o \textit{spinning wheel selection}:
+\begin{itemize}
+    \item data la fitness per $\xi_i\in\Xi(i=1,\dots,n_p)$
+    \item costruisci gli intervalli $\Gamma_i=\left(\sum_{k=1}^{i-1}\pi_{\xi_i};\sum_{k=1}^{i}\pi_{\xi_i}\right]$
+    in tempo $O(n_p)$
+    \item estrai un numero casuale $r\in U(0;1)$
+    \item scegli un individuo $i^*$ tale che $r\in\Gamma_{i^*}$ in tempo $O(\log n_p)$ ciascuno
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/clocllog.png}
+\end{figure}
+Tempo totale $O(n_p\log n_p)$.
+
+\subsubsection{Rank selection}
+La proportional selection soffre di:
+\begin{itemize}
+    \item \textit{stagnazione}: nel lungo termine, tutti gli individui tendono ad
+    avere una buona fitness, e quindi probabilità di selezione simili.
+    \item \textit{convergenza prematura}: se gli individui migliori sono cattivi
+    e gli altri sono molto cattivi, la selezione genera molto velocemente una
+    cattiva popolazione.
+\end{itemize}
+Per superare queste limitazioni, uno dovrebbe allo stesso tempo:
+\begin{itemize}
+    \item assegnare probabilità differenti a gli individui
+    \item limitare la differenza di probabilità lungo gli individui
+\end{itemize}
+Il metodo \textit{rank selection}:
+\begin{itemize}
+    \item ordina gli individui secondo una fitness non decrescente
+    $$\Xi^{(g)}=\{\xi_1,\dots,\xi_{n_p}\}\text{ con }\varphi_{\xi_1}\leq\dots\leq\varphi_{\xi_{n_p}}$$
+    \item assegnare al $k$-esimo individuo una probabilità pari a:
+    $$\pi_{\xi_k}=\frac{k}{\sum_{k=1}^{n_p}k}=\frac{2k}{n_p(n_p-1)}$$
+\end{itemize}
+Può essere fatto in tempo $O(n_p \log n_p)$ come nel caso precedente.
+
+\subsubsection{Tournament selection}
+Un compromesso efficiente consiste in:
+\begin{itemize}
+    \item estrarre $n_p$ sottoinsiemi casuali $\Xi_1,\dots,\Xi_{n_p}$ di dimensione $\alpha$
+    \item selezionare gli individui milgiori da ogni sottoinsieme
+    $$\xi_k:=arg\;\underset{\xi\in\Xi_k}{max}\varphi(\xi)\;\;\;k=1,\dots,n_p$$
+\end{itemize}
+
+in tempo $O(n_p\alpha)$. Il parametro $\alpha$ regola la forza della selezione:
+\begin{itemize}
+    \item $\alpha\approx n_p$ favorisce gli individui migliori
+    \item $\alpha\approx 2$ lascia possibilità ai cattivi individui
+\end{itemize}
+Tutte le procedure di selezione ammettono una \textit{variante elitaria} (elitist variant),
+la quale include nella nuova popolazione il migliore individuo della corrente (mantieni
+sempre il migliori individuo trovato finora).
 
 
 
