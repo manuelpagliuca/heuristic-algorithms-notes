@@ -5963,6 +5963,366 @@ Dopo per ogni soluzione $x'\in N_{\mathcal{R}_2}(x)$ ottenuto scambiando $(i,j)$
     \item se la soluzione migliore tra $x',x'',\dots$ è migliore di $x$, accettala.
 \end{itemize}
 
+\paragraph{Esempio: Algoritmo Lin-Kernighan}\mbox{}\\
+Esplora tutte le soluzioni $x'\in N_{\mathcal{R}_2}(x)$, ottenuto con gli scambi
+$(i,j)$.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/exampl_kernig1.png}
+\end{figure}
+Concentriamoci sullo scambio $(1,3)$, che sostituisce $(s_2,\dots,s_3)$.
+Questo scambio sostituisce $(s_1,s_2)$ e $(s_3,s_4)$ con $(s_1,s_3)$ e $(s_2,s_4)$.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/exampl_kernig2.png}
+\end{figure}
+Cerca lo scambio migliore che rimuove $(s_1,s_3)$ e un arco $x\cap x'$. Assumiamo che
+questo scambio sia $(1,7)$, il quale scambia $(s_3,\dots,s_7)$.
+Lo scambio $(1,7)$ sostituisce $(s_1,s_3)$ e $(s_7,s_8)$ con $(s_1,s_7)$ e $(s_3,s_8)$.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.4]{images/exampl_kernig3.png}
+\end{figure}
+Cerca lo scambio migliore che rimuove $(s_1,s_7)$ ed un arco da $x\cap x''$. Assumiamo
+che questo sia lo scambio $(1,10)$, il quale sostituisce $(s_7,\dots,s_{10})$.
+
+Lo scambio $(1,10)$ sostituisce $(s_1,s_7)$ e $(s_{10},s_{11})$ con
+$(s_1,s_{10})$ e $(s_7,s_{11})$.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.4]{images/exampl_kernig4.png}
+\end{figure}
+Cerca lo scambio migliore che rimuove $(s_1,s_{10})$ ed un arco da $x\cap x''$.
+Assumiamo che questo sia lo scambio $(1,14)$, il quale sostituisce $(s_{10},\dots,s_{14})$.
+Lo scambio $(1,14)$ sostituisce $(s_1,s_{10})$ e $(s_{14},s_{15})$ con $(s_1,s_{14})$ e
+$(s_{10},s_{15})$.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.4]{images/exampl_kernig5.png}
+\end{figure}
+Cerca lo scambio migliore che rimuove $(s_1,s_{14})$ ed un arco da
+$x\cap x^{iv}$. Assumiamo che sia $(1,18)$, il quale sostituisce
+$(s_{14},\dots,s_{18})$.
+
+Lo scambio $(1,18)$ sostituisce $(s_1,s_{14})$ e $(s_{18},s_{19})$ con
+$(s_1,s_{18})$ e $(s_{14},s_{19})$.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.4]{images/exampl_kernig6.png}
+\end{figure}
+Cercare per il migliore scambio che rimuove $(s_1,s_{18})$ ed un arco
+da $x\cap x^v$. Assumiamo che tutti gli scambi restituiscono soluzioni
+peggiori di $x$: termina restituendo la migliore soluzione trovata.
+
+\subsubsection{Dettagli implementativi}
+\begin{itemize}
+    \item Ogni passo rimuove un arco dalla soluzione di partenza per evitare
+    di tornare indietro e uno degli archi aggiunti nel passaggio precedente per
+    ridurre la complessità.
+
+    \item Questo impone un limite superiore sulla lunghezza della sequenza.
+    \item Interrompere la sequenza non appena la soluzione non è più migliore
+    della soluzione iniziale non pregiudica il risultato.
+    \begin{itemize}
+        \item la variazione totale dell'obiettivo somma gli effetti delle singole mosse
+        $$\delta f_{o_1,\dots,o_k}(x)=\sum_{\ell=1}^k\delta f_{o_\ell}(x)$$
+        \item ogni sequenza di numeri con somma negativa ammette una permutazione
+        ciclica le cui somme parziali sono tutte negative.
+        \item si ha quindi una permutazione ciclica delle mosse $o_1,\dots,o_k$ con $f<0$
+        ad ogni passo.
+        $$\delta f_{o_1,\dots,o_k}(x)<0\implies\exists h:\sum_{\ell=1}^{\ell}\delta f_{o_{h+1},\dots,o_{h+\ell}}(x)<0$$
+    \end{itemize}
+
+\end{itemize}
+
+\subsubsection{Metodi iterati golosi (destroy-and-repair)}
+Tutti gli scambi possono essere visti come una combinazione di addizione e rimozione.
+$$x'=x\cup A\setminus D$$
+Tuttavia:
+\begin{itemize}
+    \item gli scambi singoli $x'=x\cup\{j\}\setminus\{i\}$ può dare brutti o risultati infattibili.
+    \item vicinati più grandi possono essere inefficienti.
+    \item in molti problemi le giuste cardinalità di $A$ e $D$ sono sconosciute,
+    perché le soluzioni hanno una cardinalità non-uniforme (e.g, KP, SCP, $\dots$).
+\end{itemize}
+Una possibile idea è quella di: rimuovere da $x$ un sottoinsieme $D\subset x$ di
+cardinalità $\leq k$ e completarlo con una euristica costruttiva. Oppure,
+aggiungere ad $x$ un insieme $A\subset B\setminus x $ di cardinalità $\leq k$
+e ridurlo con un'euristica distruttiva.
+
+\paragraph{Selezione di A e D}\mbox{}\\
+Anche se uno dei due sottoinsiemi è costruito con un'euristica polinomiale, di solito
+non è possibile considerare tutte le possibili scelte per l'altro sottoinsieme.
+\begin{itemize}
+    \item il numero dei possibili sottoinsiemi da aggiungere è $O(n^{|A|})$.
+    \item il numero dei possibili sottoinsiemi da rimuovere è $O(n^{|D|})$.
+\end{itemize}
+Pertanto la complessità è ulteriormente ridotta:
+\begin{itemize}
+    \item generando $A$ (o $D$) con euristiche randomizzate, distorte per selezionare
+    elementi promettenti in base al loro costo.
+    \item applicando la strategia \textit{fist-best}.
+\end{itemize}
+\textit{Sono metaeuristiche, anziché euristiche}.
+
+
+\subsection{Multi-start, ILS, e VNS}
+\subsubsection{Superare gli ottimi locali}
+L'euristica di scambio \textit{steepest descent} fornisce solamente l'ottimo locale. Per
+fare in modo di migliorarla, si può:
+\begin{itemize}
+    \item ripetere la ricerca (\textit{come evito di ripercorrere lo stesso cammino?}).
+    \item estendere la ricerca (\textit{come evito di cadere nello stesso ottimo locale?}).
+\end{itemize}
+Negli algoritmi costruttivi era possibile solo la ripetizione. La metaeuristica costruttiva
+sfrutta:
+\begin{itemize}
+    \item randomizzazione.
+    \item memoria.
+\end{itemize}
+per operare su $\Delta_A^+(x)$ e $\varphi_A(i,x)$. La metaeuristiche di scambio
+li sfruttano per operare su:
+\begin{enumerate}
+    \item la soluzione di partenza $x^{(0)}$ (multi-start, ILS, VNS).
+    \item il vicinato $N(x)$ (VND).
+    \item il criterio di selezione $\varphi(x,A,D)$ (DLS o GLS, SA, TS).
+\end{enumerate}
+
+\subsubsection{Condizione di termine}
+Una ricerca che ripete o procede oltre all'ottimo locale può essere idealmente infinita.
+
+In pratica, uno può utilizzare condizione di terminazione "assolute":
+\begin{enumerate}
+    \item un dato numero totale di esplorazioni del vicinato o un dato numero totale di
+    ripetizioni della ricerca locale.
+    \item un dato tempo totale di esecuzione.
+    \item un dato valore della funzione obiettivo.
+    \item un dato miglioramento dell'obiettivo rispetto la soluzione di partenza.
+\end{enumerate}
+oppure, condizione di terminazione "relative":
+\begin{enumerate}
+    \item un dato numero di esplorazioni del vicinato o ripetizioni dopo l'ultimo miglioramento
+    di $f^*$.
+    \item un dato tempo di esecuzione dopo l'ultimo miglioramento.
+    \item un dato valore minimo del rateo tra miglioramento dell'obiettivo e numero di
+    esplorazioni o tempo di esecuzione (es., $f^*$ migliora meno del 1\% nelle ultime 1000 esplorazioni).
+\end{enumerate}
+I confronti equi richiedono condizioni assolute (tempo o numero di esplorazioni).
+
+\subsubsection{Modificare la soluzione di partenza: generazione casuale}
+Risulta possibile creare differenti soluzioni di partenza:
+\begin{itemize}
+    \item generandole casualmente.
+    \item applicando differenti euristiche costruttive.
+    \item modificando soluzioni generate da gli algoritmi di scambio.
+\end{itemize}
+I vantaggi di una generazione casuale sono:
+\begin{itemize}
+    \item semplicità concettuale.
+    \item rapidità per le problematiche nelle quali è facile garantire la fattibilità.
+    \item controllo sulla distribuzione di probabilità in $X$ in base a:
+    \begin{itemize}
+        \item \textbf{costo degli elementi} (es., favorire gli elementi più economici).
+        \item \textbf{frequenza degli elementi} durante le ricerche passate, per favorire
+        gli elementi più frequenti (intensificazione) o quelli meno frequenti (diversificazione).
+    \end{itemize}
+    \item convergenza asintotica all'ottimo (in tempo infinito).
+\end{itemize}
+Gli svantaggi della generazione casuale sono:
+\begin{itemize}
+    \item scarsa qualità delle soluzioni di partenza (non quelle finali!).
+    \item lunghi tempi prima di raggiungere l'ottimo locale. Questo dipende dalla complessità
+    degli algoritmi di scambio.
+    \item inefficienza nel decidere la fattibilità è $\mathcal{NP}-completa$.
+\end{itemize}
+
+\subsubsection{Modificando la soluzione di partenza: procedure costruttive}
+I metodi multi-start sono l'approccio classico:
+\begin{itemize}
+    \item progettare molte euristiche costruttive.
+    \item ogni euristica costruttiva genera una soluzione di partenza.
+    \item ogni soluzione di partenza è migliorata da un'euristica di scambio.
+\end{itemize}
+
+Gli svantaggi sono:
+\begin{enumerate}
+    \item scarso controllo: le soluzioni generate tendono ad essere simili.
+    \item impossibilità nel procedere indefinitamente: il numero di ripetizioni è fisso.
+    \item alto sforzo di progettazione: molti algoritmi diversi devono essere progettati.
+    \item non garantisce la convergenza, neanche su un tempo infinito.
+\end{enumerate}
+Conseguentemente, le metaeuristiche costruttivi sono attualmente preferite. GRASP e Ant System
+includono per definizione una procedura di scambio.
+
+\subsubsection{Influenza di una soluzione di partenza}
+Se l'euristica di scambio è:
+\begin{itemize}
+    \item buona, la soluzione di partenza ha un'influenza di breve durata:
+    una generazione casuale o euristica di $x^{(0)}$ sono molto simili.
+    \item cattiva, la soluzione di partenza ha un'influenza di lunga durata:
+    una buona euristica per generare $x^{(0)}$ è utile.
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/goodandbad.png}
+    \caption{\textit{L'euristica di scambio non è molto buona.}}
+\end{figure}
+
+\paragraph{Modificando la soluzione di partenza sfruttando le precedenti}\mbox{}\\
+L'idea è quella di sfruttare le informazioni su le soluzioni precedentemente visitate:
+\begin{itemize}
+    \item salvare soluzioni di riferimento, come il miglior ottimo locale
+    trovato finora e possibilmente altri ottimi locali.
+    \item generare la nuova soluzione di partenza modificando quelle di riferimento.
+\end{itemize}
+I vantaggi di questo approccio sono:
+\begin{itemize}
+    \item controllo: le modifiche possono essere ridotte o incrementate \textit{ad libitum}.
+    \item buona qualità: la soluzione di partenza è molto buona.
+    \item semplicità concettuale.
+    \item semplicità implementativa: la modifica può essere eseguita con le operazioni
+    che definiscono il vicinato.
+    \item convergenza asintotica verso l'ottimo sotto determinate condizioni (adatte).
+\end{itemize}
+
+\subsubsection{Iterated Local Search (ILS)}
+L'algoritmo \textit{Iterated Local Search} (ILS) richiede:
+\begin{itemize}
+    \item un euristica di scambio \textit{steepest descent} per produrre un ottimo locale.
+    \item una procedura di perturbazione per generare soluzioni di partenza.
+    \item una condizione di accettazione per decidere se cambiare il riferimento alla soluzione $x$.
+    \item una condizione di terminazione.
+\end{itemize}
+
+\begin{algorithm}[H]
+    \caption{Algoritmo $IteratedLocalSearch(I,x^{(0)})$}
+    \begin{algorithmic}
+        \State $x:=SteepestDescent(x^{(9)});$
+        \State $x^*:=x;$
+
+        \For{$I:=1$ to $\ell$}
+            \State $x':=Perturbate(x);$
+            \State $x':=SteepestDescent(x');$
+            \If {$Accept(x',x^*)$}
+                \State $x:=x';$
+            \EndIf
+
+            \If {$f(x')<f(x^*)$}
+                \State $x^*:=x';$
+            \EndIf
+        \EndFor
+        \State Return $(x^*,f(x^*));$
+
+    \end{algorithmic}
+\end{algorithm}
+
+L'idea è che:
+\begin{itemize}
+    \item l'euristica dello scambio esplora rapidamente un
+    bacino di attrazione, terminando in un ottimo locale.
+    \item la procedura di perturbazione si muove in un altro bacino di attrazione.
+    \item la condizione di accettazione valuta se il nuovo ottimo locale è un
+    punto di partenza promettente per la perturbazione successiva.
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/optbasins.png}
+\end{figure}
+
+\paragraph{Esempio: ILS per il TSP}\mbox{}\\
+Un applicazione classica di ILS nel TSP utilizza:
+\begin{itemize}
+    \item euristiche di scambio: \textit{steepest descent} con vicinato $N_{\mathcal{R}_2}$ o
+    $N_{\mathcal{R}_3}$.
+
+    \item procedure di perturbazione: un \textit{doppo ponte} muove quel particolare
+    genere di 4-scambio.
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.5]{images/ILS_TSP.png}
+    \end{figure}
+
+    \item condizione di accettazione: la migliore soluzione conosciuta migliora
+    $$f(x')<f(x^*)$$
+\end{itemize}
+
+\subsubsection{Procedura di perturbazione}
+Sia $\mathcal{O}$ l'insieme delle operazioni che definisce il vicinato $N_{\mathcal{O}}$. La
+\textbf{procedura di perturbazione} esegue un operazione casuale $o$, con $o\in\mathcal{O}'\nsubseteq\mathcal{O}$,
+per evitare che l'euristica di scambio guidi la soluzione $x'$ all'ottimo locale di partenza $x$.
+
+Due definizioni tipiche di $\mathcal{O}'$ sono:
+\begin{itemize}
+    \item sequenze di $k>1$ operazioni di $\mathcal{O}$ (generare una sequenza casuale è economico).
+    \item concettualmente due operazioni differenti (es., lo scambio di vertici anziché lo scambio di archi).
+\end{itemize}
+
+La principale difficoltà di ILS risiede nel regolare la perturbazione, nel caso in cui sia:
+\begin{itemize}
+    \item troppo forte, trasforma la ricerca in un riavvio casuale.
+    \item troppo debole, riporta la ricerca all'ottimo di partenza.
+    \begin{itemize}
+        \item sprecando tempo.
+        \item possibilmente perdendo la convergenza asintotica.
+    \end{itemize}
+\end{itemize}
+Idealmente si vorrebbe essere in grado di entrare in un qualsiasi bacino ed uscire da
+un qualsiasi bacino.
+
+\subsubsection{Condizione di accettazione}
+
+\begin{algorithm}[H]
+    \caption{Algoritmo $IteratedLocalSearch(I,x^{(0)})$}
+    \label{alg:ils}
+    \begin{algorithmic}
+        \State $x:=SteepestDescent(x^{(9)});$
+        \State $x^*:=x;$
+
+        \For{$I:=1$ to $\ell$}
+            \State $x':=Perturbate(x);$
+            \State $x':=SteepestDescent(x');$
+
+            \If {$\begingroup\color{red}Accept(x',x^*)\endgroup$}
+                \State $\begingroup\color{red} x:=x';\endgroup$
+            \EndIf
+
+            \If {$f(x')<f(x^*)$}
+                \State $x^*:=x';$
+            \EndIf
+        \EndFor
+        \State Return $(x^*,f(x^*));$
+
+    \end{algorithmic}
+\end{algorithm}
+
+La condizione di accettazione equilibra l'intensificazione e la diversificazione.
+\begin{itemize}
+    \item L'accettazione delle sole soluzioni migliorative favorisce l'\textit{intensificazione}.
+    $$Accept(x',x^*):=(f(x')<f(x^*))$$
+    La soluzione di riferimento è sempre la migliore trovata: $x=x^*$
+    \item L'accettazione di una qualsiasi soluzione favorisce la \textit{diversificazione}.
+    $$Accept(x',x^*):=true$$
+    La soluzione di riferimento è sempre l'ultima soluzione ottima trovata: $x=x'$.
+\end{itemize}
+
+Strategie intermedie possono essere definite basandosi su $\delta f =f(x')-f(x^*)$:
+\begin{itemize}
+    \item se $\delta f<0$, accetta sempre $x'$.
+    \item se $\delta f\geq 0$, accetta $x'$ con una probabilità $\pi(\delta f)$, dove
+    $\pi(\cdot)$ è una funzione non crescente.
+\end{itemize}
+I casi più tipici sono:
+\begin{itemize}
+    \item probabilità costante: $\pi(\delta f)=\overline{\pi}\in(0;1)$ per ogni $\delta f\geq 0$.
+    \item probabilità monotonamente decrescente con $\pi(0)=1$ e $\lim_{\delta f\rightarrow+\infty}\pi(\delta)=0$
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.6]{images/acceptcond.png}
+\end{figure}
 
 
 \end{document}
