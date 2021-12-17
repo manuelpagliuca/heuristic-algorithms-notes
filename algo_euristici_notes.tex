@@ -6278,7 +6278,7 @@ un qualsiasi bacino.
     \caption{Algoritmo $IteratedLocalSearch(I,x^{(0)})$}
     \label{alg:ils}
     \begin{algorithmic}
-        \State $x:=SteepestDescent(x^{(9)});$
+        \State $x:=SteepestDescent(x^{(0)});$
         \State $x^*:=x;$
 
         \For{$I:=1$ to $\ell$}
@@ -6323,6 +6323,667 @@ I casi più tipici sono:
     \centering
     \includegraphics[scale=0.6]{images/acceptcond.png}
 \end{figure}
+Si può usare anche la memoria, accettando $x'$ più facilmente se sono trascorse molte iterazioni
+dall'ultimo miglioramento di $x^*$.
+
+\subsection{Variable Neighbourhood Search (VNS)}
+Un metodo molto simile al ILS è il \textit{Variable Neighbourhood Search} (VNS), proposto
+da Hansen e Mladenović (1997). La principale differenza tra ILS e VNS sono l'utilizzo di:
+\begin{itemize}
+    \item la stretta condizione di accettazione: $f(x')<f(x^*)$
+    \item un meccanismo di perturbazione adattivo anziché uno fisso.
+\end{itemize}
+VNS introduce spesso anche modifiche di quartiere. Il meccanismo perturbativo si basa
+su una gerarchia di quartieri, cioè una famiglia di quartieri con dimensione
+parametrica $k$ crescente.
+$$N_1\subset N_2\subset\dots \subset N_k\subset\dots\subset N_{k_{max}}$$
+Tipicamente si utilizzano i vicinati parametrizzati:
+\begin{itemize}
+    \item $N_{H_k}$, in base alla distanza di Hamming tra i sottoinsiemi.
+    \item $N_{\mathcal{O}_k}$, basato sulle sequenze di operazioni da un insieme base $\mathcal{O}$.
+\end{itemize}
+ed estrae $x^{(0)}$ casualmente da un vicinato della gerarchia.
+
+\subsubsection{Meccanismo di perturbazione adattivo}
+Viene chiamato \textit{vicinato variabile} perché il vicinato utilizzato per estrarre $x^{(0)}$
+varia in base ai risultati dell'euristica di scambio.
+\begin{itemize}
+    \item se viene trovata una soluzione migliore, si utilizza il vicinato più piccolo,
+    per generare una soluzione di partenza molto vicina a $x^*$ (intensificazione).
+    \item se una soluzione peggiore è trovata, si utilizzare un vicinato leggermente più grande,
+    per generare una soluzione di partenza leggermente più distante da $x^*$ (diversificazione).
+\end{itemize}
+
+Questo metodo ha tre parametri:
+\begin{enumerate}
+    \item $k_{min}$ identifica il vicinato iù piccolo per generare nuove soluzioni.
+    \item $k_{max}$ identifica il vicinato più grande per generare nuove soluzioni.
+    \item $\delta k$ è l'incremento di $k$ tra due tentativi successivi.
+\end{enumerate}
+L'euristica di scambio adotta il vicinato più piccolo come quello efficiente (\textit{
+    $N_1$, o comunque $N_k$ con $k\leq k_{min}$}).
+
+\subsubsection{Schema generale}
+
+\begin{algorithm}[H]
+    \caption{Algoritmo $VariableNeighbourhoodSearch(I,x^{(0)})$}
+    \label{alg:ils1}
+    \begin{algorithmic}
+        \State $x:=SteepestDescent(x^{(0)});$
+        \State $x^*:=x;$
+        \State $k:=k_{min};$
+
+        \For{$I:=1$ to $\ell$}
+            \State $x':=Shaking(x^*,k);$
+            \State $x':=SteepestDescent(x');$
+
+            \If {$f(x')<f(x^*)$}
+                \State $x:=x';$
+                \State $k:=k_{min};$
+            \Else
+                \State $k:=k+\delta k;$
+            \EndIf
+
+            \If $k>k_{max}$
+                \State $k:=k_{min};$
+            \EndIf
+        \EndFor
+        \State Return $(x^*,f(x^*));$
+
+    \end{algorithmic}
+\end{algorithm}
+\begin{itemize}
+    \item la soluzione di riferimento $x'$ è sempre la migliore soluzione conosciuta $x^*$.
+    \item la soluzione di partenza si ottiene estraendola a caso dal vicinato corrente della
+    soluzione di riferimento $N_k(x^*)$.
+    \item l'euristica dello scambio produce un ottimo locale rispetto al vicinato di
+    base $N$.
+    \item se la soluzione più nota migliore, il vicinato attuale diventa $N_{k_{min}}$.
+    \item in caso contrario, spostarsi in un vicinato più grande $N_{k+\delta k}$ ,
+    senza mai superare $N_{k_{max}}$.
+\end{itemize}
+
+\subsubsection{Regolazione dei parametri}
+Il valore di $k_{min}$ deve essere:
+\begin{itemize}
+    \item abbastanza grande da uscire dall'attuale bacino di attrazione.
+    \item abbastanza piccolo da evitare di saltare sui bacini di attrazione adiacenti.
+\end{itemize}
+
+In generale, si pone $k_{min}=1$, e lo si aumenta nel caso in cui sia sperimentalmente
+redditizio. Il valore di $k_{max}$ deve essere:
+\begin{itemize}
+    \item grande abbastanza da raggiungere una qualsiasi utile bacino di attrazione.
+    \item abbastanza piccolo da evitare di raggiungere zone inutili dello spazio delle soluzioni.
+\end{itemize}
+\paragraph{Esempio}\mbox{}\\
+Il diametro dello spazio di ricerca per il vicinato di base: $min(m,n-m)$ per il MDP;
+$n$ per il TSP e MAX-SAT, $\dots$
+Il valore di $\delta k$ deve essere:
+\begin{itemize}
+    \item grande abbastanza da raggiungere $k_{max}$ in un tempo ragionevole.
+    \item abbastanza piccolo da consentire ogni ragionevole valore di $k$.
+\end{itemize}
+Generalmente, si pone $\delta k=1$.
+
+\subsubsection{VNS Distorto (skewed)}
+In modo da favorire la diversificazione. è possibile accettare $x'$ quando
+$$f(x')<f(x^*)+\alpha d_H(x',x^*)$$
+dove:
+\begin{itemize}
+    \item $d_H(x',x^*)$ è la distanza di Hamming tra $x'$ e $x^*$.
+    \item $\alpha >0$ è un parametro adatto.
+\end{itemize}
+Questo permette di accettare soluzioni peggiorative purché lontane:
+\begin{itemize}
+    \item $\alpha\approx 0$ tende ad accettare solamente soluzioni migliorative.
+    \item $\alpha\gg 0$ tende ad accettare qualsiasi soluzione.
+\end{itemize}
+Certamente, le strategie casuali viste per l'ILS possono essere adottate.
+
+\subsection{VND e DLS}
+\subsubsection{Estendere la ricerca locale senza peggiorarla}
+Anziché ripetere la ricerca locale la si estende oltre all'ottimo locale. Per evitare il peggiorare
+delle soluzioni, il passo di selezione deve essere modificato.
+$$\tilde{x}:= arg\;\underset{x'\in N(x)}{f(x')}$$
+Le due strategie principali che permettono questo:
+\begin{itemize}
+    \item La \textbf{VND} (\textit{Variable Neighbourhood Descent}) cambia il vicinato $N$.
+    \begin{itemize}
+        \item garantisce un evoluzione senza cicli (l'obiettivo migliora).
+        \item termina quando tutti i vicinati sono stati sfruttati.
+    \end{itemize}
+    \item La \textbf{DLS} (\textit{Dynamic Local Search}) cambia la funzione obiettivo $f$
+    ($\tilde{x}$ è migliore di $x$ per il nuovo obiettivo, forse peggio per il vecchio).
+    \begin{itemize}
+        \item può essere intrappolato in cicli (il nuovo obiettivo cambia nel tempo).
+        \item può procedere indefinitamente.
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{VND}
+Il VND di Hansen e Mladenović (1997) sfrutta il fatto che una soluzione è localmente ottima
+per uno specifico vicinato. Un ottimo locale può essere migliorato utilizzando un vicinato
+differente.
+Data una famiglia di vicinati $N_1,\dots,N_{k_{max}}$
+\begin{enumerate}
+    \item poni $k:=1$
+    \item applica un'euristica di scambio \textit{steepest descent} e trova un
+    ottimo locale $\overline{x}$ rispetto a $N_k$.
+    \item contrassegna tutti i vicinati per cui $\overline{x}$ è localmente ottima ed aggiorna
+    $k$.
+    \item se $\overline{x}$ è un ottimo locale per tutti $N_k$, termina; altrimenti, torna al punto 2.
+\end{enumerate}
+
+\begin{algorithm}[H]
+    \caption{$VariableNeighbourhoodDescent(I,x^{(0)})$}
+    \label{alg:vnd}
+    \begin{algorithmic}
+        \State $flag_k:=false\forall k;$
+        \State $\overline{x}:=x^{(0)};$
+        \State $x^*:=x^{(0)};$
+        \State $k:=1;$
+
+        \While{$\exists k:flag_k=false$}
+            \State $\overline{x}:=SteepestDescent(\overline{x},k);$
+
+            \If {$f(x')<f(x^*)$}
+                \State $x^*:=\overline{x};$
+                \State $flag_{k'}:=false\forall k'\neq k;$
+            \Else
+                \State $flag_k:=true;$
+            \EndIf
+                \State $k:=Update(k);$
+        \EndWhile
+        \State Return $(x^*,f(x^*));$
+
+    \end{algorithmic}
+\end{algorithm}
+
+Esiste una relazione stretta tra VND e VNS (in fatti furono proposti nello stesso paper). Le
+differenze fondamentali sono che nel VND:
+\begin{itemize}
+    \item ad ogni passo la soluzione corrente è la migliore conosciuta.
+    \item i vicinati sono esplorati, anziché essere utilizzati per estrarre soluzioni casuali (non sono mai grandi).
+    \item i vicinati non formano necessariamente una gerarchia. L'aggiornamento di $k$ non è sempre un incremento.
+    \item quando un ottimo locale per ogni $N_k$ è stato raggiunto, termina. VND è deterministico
+    e troverebbe nient'altro.
+\end{itemize}
+
+Sono presenti due classi principali di metodi VND:
+\begin{itemize}
+    \item metodi con \textit{vicinati eterogenei}:
+    \begin{itemize}
+        \item sfruttare il potenziale di quartieri topologicamente diversi (es.,
+        scambio di vertici anziché di archi).
+    \end{itemize}
+    Conseguentemente, $k$ periodicamente scansiona i valori da $1$ a $k_{max}$ (possibilmente
+    effettuando una permutazione casuale della sequenza ad ogni ripetizione).
+    \item metodi con \textit{vicinati gerarchici} ($N_1\subset\dots\subset N_{k_{max}}$):
+    \begin{itemize}
+        \item sfruttare appieno i quartieri piccoli e veloci.
+        \item ricorrere a quelli grandi e lenti solo per uscire da ottimi locali
+        (solitamente terminando $SteepestDescent$ prematuramente).
+    \end{itemize}
+    Conseguentemente, l'aggiornamento di $k$ funziona come nel VNS:
+    \begin{itemize}
+        \item quando non si trovano miglioramenti in $N_k$, si incrementa $k$.
+        \item quando si trovano miglioramenti in $N_k$, si decrementa $k$ ad 1.
+    \end{itemize}
+\end{itemize}
+Si termina quando la soluzione corrente è un ottimo locale per tutti i $N_k$.
+\begin{itemize}
+    \item nel caso eterogeneo, si termina quando tutte falliscono.
+    \item nel caso gerarchico, si termina quando la più grande fallisce.
+\end{itemize}
+\paragraph{Esempio: il CMSTP}\mbox{}\\
+L'istanza del CMSTP ha $n=9$ vertici, pesi uniformi ($w_v=1$), capacità $W=5$ e i costi
+riportati (gli archi mancanti hanno $c_e\gg 3$)
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/cmstpex1.png}
+\end{figure}
+Considerando il vicinato $N_{S_1}$ (scambi sul singolo arco) per la prima soluzione:
+\begin{itemize}
+    \item nessuno arco del ramo destro può essere eliminato, perché il ramo sinistro
+    ha una capacità residua nulla, una connessione diretta alla radice ne aumenterebbe il costo.
+    \item l'eliminazione di qualsiasi arco nel ramo sinistro aumenta il costo totale: la
+    soluzione è un ottimo locale per $N_{S_1}$.
+\end{itemize}
+Il vicinato $N_{T_1}$ (trasferimenti dei vertici singoli) hanno una soluzione migliore, ottenuta
+muovendo il vertice 5 dal ramo sinistro su quello destro.
+
+\subsubsection{DLS}
+La DLS (\textit{Dynamic Local Search}), conosciuta anche con il nome \textit{Guided Local Search}.
+Questo è un approccio complementare al VND:
+\begin{itemize}
+    \item mantiene il vicinato di partenza.
+    \item modifica la funzione obiettivo.
+\end{itemize}
+Viene spesso utilizzata quando l'obiettivo è inutile perché ha ampi \textit{plateau}. L'idea di
+base è:
+\begin{itemize}
+    \item definire una funzione di penalità $w:X\rightarrow\mathbb{N}$
+    \item costruire una funzione ausiliaria $\tilde{f}(f(x),w(x))$
+    \item applicare l'euristica di scambio \textit{steepest descent} per ottimizzare $\tilde{f}$
+    \item ad ogni iterazione aggiornare la penalità $w$ basata sul risultato
+\end{itemize}
+La penalità è adattiva in maniera da allontanarsi dai recenti ottimi locali, ma questo introduce
+il rischio di finire in un ciclo.
+
+\begin{algorithm}[H]
+    \caption{$DyamicLocalSearch(I,x^{(0)})$}
+    \label{alg:vnd}
+    \begin{algorithmic}
+        \State $w:= StartingPenalty(I);$
+        \State $\overline{x}:=x^{(0)};$
+        \State $x^*:=x^{(0)};$
+
+        \While{$Stop()=false$}
+            \State $(\overline{x},x_f):=SteepestDescent(\overline{x},f,w);$
+
+            \If {$f(x_f)<f(x^*)$}
+                \State $x^*:=x_f;$
+            \EndIf
+                \State $w:=UpdatePenalty(w,\overline{x},x^*);$
+            \EndWhile
+        \State Return $(x^*,f(x^*));$
+
+    \end{algorithmic}
+\end{algorithm}
+
+Notare che l'euristica \textit{steepest descent}:
+\begin{itemize}
+    \item ottimizza una combinazione $\tilde{f}$ di $f$ e $w$.
+    \item restituisce due soluzioni:
+    \begin{enumerate}
+        \item una soluzione finale $\overline{x}$, localmente ottima rispetto a $\tilde{f}$,
+        per aggiornare $w$.
+        \item una soluzione $x_f$, che è la migliore conosciuta rispetto ad $f$.
+    \end{enumerate}
+\end{itemize}
+
+\paragraph{Varianti}\mbox{}\\
+La penalità può essere applicata (per esempio):
+\begin{itemize}
+    \item additivamente a gli elementi della soluzione:
+    $$\tilde{f}(x)=f(x)+\sum_{i\in x}w_i$$
+    \item moltiplicativamente ai componenti della funzione obiettivo $f(x)=\sum_j \phi_j(x)$:
+    $$\tilde{f}(x)=\sum_j w_j\phi_j (x)$$
+\end{itemize}
+La penalità può essere aggiornata:
+\begin{itemize}
+    \item ad ogni singola esplorazione del vicinato.
+    \item quando un ottimo locale per $\tilde{f}$ viene raggiunto.
+    \item quando la migliore soluzione conosciuta $x^*$ rimane invariata per un lungo tempo.
+\end{itemize}
+La penalità può essere modificata con:
+\begin{itemize}
+    \item \textbf{aggiornamenti casuali}: perturbazione "rumorosa" (noisy) dei costi.
+    \item \textbf{aggiornamenti basati sulla memoria} (memory-based): favorendo gli elementi
+    più frequenti (intensificazione) o quelli meno frequenti (diversificazione).
+\end{itemize}
+
+\paragraph{Esempio: DLS per il MCP}\mbox{}\\
+Dato un grafo non orientato, trova una cricca di cardinalità massima:
+\begin{itemize}
+    \item l'euristica di scambio è un VND utilizzando i vicinati:
+    \begin{enumerate}
+        \item $N_{A_1}$ (aggiunta di un vertice): la soluzione migliora sempre, ma il vicinato
+        è molto piccolo e spesso vuoto.
+        \item $N_{S_1}$ (scambio di un vertice interno con uno esterno): il vicinato è grande,
+        ma forma un \textit{plateau} (obiettivo uniforme).
+    \end{enumerate}
+
+    \item l'obiettivo non fornisce una direzione utile in nessuno dei due vicinati.
+    \item associare ad ogni vertice $i$ una penalità $w_i$ inizialmente uguale a zero.
+    \item l'euristica di scambio minimizza la penalità totale (nel vicinato).
+    \item aggiornare la penalità:
+    \begin{itemize}
+        \item quando l'esplorazione di $N_{S_1}$ termina: la penalità della cricca corrente di
+        vertici incrementa di 1.
+        \item dopo un dato numero di esplorazioni: tutte le penalità non zero decrementano di 1.
+    \end{itemize}
+\end{itemize}
+La logica del metodo consiste nel mirare a:
+\begin{itemize}
+    \item espellere i vertici interni (diversificazione).
+    \item in particolare, i vertici interni più vecchi (memoria).
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/MCP_ex1.png}
+\end{figure}
+Si inizia da $x^{(0)}=\{B,C,D\}$, con $w=[0\;1\;1\;1\;0\;0\;0\;0\;0]$
+
+\begin{enumerate}
+    \item $w(\{B,C,E\})=w(\{A,B,D\})=2$, ma $\{A,B,D\}$ vince lessicograficamente:
+    $x^{(1)}=\{A,B,D\}$ con $w=[1\;2\;1\;2\;0\;0\;0\;0\;0]$
+
+    \item $x^{(2)}=\{B,C,D\}$ con $w=[1\;3\;2\;3\;0\;0\;0\;0\;0]$ è l'unico vicinato.
+
+    \item $w(\{B,C,E\})=5<7=w(\{A,B,D\})$:
+    $x^{(3)}=\{B,C,E\}$ con $w=[1\;4\;3\;3\;1\;0\;0\;0\;0]$
+
+    \item $w(\{C,E,F\})=4<10=w(\{B,C,D\})$:
+    $x^{(4)}=\{C,E,F\}$ con $w=[1\;4\;4\;3\;2\;1\;0\;0\;0]$
+
+    \item $w(\{E,F,G\})=3<11=w(\{B,C,E\})$:
+    $x^{(5)}=\{E,F,G\}$ con $w=[1\;4\;4\;3\;3\;2\;1\;0\;0]$
+
+    \item $w(\{F,G,H\})=w(\{F,G,I\})=3<9=w(\{C,E,F\})$:
+    $x^{(6)}=\{F,G,H\}$ con $w=[1\;4\;4\;3\;3\;3\;2\;1\;0]$
+
+\end{enumerate}
+Ora il vicinato $N_{A_1}$ non è vuoto: $x^{(7)}=\{F,G,H,I\}$
+
+\paragraph{Esempio: DLS per il MAX-SAT}\mbox{}\\
+Date $m$ disgiunzioni logiche che dipendono da $n$ variabili logiche, trovare una assegnamento
+di verità che soddisfi il massimo numero di formule.
+\begin{itemize}
+    \item vicinato $N_{F_1}$ (1-flip) è generato complementando una variabile.
+    \item associare ad ogni formula logica una penalità $w_j$ inizialmente uguale ad 1.
+    \item l'euristica di scambio massimizza il peso delle formule soddisfatte modificandone
+    il numero con la penalità moltiplicativa.
+    \item la penalità è aggiornata
+    \begin{enumerate}
+        \item incrementando il peso delle formule non soddisfatte per favorirle
+        $$w_j:=\alpha_{us} w_j\text{ per ogni }j\in U(x)\;(\text{con }\alpha_{us}>1)$$
+        quando un ottimo locale è raggiunto.
+
+        \item riducendo la penalità verso 1
+        $$w_j:=(1-\rho)w_j+\rho\cdot 1\text{ per ogni }j\in C \;(\text{con }\rho\in(0,1))$$
+        con una certa probabilità o dopo un certo numero di aggiornamenti.
+    \end{enumerate}
+\end{itemize}
+La logica del metodo mira a:
+\begin{itemize}
+    \item soddisfare le correnti formule non soddisfatte (diversificazione).
+    \item in particolare, quelli che sono rimasti insoddisfatti per più tempo e
+    più recentemente (memoria).
+\end{itemize}
+I parametri che regolano l'intensificazione e la diversificazione
+\begin{itemize}
+    \item piccoli valori di $\alpha_{us}$ e $\rho$ preservano la penalità corrente (intensificazione).
+    \item grandi valori di $\alpha_{us}$ e $\rho$ cancellano la penalità corrente (diversificazione).
+\end{itemize}
+
+
+\section{Metaeuristiche di ricombinazione}
+\subsection{Euristiche di ricombinazione}
+Le euristiche costruttive e di scambio gestiscono una soluzione alla volta (eccetto per Ant System).
+L'euristiche di ricombinazione gestiscono diverse soluzioni in parallelo:
+\begin{itemize}
+    \item iniziano da un insieme (detto \textit{popolazione}) di soluzioni (individuali)
+    ottenute in qualche maniera.
+    \item ricombinano gli individui generando una nuova popolazione.
+\end{itemize}
+Il loro aspetto originale è l'uso di operazioni che lavorano su più soluzioni, ma
+spesso includono caratteristiche di altri approcci (a volte rinominati).
+Alcune sono quasi o completamente deterministiche:
+\begin{itemize}
+    \item \textit{Scatter Search}
+    \item \textit{Path Relinking}
+\end{itemize}
+altre sono fortemente randomizzate (spesso basate su metafore biologiche):
+\begin{itemize}
+    \item algoritmi genetici
+    \item algoritmi memetici
+    \item strategie evolutive
+\end{itemize}
+\textit{Certamente l'efficacia di un metodo non dipende dalla sua metafora}.
+
+\subsection{Schema generale}
+L'idea di base:
+\begin{itemize}
+    \item buone soluzioni condividono componenti con l'ottimo globale.
+    \item differenti soluzioni possono condividere differenti componenti.
+    \item combinare differenti soluzioni, è possibile fondere componenti ottimi più facilmente
+    che costruirli passo a passo.
+\end{itemize}
+Il tipico schema di un'euristica di ricombinazione è il seguente:
+\begin{itemize}
+    \item costruire una popolazione iniziale di soluzioni.
+    \item finché un'adatta condizione di terminazione non produce popolazioni
+    successive (dette \textit{generazioni}).
+    \item per ogni generazione:
+    \begin{itemize}
+        \item estrae sottoinsiemi di individui (solitamente, uno o due).
+        \item applica operazioni di scambio ai singoli individui.
+        \item applica operazioni di ricombinazione ai sottoinsiemi.
+        \item colleziona gli individui generati dalle operazioni.
+        \item sceglie quando accettare o non ogni nuovo individuo (ed in quante copie)
+        generando così una nuova popolazione.
+    \end{itemize}
+\end{itemize}
+\subsection{Scatter Search}
+SS, proposta da Glover (1977), procede nel seguente modo:
+\begin{enumerate}
+    \item genera una popolazione iniziale di soluzioni.
+    \item migliora tutte le popolazioni con una procedura di scambio.
+    \item costruisce un insieme di riferimento $R=U\cup D$ dove:
+    \begin{itemize}
+        \item il sottoinsieme $B$ contiene le migliori soluzioni conosciute.
+        \item il sottoinsieme $D$ include le soluzioni più "distanti" (da $B$ e l'uno dall'altro).
+        Questo richiede una definizione di distanza (es., distanza di Hamming).
+    \end{itemize}
+    \item per ogni coppia di soluzioni $(x,y)\in B\times (B\cup D)$
+    \begin{itemize}
+        \item "ricombina" $x$ e $y$, generando $z$
+        \item migliora $z$ con una procedura di scambio, ottenendo $z'$
+        \item se $z'\notin B$ e $B$ contiene una soluzione peggiore, sostituiscila con $z'$
+        (non vogliamo duplicati nell'insieme di riferimento)
+        \item se $z'\notin D$ e $D$ include una soluzione più vicina, sostituiscila con $z'$
+        (non vogliamo duplicati nell'insieme di riferimento)
+    \end{itemize}
+    \item terminare quando $R$ rimane invariato.
+\end{enumerate}
+La logica è:
+\begin{itemize}
+    \item le ricombinazioni in $B\times B$ intensificano la ricerca.
+    \item le ricombinazioni in $B\times D$ diversificano la ricerca.
+\end{itemize}
+
+
+\begin{algorithm}[H]
+    \caption{$ScatterSearch(I,P,n_B,n_D)$}
+    \label{alg:ss}
+    \begin{algorithmic}
+        \State $B:=\emptyset;$
+        \State $D:=\emptyset;$
+        \State {Repeat}
+            \For{per ogni $x\in P$}
+                \State{$z:=SteepestDescent(I,x);$}
+                \If{$f(z)<f(x^*)$}
+                    \State{$x^*:=z;$}
+                \EndIf
+
+                \State{$y_B:=arg\;\underset{y\in B}{max}f(y);$}
+                \State{$y_D:=arg\;\underset{y\in D}{min}\;d(y,B\cup D\setminus\{y\})$}
+                \If{$z\notin B$ e $(|B|<n_B\text{ or }f(z)<f(y_B))$}
+
+                    \State{$B$ tiene le $n_B$ migliori uniche soluzioni}
+                    \State{$B:=B\cup\{z\};$}
+                    \State{$Stop:=false;$}
+                    \If{$|B|>n_B$}
+                        \State{$B:=B\setminus\{y_B\};$}
+                    \EndIf
+                \ElsIf{$z\notin D$ and $(|D|<n_D\text{ or }d(z,B\cup D\setminus y_D)>d(y_D,B\cup D\setminus y_D))$}
+                    \State{$D$ tiene le $n_D$ soluzioni più diverse}
+                    \State{$D:=D\cup\{z\};$}
+                    \State{$Stop:=false;$}
+                    \If{$|D|>n_D$}
+                        \State{$D:=D\setminus\{y_D\};$}
+                    \EndIf
+                \EndIf
+            \EndFor
+            \State{$P:=\emptyset;$}
+            \For{$(x,y)\in B\times (B\cup D)$}
+                \State{$P:=P\cup Recombine(x,y,I);$}
+            \EndFor
+            \State {fino a $Stop=true;$}
+        \State Return $(x^*,f(x^*));$
+
+    \end{algorithmic}
+\end{algorithm}
+
+\subsection{Procedura di ricombinazione}
+La procedura di ricombinazione dipende dal problema. Solitamente, le soluzioni $x$ e $y$
+sono manipolate come sottoinsiemi:
+\begin{enumerate}
+    \item include in $z$ tutti gli elementi condivisi da $x$ e $y$:
+    $$x:=x\cap y$$
+    (\textit{entrambe le soluzioni concorro nel suggerire quegli elementi})
+    \item aumentare la soluzione $z$ aggiungendo gli elementi da $x\setminus y$ o $y\setminus x$
+    \begin{itemize}
+        \item scegliere casualmente o con un criterio di selezione goloso.
+        \item alternativamente da ciascuna fonte o liberamente
+        dalle due fonti (questo è simile ad una euristica costruttiva ristratta).
+        \item se necessario, aggiungere elementi esterni da $B\setminus(x\cup y)$
+        \item se un sottoinsieme $z$ è infattibile, applicare un euristica di scambio per renderlo
+        fattibile (procedura di riparazione).
+    \end{itemize}
+\end{enumerate}
+
+\paragraph{Esempi}\mbox{}\\
+MDP:
+\begin{itemize}
+    \item inizia con $z:=x\cap y$
+    \item aumenta $z$ con $k-|z|$ casualmente o punti golosi da $x$ e $y$.
+    \item non è richiesta alcuna procedura di riparazione
+\end{itemize}
+Max-SAT:
+\begin{itemize}
+    \item inizia con $z:=x\cap z$
+    \item aumenta $z$ con $n-|z|$ casualmente o con assegnamenti di verità golosi da $x$ e $y$
+    \item non è richiesta alcuna procedura di riparazione
+\end{itemize}
+KP:
+\begin{itemize}
+    \item inizia con $z:=x\cap y$
+    \item aumenta $z$ con elementi casuali o golosi da $x$ e $y$ rispettando la capacità
+    \item non è richiesta alcuna procedura di riparazione, ma la soluzione potrebbe essere aumentata
+\end{itemize}
+SCP:
+\begin{itemize}
+    \item inizia con $z:=x\cap y$
+    \item aumenta $z$ con delle colonne casuali o golose da $x$ e $y$ (evitando quelle ridondanti).
+    \item aggiunge delle colonne esterne da $B\setminus(x\cup y)$
+    \item rimuove le colonne ridondanti con una fase distruttiva
+\end{itemize}
+
+\subsection{Path Relinking}
+PR, proposto das Glove (1989), viene generalmente utilizzato come procedura di intensificazione
+finale piuttosto che metodo stand-alone.
+Dato un vicinato $N$ ed un euristica di scambio basata su questo:
+\begin{itemize}
+    \item collezionare in un insieme di riferimento $R$ le migliori soluzioni generate da
+    un euristica ausiliaria (soluzioni elite).
+    \item per ogni coppia di soluzioni $x$ e $y$ in $R$
+    \begin{itemize}
+        \item si costruisce un cammino $\gamma_{xy}$ da $x$ a $y$ nello spazio di ricerca
+        del vicinato $N$, applicando a $z^{(0)=x}$ l'euristica ti scambio ausiliaria,
+        ma scegliendo ad ogni passo la soluzione più vicina alla destinazione $y$.
+        $$z^{(k+1)}:=arg\;\underset{z\in N(z^{(k)})}{min}\; d(z,y)$$
+        dove $d$ è una opportuna funzione metrica sulle soluzioni. In caso di distanza
+        uguale, ottimizzare la funzione obiettivo $f$.
+
+        \item trovare la migliore soluzione $z_{xy}^*$ lungo il cammino
+        $$z^*_{xy}:=arg\;\underset{k\in\{1,\dots,|\gamma_{xy}|-1\}}{min}f(z^{(k)})$$
+\item se $z^*_{xy}\notin R$ ed è migliore di quelli di $R$, aggiungilo ad $R$
+    \end{itemize}
+
+\end{itemize}
+
+\begin{algorithm}[H]
+    \caption{$PathRelinking(I,P,n_R)$}
+    \label{alg:pr}
+    \begin{algorithmic}
+        \State {Repeat}
+        \State $R:=\emptyset;$
+            \For{per ogni $x\in P$}
+                \State{$z:=SteepestDescent(I,x);$}
+                \If{$f(z)<f(x^*)$}
+                    \State{$x^*:=z;$}
+                \EndIf
+                    \State{$y_R:=arg\;\underset{y\in R}{max}f(y);$}
+                    \If{$z\notin R$ e $(|R|<n_R\text{ or }f(z)<f(y_R))$}
+                        \State{$R$ tiene le $n_R$ migliori uniche soluzioni}
+                        \State{$R:=R\cup\{z\};$}
+                        \State{$Stop:=false;$}
+                        \If{$|R|>n_R$}
+                            \State{$R:=R\setminus\{y_R\};$}
+                        \EndIf
+                    \EndIf
+            \EndFor
+            \State{$P:=\emptyset;$}
+            \For{$x\in R$ e $y\in R\setminus\{x\}$}
+                \State{$z:=x;$}
+                \State{$z^*:=x;$}
+                \While{$z\neq y$}
+                    \State{$Z:=arg\;\underset{z'\in N(z)}{min}\;d(z',y);$}
+                    \State{$z:=arg\;\underset{z'\in Z}{min}f(z');$}
+                    \If{$f(z)<f(z^*)$}
+                        \State $z^*:=z;$
+                    \EndIf
+                \EndWhile
+            \If{$z^*\notin P$}
+                \State{$P:=P\cup\{z^*\}$}
+            \EndIf
+            \EndFor
+        \State Finto a $Stop=true;$
+        \State Return $(x^*,f(x^*));$
+
+    \end{algorithmic}
+\end{algorithm}
+\subsubsection{Relinking paths}
+I cammini esplorati in questa maniera:
+\begin{itemize}
+    \item intensificano la ricerca, perché connettono buone soluzioni.
+    \item diversificano la ricerca, perché seguono differenti cammini con
+    rispetto alle euristiche di scambio (specialmente se gli estremi sono
+    molto distanti).
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.5]{images/relin_paths.png}
+    \end{figure}
+    \item dato che la distanza di $z^{(k)}$ da $y$ sta decrementando, uno può esplorare:
+    \begin{itemize}
+        \item soluzioni in peggioramento senza il rischio di comportamenti ciclici
+        \item sottoinsiemi irrealizzabili senza il rischio di non tornare alla fattibilità
+        (\textit{non migliorano direttamente, ma aprono la strada a miglioramenti})
+    \end{itemize}
+\end{itemize}
+
+\paragraph{Varianti}\mbox{}\\
+\begin{itemize}
+    \item \textit{backward path-relinking}: costruisce il cammino al contrario da $y$ a $x$.
+    \item \textit{back-and-forward path relinking}: costruisce entrambi i cammini.
+    \item \textit{mixed path relinking}: costruisce un cammino con passi alternativi
+    da ciascun estremo.
+    \item \textit{truncated path relinking}: costruisce solo i primi passi del cammino
+    (\textit{se le buone soluzioni sono sperimentalmente vicine l'una con l'altra}).
+    \item \textit{external path relinking}: costruisce un cammino da $x$ muovendosi lontano da $y$
+    (\textit{se le buone soluzioni sono sperimentalmente lontane l'una con l'altra}).
+\end{itemize}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 \end{document}
