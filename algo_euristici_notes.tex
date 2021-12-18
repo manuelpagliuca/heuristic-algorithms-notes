@@ -7193,14 +7193,274 @@ Tutte le procedure di selezione ammettono una \textit{variante elitaria} (elitis
 la quale include nella nuova popolazione il migliore individuo della corrente (mantieni
 sempre il migliori individuo trovato finora).
 
+\subsubsection{Crossover}
+L'operatore di \textbf{crossover} combina $k\geq 2$ individui per generarne altri $k$.
+I più comuni impostano $k=2$ e sono:
+\begin{itemize}
+    \item \textit{simple crossover}:
+    \begin{itemize}
+        \item estrarre una posizione casuale con una probabilità uniforme.
+        \item dividere la codifica in due parti nella posizione estratta.
+        \item scambiare le parti finali delle codifiche dei due individui
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.5]{images/crossover_1.png}
+        \end{figure}
+    \end{itemize}
+    \item \textit{double crossover}:
+    \begin{itemize}
+        \item estrarre una posizione casuale con una probabilità uniforme.
+        \item dividere la codifica in due parti nella posizione estratta.
+        \item scambiare le parti estreme delle codifiche dei due individui
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.5]{images/crossover_2.png}
+        \end{figure}
+    \end{itemize}
+\end{itemize}
+Generalizzando si ottiene che:
+\begin{itemize}
+    \item $\alpha$\textit{ points crossover}:
+    \begin{itemize}
+        \item si estraggono $\alpha$ posizioni casuali con una probabilità uniforme.
+        \item si divide la codifica in $\alpha +1$ parti alle posizioni estratte.
+        \item si scambiano le parti dispari delle codifiche dei due individui (prima, terza, $\dots$)
+    \end{itemize}
+\end{itemize}
+Per piccoli valori di $\alpha$, questo implica un \textit{bias posizionale}: simboli
+chiusi nella codifica tendono a rimanere chiusi. Per cancellare questo bias, uno
+può adottare:
+\begin{itemize}
+    \item \textit{uniform crossover}:
+    \begin{itemize}
+        \item costruire un vettore casuale binario $m\in U(\mathbb{B}^n)$ ("maschera").
+        \item se $m_i=1$ scambia i simboli in posizione $i$ dei due individui,
+        se $m_i=0$ li mantiene invariati.
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.5]{images/uniform_crossover.png}
+        \end{figure}
+    \end{itemize}
+\end{itemize}
 
+\paragraph{Crossover vs Scatter Search e Path Relinking}\mbox{}\\
+L'operatore di crossover assomiglia alla fase di ricombinazione di SS e PR. Le
+principali differenze sono:
+\begin{enumerate}
+    \item ricombina i simboli delle codifiche, anziché:
+    \begin{itemize}
+        \item ricombinare le soluzioni (SS)
+        \item esegue una catena di scambi sulle soluzioni (PR)
+    \end{itemize}
+    \item opera sull'intera popolazione, anziché solo su un set di riferimento $R$
+    \item opera su coppie casuali di individui, anziché scansionare metodicamente tutte le
+    coppie di soluzioni di $R$
+    \item genera una coppia di nuovi individui, anziché
+    \begin{itemize}
+        \item generare una singola soluzione intermedia (SS)
+        \item visitando le soluzioni intermedie e scegliendone una (PR)
+    \end{itemize}
+    \item i nuovi individui entrano nella popolazione, invece di diventare candidati per
+    l'insieme di riferimento.
+\end{enumerate}
+\subsubsection{Mutation}
+L'operatore \textit{mutation} modifica un individuo per generarne uno simile.
+\begin{itemize}
+    \item scansiona e codifica $\xi$ un simbolo alla volta
+    \item decide con una probabilità $\pi_m$ di modificare il simbolo corrente.
+\end{itemize}
+Il tipo di modifica solitamente dipende dalla codifica:
+\begin{itemize}
+    \item \textbf{codifiche binarie} (\textit{binary encodings}): ribaltano $\xi_i$ in $\xi_i':=1-\xi_1$
+    \item \textbf{stringhe simboliche} (\textit{symbol strings}): sostituiscono
+    $\xi_c$ con un simbolo casuale $\xi'_c\in B_c\setminus\{\xi_c\}$ selezionato con
+    una probabilità uniforme.
+    \item \textbf{permutazioni}: sono presenti molte proposte.
+    \begin{itemize}
+        \item scambio di due elementi casuali nella permutazione (\textit{swap})
+        \item inversione dell'allungamento tra due posizioni casuali della permutazione
+        \item $\dots$
+    \end{itemize}
+\end{itemize}
+\paragraph{Mutation vs euristiche di scambio}\mbox{}\\
+L'operatore \textit{mutation} ha delle forti relazioni con le operazioni di scambio. Le
+principali differenze sono che:
+\begin{enumerate}
+    \item modifica i simboli di una codifica, anziché scambiando gli elementi di una
+    soluzione.
+    \item opera su simboli casuali, anziché esplorare un vicinato sistematicamente.
+    \item opera su un numero casuale di simboli, anziché scambiando un numero fisso
+    di elementi.
+\end{enumerate}
 
+\subsubsection{Il problema di fattibilità}
+Se la codifica non è completamente invertibile, crossover e mutation talvolta possono generare
+codifiche che non corrispondono a soluzioni fattibili.
+Noi distinguiamo tra:
+\begin{itemize}
+    \item \textit{codifiche fattibili} (\textit{feasible encodings}) che corrispondono a soluzioni fattibili.
+    \item \textit{codifiche infattibili} (\textit{unfeasible encodings}) che corrispondono
+    a leciti (legal), ma infattibili sottoinsiemi.
+\end{itemize}
+L'esistenza di codifiche infattibili implica molteplici svantaggi:
+\begin{itemize}
+    \item \textbf{inefficienza}: tempo computazionale perso nella gestione di oggetti inutili.
+    \item \textbf{inefficacia}: l'euristica esplora meno soluzioni (possibilmente, nessuna).
+    \item \textbf{problemi di progettazione}: la fitness deve essere definita su sottoinsiemi infattibili.
+\end{itemize}
+Qui sono presenti tre approcci principali per affrontare questo problema:
+\begin{enumerate}
+    \item codifiche speciali e operatori (evitare o limitare la non fattibilità).
+    \item procedure di riparazione (rendere la non fattibilità fattibile).
+    \item funzioni di penalità (accettare la non fattibilità, ma scoraggiarla).
+\end{enumerate}
 
+\subsubsection{Codifiche speciali e operatori}
+L'idea consiste nell'investigare:
+\begin{itemize}
+    \item codifiche che (quasi) sempre restituiscono soluzioni fattibili, come:
+    \begin{itemize}
+        \item codifiche di permutazione (permutation1 encodings) e decodifiche
+        order-first split-second, per problemi di partizione (CMSTP, VRP, $\dots$).
+        \item codifiche di permutazione e euristica costruttiva per la decodifica,
+        di problemi di scheduling (PSMP, $\dots$)
+    \end{itemize}
+    \item operatori crossover e mutation che mantengono la fattibilità, come:
+    \begin{itemize}
+        \item operatori che simulano $k$-scambi per il TSP
+    \end{itemize}
+\end{itemize}
+Questi metodi:
+\begin{itemize}
+    \item tendono ad approssimare da vicino l'euristica dello scambio e della
+    ricombinazione basata sul concetto di vicinato.
+    \item abbandonare l'idea di astrazione e concentrarsi sul problema specifico,
+    contrariamente agli algoritmi genetici classici.
+\end{itemize}
 
+\subsubsection{Procedure di riparazione}
+Una procedura di riparazione $x_R(\xi)$
+\begin{itemize}
+    \item riceve una codifica $\xi$ che restituisce un sottoinsieme non fattibile
+    $x(\xi)\notin X$
+    \item restituisce una soluzione fattibile $x_R\in X$
+\end{itemize}
+Questa procedure è applicata ad ogni codifica non fattibile $\xi\in\Xi^{(g)}$
+\begin{itemize}
+    \item in alcuni metodi la codifica $\xi(x_R(x(\xi)))$ sostituisce $\xi$ in $X^{(g)}$
+    \item in altre $\xi$ rimane in $\Xi^{(g)}$ e $x_R(\xi)$ è utilizzata solo per aggiornare $x^*$
+\end{itemize}
+La prima famiglia di metodi: mantiene una popolazione di soluzioni fattibili. Ma
+introducono:
+\begin{itemize}
+    \item un forte bias in favore di codifiche fattibili
+    \item un bias in favore delle soluzioni fattibili più facilmente ottenibili
+    con la procedura di riparazione.
+\end{itemize}
+\subsubsection{Funzioni di penalità}
+\paragraph{Misurando la non fattibilità}\mbox{}\\
+Se la funzione obiettivo è estesa ai sottoinsiemi non fattibili $x\in 2^B\setminus X$,
+la funzione fitness $\phi(\xi)$ può essere estesa ad una qualsiasi codifica, ma
+molti sottoinsiemi non fattibili hanno una fitness più grande della soluzione ottimale.
+L'operatore \textit{selection} tende a favorire certi sottoinsiemi infattibili. Per
+evitare questo, la funzione di fitness deve combinare:
+\begin{itemize}
+    \item la funzione obiettivo $f(x(\xi))$
+    \item una misura di non fattibilità $\psi(x(\xi))$
+    \[
+        \begin{cases}
+            \psi(x(\xi))=0 & \text{se }x(\xi)\in X\\
+            \psi(x(\xi))>0 & \text{se }x(\xi)\notin X
+        \end{cases}
+    \]
+\end{itemize}
+Se i vincoli del problema sono espressi da uguaglianze o disuguaglianze, $\psi(x)$ può
+essere definito come la somma pesata delle violazioni.
+\textit{Come definire i pesi?}\textit{Sono fissi, variabili o adattivi?}
+\paragraph{Definizione della fitness}\mbox{}\\
+Le combinazioni più tipiche sono:
+\begin{itemize}
+    \item \textbf{penalità assoluta}: date due codifiche $\xi$ e $\xi'$
+    \begin{itemize}
+        \item se entrambe sono fattibili, quella con la $f$ più piccola è migliore.
+        \item se esattamente una è fattibile, quella fattibile è migliore dell'altra.
+        \item se entrambe non sono fattibili, quella con il $\psi$ più piccolo è migliore
+        (\textit{adatta per "rank selection" e "tournament selection"}).
+    \end{itemize}
 
+    \item \textbf{penalità proporzionale}: le codifiche infattibili hanno una penalità
+    che è crescente con la violazione.
+    $$\varphi(\xi)=f(x(\xi))-\alpha\psi(x(\xi))+M\;\;\text{per i problemi di massimizzazione}$$
+    $$\varphi(\xi)=-f(x(\xi))-\alpha\psi(x(\xi))+M\;\;\text{per i problemi di minimizzazione}$$
+    dove l'offset $M$ garantisce che $\varphi(\xi)\geq 0 $ per tutte le codifiche.
+    \item \textbf{penalità ottenuta da riparazione}:
+    cioè mantenere la codifica non fattibile, ma derivarne la fitness
+    dal valore obiettivo della soluzione riparata
+    $$\varphi(\xi)=f(x_R(\xi))\text{ o }\varphi(\xi)=UB-f(x_R(\xi))$$
+    visto che solitamente $f(x_R(x(\xi)))\geq f(x(\xi))$
+\end{itemize}
 
+\paragraph{Regolazione del peso}\mbox{}\\
+Sperimentalmente, è meglio utilizzare la più piccola penalità effettiva:
+\begin{itemize}
+    \item se la penalità è troppo piccola, troppo poche soluzioni possibile sono trovate.
+    \item se la penalità è troppo grande, la ricerca è confinata in una parte della
+    regione fattibile.
+\end{itemize}
+Un buon valore del parametro $\alpha$ può essere trovato regolando:
+\begin{itemize}
+    \item \textbf{metodi dinamici}: incrementando $\alpha$ lungo il tempo
+    (\textit{prima si raggiungono buoni sottoinsieme, dopo si rafforza
+    la fattibilità}).
+    \item \textbf{metodi adattivi}: aggiornare $\alpha$ in base alla situazione
+    \begin{itemize}
+        \item incrementa $\alpha$ quando codifiche non fattibili dominano la popolazione.
+        \item decrementa $\alpha$ quando codifiche fattibili dominano
+    \end{itemize}
+    \item \textbf{metodi evolutivi}: codifica $\alpha$ in ogni individuo, in modo
+    da selezionare e rifinire entrambe le soluzione ed il parametro dell'algoritmo.
+\end{itemize}
 
+\subsubsection{Algoritmi memetici}
+Algoritmi memetici (Moscato, 1989) sono ispirati dal concetto di "meme" (Dawkins, 1989)
+il quale è l'unità di base di informazione culturale riproducibile.
+\begin{itemize}
+    \item i geni sono selezionati solo al livello di espressione fenotipica.
+    \item i meme si adattano direttamente, come nell'evoluzione larmarckiana.
+\end{itemize}
+Fuori dalla metafora, gli algoritmi memetici si combinano:
+\begin{itemize}
+    \item operatori \textit{"genotipici"} che manipolano le codifiche (crossover e mutation).
+    \item operatori \textit{"fenotipici"} cje manipolano le soluzioni (ricerca locale).
+\end{itemize}
+In breve, le soluzioni si migliorano con gli scambi prima della ricodifica. Diversi
+parametri determinano come applicare la ricerca locale:
+\begin{itemize}
+    \item quanto spesso (ad ogni generazione, or dopo una sufficiente diversificazione)
+    \item a quali individui (tutti, i migliori, i più diversificati)
+    \item per quanto tempo (fino ad un ottimo locale, oltre, or fermandosi prima)
+    \item con quale metodo (steepest descnt, VNS, ILS, $\dots$)
+\end{itemize}
 
-
+\subsubsection{Strategie evolutive}
+Sono state proposte da Rachenberg e Schwefel (1971). Le principali differenze
+rispetto alla genetica classica sono:
+\begin{itemize}
+    \item le soluzioni sono codificate in vettori reali
+    \item una piccola popolazione di $\mu$ individui generano $\lambda$ candidati
+    discendenti (originalmente, $\mu=1$).
+    \item i nuovi individui competono per costruire la nuova popolazione
+    \begin{itemize}
+        \item nella strategia $(\mu,\lambda)$ i migliori $\mu$ discendenti
+        sostituiscono la popolazione originale, anche se alcuni sono dominati
+        \item nella strategia $(\mu+\lambda)$ i migliori $\mu$ individui
+        complessivamente (predecessori o discendenti) sopravvivono nella nuova
+        popolazione
+    \end{itemize}
+    \item l'operatore \textit{mutation} somma alle codifiche un rumore casuale
+    con una distribuzione normale di media zero
+    $$\xi':=\xi+\delta\text{ con }\delta\in N(0,\delta)$$
+    \item originalmente l'operatore di \textit{crossover} non era utilizzato (ora lo è)
+\end{itemize}
 
 \end{document}
