@@ -3,8 +3,8 @@
 ![Status](https://img.shields.io/badge/notes-completed-brightgreen)
 ![Lang](https://img.shields.io/badge/lang-LaTeX%20-blue)
 
-Notes (_italian_) for the course of "Computer Science Theory"
-held by Prof. Mereghetti , LaTeX, A.A. 2021/2022 MsC's in Computer Science.
+Notes (_italian_) for the course of "Heuristic Algorithms"
+held by Prof. Cordone , LaTeX, A.A. 2021/2022 MsC's in Computer Science.
 
 [Download PDF](notex.pdf)
 
