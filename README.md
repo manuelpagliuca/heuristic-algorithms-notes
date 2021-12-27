@@ -4,7 +4,7 @@
 ![Lang](https://img.shields.io/badge/lang-LaTeX%20-blue)
 
 Notes (_italian_) for the course of "Computer Science Theory"
-held by Prof. Mereghetti , LaTeX, A.A. 2020/2021 MsC's in Computer Science.
+held by Prof. Mereghetti , LaTeX, A.A. 2021/2022 MsC's in Computer Science.
 
 [Download PDF](notex.pdf)
 
