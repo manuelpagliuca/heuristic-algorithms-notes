@@ -11,8 +11,16 @@ held by Prof. Mereghetti , LaTeX, A.A. 2020/2021 MsC's in Computer Science.
 ## Syllabus
 
 - Introduzione al corso (_introduction to the course_)
-- Teoria della calcolabilità (_computability theory_)
-- Teoria della complessità (_complexity theory_)
+- Algoritmi Euristici (_computability theory_)
+- Classificazione dei problemi (_problem classification_)
+- Problemi di ottimizzazione combinatoria (_combinatorial optimization problems_)
+- Efficienza teorica (_theoretical efficiency_)
+- Efficacia teorica (_theoretical efficacy_)
+- Valutazione empirica delle prestazioni (_empirical performance evaluation_)
+- Euristiche costruttive (_constructive heuristics_)
+- Euristiche di scambio (_exchange heuristics_)
+- Ricerca del vicinato (_neighborhood search_)
+- Metaeuristiche di ricombinazione (_recombination meta-heuristics_)
 
 ## Contribute to the notes
 
